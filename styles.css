@@ -19,16 +19,21 @@ html, body {
   stroke-linecap: square;
 }
 
+.main-panel {
+  fill: rgb(146, 106, 54);
+  fill-rule: evenodd;
+}
+
 .small-peg-hole {
   stroke: rgb(146, 106, 54);
   stroke-width: 4;
   fill-opacity: 1;
-  fill: black;
+  fill: rgb(90, 58, 16);
 }
 
 .large-peg-hole {
   stroke: rgb(146, 106, 54);
   stroke-width: 6;
   fill-opacity: 1;
-  fill: black;
+  fill: rgb(90, 58, 16);
 }
