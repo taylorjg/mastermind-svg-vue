@@ -12,3 +12,8 @@ html, body {
   margin: auto;
   background-color: rgb(141, 97, 40);
 }
+
+.secret-panel {
+  stroke: rgb(146, 106, 54);
+  stroke-width: 3;
+}
