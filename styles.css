@@ -15,5 +15,20 @@ html, body {
 
 .secret-panel {
   stroke: rgb(146, 106, 54);
-  stroke-width: 3;
+  stroke-width: 6;
+  stroke-linecap: square;
+}
+
+.small-peg-hole {
+  stroke: rgb(146, 106, 54);
+  stroke-width: 4;
+  fill-opacity: 1;
+  fill: black;
+}
+
+.large-peg-hole {
+  stroke: rgb(146, 106, 54);
+  stroke-width: 6;
+  fill-opacity: 1;
+  fill: black;
 }

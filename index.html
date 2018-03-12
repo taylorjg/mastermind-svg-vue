@@ -10,11 +10,23 @@
 
 <body>
     <svg id="board">
+
         <line class="secret-panel" x1="134" y1="20" x2="124" y2="20"></line>
         <line class="secret-panel" x1="124" y1="20" x2="124" y2="80"></line>
         <line class="secret-panel" x1="124" y1="80" x2="372" y2="80"></line>
         <line class="secret-panel" x1="372" y1="20" x2="372" y2="80"></line>
         <line class="secret-panel" x1="362" y1="20" x2="372" y2="20"></line>
+
+        <!-- d = 36, r = 18, gap = 26 -->
+        <!-- d = 34, r = 17, gap = 28 -->
+        <!-- d = 32, r = 16, gap = 30 -->
+        
+        <!-- 124 + half gap + r = 124 + 13 + 18 =  -->
+        <!-- 155 + 36 + 26 =  -->
+        <circle class="large-peg-hole" cx="155" cy="48" r="12"></circle>
+        <circle class="large-peg-hole" cx="217" cy="48" r="12"></circle>
+        <circle class="large-peg-hole" cx="279" cy="48" r="12"></circle>
+        <circle class="large-peg-hole" cx="341" cy="48" r="12"></circle>
     </svg>
 </body>
 
