@@ -14,7 +14,7 @@ html, body {
 }
 
 .secret-panel {
-  stroke: rgb(146, 106, 54);
+  stroke: rgb(143, 103, 52);
   stroke-width: 6;
   stroke-linecap: square;
 }
