@@ -14,9 +14,12 @@ html, body {
 }
 
 .secret-panel {
-  stroke: rgb(143, 103, 52);
+  /* stroke: rgb(143, 103, 52); */
+  stroke: rgb(141, 97, 40);
   stroke-width: 6;
   stroke-linecap: square;
+  fill-opacity: 0;
+  filter: url(#shadow);
 }
 
 .main-panel {
