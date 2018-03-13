@@ -11,11 +11,18 @@
 <body>
     <svg id="board">
 
-        <line class="secret-panel" x1="134" y1="20" x2="124" y2="20"></line>
-        <line class="secret-panel" x1="124" y1="20" x2="124" y2="80"></line>
-        <line class="secret-panel" x1="124" y1="80" x2="372" y2="80"></line>
-        <line class="secret-panel" x1="372" y1="20" x2="372" y2="80"></line>
-        <line class="secret-panel" x1="362" y1="20" x2="372" y2="20"></line>
+        <defs>
+            <filter id="shadow">
+                <feDropShadow dx="1" dy="1" stdDeviation="3" flood-color="rgb(90, 58, 16)" />
+            </filter>
+        </defs>
+
+        <!-- <line class="secret-panel" x1="134" y1="20" x2="124" y2="20" filter="url(#fred)" /> -->
+        <line class="secret-panel" x1="134" y1="20" x2="124" y2="20" />
+        <line class="secret-panel" x1="124" y1="20" x2="124" y2="80" style="filter:url(#shadow)"></line>
+        <line class="secret-panel" x1="124" y1="80" x2="372" y2="80" style="filter:url(#shadow)"></line>
+        <line class="secret-panel" x1="372" y1="20" x2="372" y2="80" style="filter:url(#shadow)"></line>
+        <line class="secret-panel" x1="362" y1="20" x2="372" y2="20" style="filter:url(#shadow)"></line>
 
         <circle class="large-peg-hole" cx="155" cy="48" r="12"></circle>
         <circle class="large-peg-hole" cx="217" cy="48" r="12"></circle>
@@ -134,7 +141,7 @@
             L257 128 A 27 27 1 0 1 298 128
             L320 128 A 27 27 1 1 1 320 168
             L298 168 A 27 27 1 0 1 257 168
-            L237 168 A 27 27 1 0 1 195 168
+            L237 168 A 27 27 1 0 1 195 168 Z
         ">
         </path>>
     </svg>

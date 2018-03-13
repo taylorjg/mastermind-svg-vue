@@ -20,8 +20,14 @@ html, body {
 }
 
 .main-panel {
-  fill: rgb(146, 106, 54);
+  /* fill: rgb(146, 106, 54); */
+  fill: rgb(141, 97, 40);
   fill-rule: evenodd;
+  filter: url(#shadow);
+  /* stroke: rgb(146, 106, 54); */
+  stroke: rgb(141, 97, 40);
+  stroke-width: 6;
+  stroke-linejoin: round;
 }
 
 .small-peg-hole {
