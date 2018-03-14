@@ -1,6 +1,6 @@
-const SMALL_PEG_HOLE_RADIUS = 8;
+const SMALL_PEG_HOLE_RADIUS = 6;
 const LARGE_PEG_HOLE_RADIUS = 12;
-const FIRST_ROW_CENTRE_Y = 148;
+const FIRST_ROW_CENTRE_Y = 140;
 const ROW_GAP_Y = 60;
 const FIRST_LARGE_PEG_X = 155;
 const LARGE_PEG_GAP_X = 62;
@@ -36,7 +36,7 @@ const addRowSmallPegHoles = row => {
 };
 
 const addRowSmallPegHole = (row, n) => {
-  const cx = n % 2 ? 93 : 53;
+  const cx = n % 2 === 0 ? 53 : 93;
   const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + (n >= 2 ? 12 : -12);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "small-peg-hole");
@@ -74,15 +74,22 @@ const buildPathDataForSmallHolesCutOut = row => {
 };
 
 const buildPathDataForLargeHolesCutOut = row => {
+  const dx = 21;
+  const dy = 17;
   const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
-  const y1 = cy - 20;
-  const y2 = cy + 20;
-  const d1 = `M175 ${y2} A 27 27 0 1 1 175 ${y1}`;
-  const d2 = `L195 ${y1} A 27 27 1 0 1 237 ${y1}`;
-  const d3 = `L257 ${y1} A 27 27 1 0 1 298 ${y1}`;
-  const d4 = `L320 ${y1} A 27 27 1 1 1 320 ${y2}`;
-  const d5 = `L298 ${y2} A 27 27 1 0 1 257 ${y2}`;
-  const d6 = `L237 ${y2} A 27 27 1 0 1 195 ${y2} Z`;
+  const y1 = cy - dy;
+  const y2 = cy + dy;
+  const r = 27;
+  const cx1 = FIRST_LARGE_PEG_X;
+  const cx2 = FIRST_LARGE_PEG_X + LARGE_PEG_GAP_X;
+  const cx3 = FIRST_LARGE_PEG_X + (2 * LARGE_PEG_GAP_X);
+  const cx4 = FIRST_LARGE_PEG_X + (3 * LARGE_PEG_GAP_X);
+  const d1 = `M${cx1 + dx} ${y2} A ${r} ${r} 0 1 1 ${cx1 + dx} ${y1}`;
+  const d2 = `L${cx2 - dx} ${y1} A ${r} ${r} 1 0 1 ${cx2 + dx} ${y1}`;
+  const d3 = `L${cx3 - dx} ${y1} A ${r} ${r} 1 0 1 ${cx3 + dx} ${y1}`;
+  const d4 = `L${cx4 - dx} ${y1} A ${r} ${r} 1 1 1 ${cx4 - dx} ${y2}`;
+  const d5 = `L${cx3 + dx} ${y2} A ${r} ${r} 1 0 1 ${cx3 - dx} ${y2}`;
+  const d6 = `L${cx2 + dx} ${y2} A ${r} ${r} 1 0 1 ${cx2 - dx} ${y2} Z`;
   return [d1, d2, d3, d4, d5, d6].join(" ");
 };
 
