@@ -20,11 +20,8 @@ const addSecretPanel = () => {
   range(4).forEach(addSecretPanelLargePegHole);
 };
 
-const addSecretPanelLargePegHole = n => {
-  const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
-  const cy = 48;
-  addLargePegHole(cx, cy);
-};
+const addSecretPanelLargePegHole = n =>
+  addLargePegHole(48, n);
 
 const addRows = () =>
   range(10).forEach(addRow);
@@ -39,16 +36,14 @@ const addRowSmallPegHoles = row => {
 };
 
 const addRowSmallPegHole = (row, n) => {
-  
-  // <circle class="small-peg-hole" cx="93" cy="136" r="8"></circle>
-  // <circle class="small-peg-hole" cx="53" cy="136" r="8"></circle>
-  // <circle class="small-peg-hole" cx="93" cy="160" r="8"></circle>
-  // <circle class="small-peg-hole" cx="53" cy="160" r="8"></circle>
-
-  // <circle class="small-peg-hole" cx="93" cy="196" r="8"></circle>
-  // <circle class="small-peg-hole" cx="53" cy="196" r="8"></circle>
-  // <circle class="small-peg-hole" cx="93" cy="220" r="8"></circle>
-  // <circle class="small-peg-hole" cx="53" cy="220" r="8"></circle>
+  const cx = n % 2 ? 93 : 53;
+  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + (n >= 2 ? 12 : -12);
+  const circle = createSVGElement("circle");
+  circle.setAttribute("class", "small-peg-hole");
+  circle.setAttribute("cx", cx);
+  circle.setAttribute("cy", cy);
+  circle.setAttribute("r", SMALL_PEG_HOLE_RADIUS);
+  board.appendChild(circle);
 };
 
 const addRowLargePegHoles = row => {
@@ -56,12 +51,12 @@ const addRowLargePegHoles = row => {
 };
 
 const addRowLargePegHole = (row, n) => {
-  const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
-  addLargePegHole(cx, cy);
+  addLargePegHole(cy, n);
 };
 
-const addLargePegHole = (cx, cy) => {
+const addLargePegHole = (cy, n) => {
+  const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "large-peg-hole");
   circle.setAttribute("cx", cx);
@@ -71,19 +66,18 @@ const addLargePegHole = (cx, cy) => {
 };
 
 const addMainPanel = () => {
-  // const pathData1 = "M30 100 L374 100 L374 720 L30 720 Z";
-  // const pathData2 = "M40 122 L107 122 L107 174 L40 174 Z";
-  // const pathData = [
-  //   pathData1,
-  //   pathData2
-  // ].join(" ");
-
-  // const path = createSVGElement("path");
-  // path.setAttribute("class", "main-panel");
-  // path.setAttribute("d", pathData);
-  // board.appendChild(path);
+  const pathData1 = "M30 100 L374 100 L374 720 L30 720 Z";
+  const pathData2 = "M40 122 L107 122 L107 174 L40 174 Z";
+  const pathData = [
+    pathData1,
+    pathData2
+  ].join(" ");
+  const path = createSVGElement("path");
+  path.setAttribute("class", "main-panel");
+  path.setAttribute("d", pathData);
+  board.appendChild(path);
 };
 
 addSecretPanel();
 addRows();
-addMainPanel();
+// addMainPanel();
