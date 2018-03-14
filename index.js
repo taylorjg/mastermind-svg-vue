@@ -4,6 +4,9 @@ const FIRST_ROW_CENTRE_Y = 140;
 const ROW_GAP_Y = 60;
 const FIRST_LARGE_PEG_X = 155;
 const LARGE_PEG_GAP_X = 62;
+const SMALL_PEG_GAP_Y = 10;
+const SMALL_PEG_LEFT_X = 56;
+const SMALL_PEG_RIGHT_X = 90;
 
 const board = document.getElementById("board");
 
@@ -36,8 +39,8 @@ const addRowSmallPegHoles = row => {
 };
 
 const addRowSmallPegHole = (row, n) => {
-  const cx = n % 2 === 0 ? 53 : 93;
-  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + (n >= 2 ? 12 : -12);
+  const cx = n % 2 === 0 ? SMALL_PEG_LEFT_X : SMALL_PEG_RIGHT_X;
+  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "small-peg-hole");
   circle.setAttribute("cx", cx);
