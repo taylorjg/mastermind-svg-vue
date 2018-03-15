@@ -35,7 +35,7 @@ html, body {
 
 .small-peg-hole {
   stroke: rgb(146, 106, 54);
-  stroke-width: 4;
+  stroke-width: 2;
   fill-opacity: 1;
   fill: rgb(90, 58, 16);
 }
@@ -45,4 +45,12 @@ html, body {
   stroke-width: 6;
   fill-opacity: 1;
   fill: rgb(90, 58, 16);
+}
+
+.small-peg {
+  fill-opacity: 1;
+}
+
+.large-peg {
+  fill-opacity: 1;
 }
