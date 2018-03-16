@@ -59,8 +59,19 @@ const addRows = () =>
   range(10).forEach(addRow);
 
 const addRow = row => {
+  addRowNumber(row);
   addRowSmallPegHoles(row);
   addRowLargePegHoles(row);
+};
+
+const addRowNumber = row => {
+  const inverseRowNumber = 9 - row;
+  const text = createSVGElement("text");
+  text.setAttribute("x", (SMALL_PEG_RIGHT_X + SMALL_PEG_LEFT_X) / 2);
+  text.setAttribute("y", FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + 4);
+  text.setAttribute("class", "row-number-text");
+  text.appendChild(document.createTextNode(`${inverseRowNumber + 1}`));
+  board.appendChild(text);
 };
 
 const addRowSmallPegHoles = row => {
@@ -141,9 +152,9 @@ const addMainPanel = () => {
 };
 
 const addSmallPeg = (row, n, colour) => {
-  const row2 = 9 - row;
+  const inverseRowNumber = 9 - row;
   const cx = n % 2 === 0 ? SMALL_PEG_LEFT_X : SMALL_PEG_RIGHT_X;
-  const cy = FIRST_ROW_CENTRE_Y + (row2 * ROW_GAP_Y) + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
+  const cy = FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y) + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "small-peg");
   circle.setAttribute("cx", cx);
