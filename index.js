@@ -5,16 +5,16 @@ const Y = "#FFFF00";
 const BL = "#000000";
 const WH = "#FFFFFF";
 const LARGE_PEG_RADIUS = 15;
-const SMALL_PEG_RADIUS = 6;
-const SMALL_PEG_HOLE_RADIUS = 4;
+const SMALL_PEG_RADIUS = 7;
+const SMALL_PEG_HOLE_RADIUS = 6;
 const LARGE_PEG_HOLE_RADIUS = 12;
 const FIRST_ROW_CENTRE_Y = 140;
 const ROW_GAP_Y = 60;
 const FIRST_LARGE_PEG_X = 155;
 const LARGE_PEG_GAP_X = 62;
 const SMALL_PEG_GAP_Y = 10;
-const SMALL_PEG_LEFT_X = 56;
-const SMALL_PEG_RIGHT_X = 90;
+const SMALL_PEG_LEFT_X = 60;
+const SMALL_PEG_RIGHT_X = 86;
 
 const board = document.getElementById("board");
 
@@ -26,13 +26,13 @@ const range = n => Array.from(Array(n).keys());
 const addSecretPanel = () => {
   const path = createSVGElement("path");
   path.setAttribute("class", "secret-panel");
-  path.setAttribute("d", "M134 20 L124 20 L124 80 L372 80 L372 20 L362 20");
+  path.setAttribute("d", "M134 10 L124 10 L124 80 L372 80 L372 10 L362 10");
   board.appendChild(path);
   range(4).forEach(addSecretPanelLargePegHole);
 };
 
 const addSecretPanelLargePegHole = n =>
-  addLargePegHole(48, n);
+  addLargePegHole(38, n);
 
 const addRows = () =>
   range(10).forEach(addRow);
