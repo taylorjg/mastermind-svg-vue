@@ -22,6 +22,29 @@ html, body {
   filter: url(#shadow);
 }
 
+.secret-panel-cover {
+  fill: rgb(146, 106, 54);
+  fill-opacity: 1;
+}
+
+.secret-panel-cover-text-1 {
+  fill: rgb(141, 97, 40);
+  text-anchor: start;
+  font-family: Arial;
+  font-size: 36px;
+  font-weight: normal;
+  filter: url(#shadow);
+}
+
+.secret-panel-cover-text-2 {
+  fill: rgb(141, 97, 40);
+  text-anchor: end;
+  font-family: Arial;
+  font-size: 36px;
+  font-weight: normal;
+  filter: url(#shadow);
+}
+
 .main-panel {
   /* fill: rgb(146, 106, 54); */
   fill: rgb(141, 97, 40);

@@ -34,6 +34,27 @@ const addSecretPanel = () => {
 const addSecretPanelLargePegHole = n =>
   addLargePegHole(38, n);
 
+const addSecretPanelCover = () => {
+  const path = createSVGElement("path");
+  path.setAttribute("class", "secret-panel-cover");
+  path.setAttribute("d", "M127 13 L127 77 L369 77 L369 13 Z");
+  board.appendChild(path);
+
+  const text1 = createSVGElement("text");
+  text1.setAttribute("x", 127 + 20);
+  text1.setAttribute("y", 46);
+  text1.setAttribute("class", "secret-panel-cover-text-1");
+  text1.appendChild(document.createTextNode("MASTER"));
+  board.appendChild(text1);
+
+  const text2 = createSVGElement("text");
+  text2.setAttribute("x", 369 - 20);
+  text2.setAttribute("y", 74);
+  text2.setAttribute("class", "secret-panel-cover-text-2");
+  text2.appendChild(document.createTextNode("MIND"));
+  board.appendChild(text2);
+};
+
 const addRows = () =>
   range(10).forEach(addRow);
 
@@ -146,6 +167,7 @@ const addLargePeg = (row, n, colour) => {
 };
 
 addSecretPanel();
+addSecretPanelCover();
 addRows();
 addMainPanel();
 
