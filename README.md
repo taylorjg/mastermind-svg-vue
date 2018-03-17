@@ -8,17 +8,20 @@ I created this separate repo to play around with it.
 
 ## UI things
 
-* [ ] Add "New Game" button
-* [ ] Add "Enter" button to enter a guess
-* [ ] Show/hide secret panel cover
+* [x] Add HTML "New Game" button
+* [x] Add HTML "Enter" button to enter a guess
+* [x] Show/hide secret panel cover
     * [ ] Animate it
 * [ ] Show a ring of colours when clicking an active large peg hole
-* [ ] Add a flashing focus circle to the large peg holes for the active row
 * [ ] Allow selection of a colour from the ring
+* [ ] Add a flashing focus circle to the large peg holes for the active row
+* [ ] Use SVG buttons instead of HTML buttons
+* [ ] Add some fanfare around game win/loss
 
 ## Non-UI things
 
-* [ ] Add basic game logic
+* [x] Add basic game logic
+* [ ] Use [Vue.js](https://vuejs.org/) (my first Vue.js app!)
 
 ## Boring things
 
