@@ -16,28 +16,50 @@ const P = {
   WH: Symbol('white')
 };
 
+const PEG_TO_COLOUR = {
+  [P.R]: C.R,
+  [P.G]: C.G,
+  [P.B]: C.B,
+  [P.Y]: C.Y,
+  [P.BL]: C.BL,
+  [P.WH]: C.WH,
+};
+
 const PEGS = Object.values(P);
 
-const S = {
-  INITIALISED: Symbol('initialised'),
-  IN_PROGRESS: Symbol('in progress'),
-  WON: Symbol('won'),
-  LOST: Symbol('lost')
-};
+const LARGE_PEG_RADIUS = 15;
+const SMALL_PEG_RADIUS = 7;
+const SMALL_PEG_HOLE_RADIUS = 6;
+const LARGE_PEG_HOLE_RADIUS = 12;
+const SECRET_ROW_CENTRE_Y = 38;
+const FIRST_ROW_CENTRE_Y = 140;
+const ROW_GAP_Y = 60;
+const FIRST_LARGE_PEG_X = 155;
+const LARGE_PEG_GAP_X = 62;
+const SMALL_PEG_GAP_Y = 10;
+const SMALL_PEG_LEFT_X = 60;
+const SMALL_PEG_RIGHT_X = 86;
 
-const state = {
-  gameState: S.INITIALISED,
-  secret: Array(4).fill(P.U),
-  guessRows: [],
-  activeGuessRowIndex: -1
-};
+// const S = {
+//   INITIALISED: Symbol('initialised'),
+//   IN_PROGRESS: Symbol('in progress'),
+//   WON: Symbol('won'),
+//   LOST: Symbol('lost')
+// };
 
-const randomCode = () => {
+// const state = {
+//   gameState: S.INITIALISED,
+//   secret: Array(4).fill(P.U),
+//   guessRows: [],
+//   activeGuessRowIndex: -1
+// };
+
+const generateRandomCode = () => {
   const chooseRandomPeg = () => {
-      const randomIndex = Math.floor((Math.random() * PEGS.length));
-      return PEGS[randomIndex];
+    const randomIndex = Math.floor((Math.random() * PEGS.length));
+    return PEGS[randomIndex];
   };
-  return [0, 1, 2, 3].map(chooseRandomPeg);
+  return range(4).map(chooseRandomPeg);
 };
 
 const evaluateGuess = (secret, guess) => {
@@ -49,24 +71,12 @@ const evaluateGuess = (secret, guess) => {
   return { blacks, whites };
 };
 
-const LARGE_PEG_RADIUS = 15;
-const SMALL_PEG_RADIUS = 7;
-const SMALL_PEG_HOLE_RADIUS = 6;
-const LARGE_PEG_HOLE_RADIUS = 12;
-const FIRST_ROW_CENTRE_Y = 140;
-const ROW_GAP_Y = 60;
-const FIRST_LARGE_PEG_X = 155;
-const LARGE_PEG_GAP_X = 62;
-const SMALL_PEG_GAP_Y = 10;
-const SMALL_PEG_LEFT_X = 60;
-const SMALL_PEG_RIGHT_X = 86;
-
 const board = document.getElementById("board");
+
+const range = n => Array.from(Array(n).keys());
 
 const createSVGElement = elementName =>
   document.createElementNS('http://www.w3.org/2000/svg', elementName);
-
-const range = n => Array.from(Array(n).keys());
 
 const addSecretPanel = () => {
   const path = createSVGElement("path");
@@ -77,27 +87,39 @@ const addSecretPanel = () => {
 };
 
 const addSecretPanelLargePegHole = n =>
-  addLargePegHole(38, n);
+  addLargePegHole(SECRET_ROW_CENTRE_Y, n);
 
-const addSecretPanelCover = () => {
+const showSecretPanelCover = () => {
+
+  const group = createSVGElement("g");
+  group.setAttribute("data-piece", "secret-panel-cover");
+
   const path = createSVGElement("path");
   path.setAttribute("class", "secret-panel-cover");
   path.setAttribute("d", "M127 13 L127 77 L369 77 L369 13 Z");
-  board.appendChild(path);
+  group.appendChild(path);
 
   const text1 = createSVGElement("text");
   text1.setAttribute("x", 127 + 20);
   text1.setAttribute("y", 46);
   text1.setAttribute("class", "secret-panel-cover-text-1");
   text1.appendChild(document.createTextNode("MASTER"));
-  board.appendChild(text1);
+  group.appendChild(text1);
 
   const text2 = createSVGElement("text");
   text2.setAttribute("x", 369 - 20);
   text2.setAttribute("y", 74);
   text2.setAttribute("class", "secret-panel-cover-text-2");
   text2.appendChild(document.createTextNode("MIND"));
-  board.appendChild(text2);
+  group.appendChild(text2);
+
+  board.appendChild(group);
+};
+
+const hideSecretPanelCover = () => {
+  document
+    .querySelectorAll("[data-piece='secret-panel-cover']")
+    .forEach(piece => piece.remove());
 };
 
 const addRows = () =>
@@ -199,19 +221,25 @@ const addMainPanel = () => {
 const addSmallPeg = (row, n, colour) => {
   const inverseRowNumber = 9 - row;
   const cx = n % 2 === 0 ? SMALL_PEG_LEFT_X : SMALL_PEG_RIGHT_X;
-  const cy = FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y) + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
+  const cy =
+    FIRST_ROW_CENTRE_Y +
+    (inverseRowNumber * ROW_GAP_Y) +
+    SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "small-peg");
   circle.setAttribute("cx", cx);
   circle.setAttribute("cy", cy);
   circle.setAttribute("r", SMALL_PEG_RADIUS);
   circle.setAttribute("fill", colour);
+  circle.setAttribute("data-piece", "small-peg");
   board.appendChild(circle);
 };
 
 const addLargePeg = (row, n, colour) => {
   const inverseRowNumber = 9 - row;
-  const cy = (row < 0) ? 38 : FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
+  const cy = (row < 0)
+    ? SECRET_ROW_CENTRE_Y
+    : FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
   const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "large-peg");
@@ -219,19 +247,20 @@ const addLargePeg = (row, n, colour) => {
   circle.setAttribute("cy", cy);
   circle.setAttribute("r", LARGE_PEG_RADIUS);
   circle.setAttribute("fill", colour);
+  circle.setAttribute("data-piece", "large-peg");
   board.appendChild(circle);
 };
 
-const PEG_TO_COLOUR = {
-  [P.R]: C.R,
-  [P.G]: C.G,
-  [P.B]: C.B,
-  [P.Y]: C.Y,
-  [P.BL]: C.BL,
-  [P.WH]: C.WH,
+const removePegs = () => {
+  document
+    .querySelectorAll("[data-piece='small-peg']")
+    .forEach(piece => piece.remove());
+  document
+    .querySelectorAll("[data-piece='large-peg']")
+    .forEach(piece => piece.remove());
 };
 
-const setSecret = secret => {
+const showSecret = secret => {
   const colours = secret.map(peg => PEG_TO_COLOUR[peg]);
   colours.forEach((colour, index) => addLargePeg(-1, index, colour));
 };
@@ -249,14 +278,50 @@ const setFeedback = (row, feedback) => {
 };
 
 addSecretPanel();
-// addSecretPanelCover();
+showSecretPanelCover();
 addRows();
 addMainPanel();
 
-const secret = randomCode();
-const guess = randomCode();
+const secret = generateRandomCode();
+const guess = generateRandomCode();
 const feedback = evaluateGuess(secret, guess);
 
-setSecret(secret);
 setGuess(0, guess);
 setFeedback(0, feedback);
+
+setTimeout(() => {
+  hideSecretPanelCover();
+  showSecret(secret);
+}, 2000);
+
+// add New Game button
+// add Enter button
+
+// onNewGame
+// - removePieces()
+// - generate seret
+// - cover secret
+// - set activeGuessRowIndex = 0
+
+// onEnter
+// - generate guess
+// - evaluate guess
+// - set guess
+// - set feedback
+// - if guess correct
+//  - won
+//  - reveal secret
+// - else
+//  - bump activeGuessRowIndex
+//  - if activeGuessRowIndex === 10
+//   - lost
+//   - reveal secret
+
+// Allow choosing of peg colours for a guess
+// Disable Enter button until a colour has been chosen for all pegs
+
+// Show win feedback
+// - words + trophy
+
+// Show loss feedback
+// - words + ???
