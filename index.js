@@ -40,19 +40,23 @@ const SMALL_PEG_GAP_Y = 10;
 const SMALL_PEG_LEFT_X = 60;
 const SMALL_PEG_RIGHT_X = 86;
 
-// const S = {
-//   INITIALISED: Symbol('initialised'),
-//   IN_PROGRESS: Symbol('in progress'),
-//   WON: Symbol('won'),
-//   LOST: Symbol('lost')
-// };
+const S = {
+  INITIALISED: Symbol('initialised'),
+  IN_PROGRESS: Symbol('in progress'),
+  WON: Symbol('won'),
+  LOST: Symbol('lost')
+};
 
-// const state = {
-//   gameState: S.INITIALISED,
-//   secret: Array(4).fill(P.U),
-//   guessRows: [],
-//   activeGuessRowIndex: -1
-// };
+const state = {
+  gameState: S.INITIALISED,
+  secret: Array(4).fill(P.U),
+  guessRows: [],
+  activeGuessRowIndex: -1
+};
+
+const board = document.getElementById("board");
+const btnNewGame = document.getElementById("btnNewGame");
+const btnEnter = document.getElementById("btnEnter");
 
 const generateRandomCode = () => {
   const chooseRandomPeg = () => {
@@ -70,8 +74,6 @@ const evaluateGuess = (secret, guess) => {
   const whites = sum - blacks;
   return { blacks, whites };
 };
-
-const board = document.getElementById("board");
 
 const range = n => Array.from(Array(n).keys());
 
@@ -277,51 +279,59 @@ const setFeedback = (row, feedback) => {
   colours.forEach((colour, index) => addSmallPeg(row, index, colour));
 };
 
+const showNewGameButton = () => btnNewGame.style.display = "block";
+const hideNewGameButton = () => btnNewGame.style.display = "none";
+const showEnterButton = () => btnEnter.style.display = "block";
+const hideEnterButton = () => btnEnter.style.display = "none";
+
+
+hideEnterButton();
 addSecretPanel();
-showSecretPanelCover();
 addRows();
 addMainPanel();
 
-const secret = generateRandomCode();
-const guess = generateRandomCode();
-const feedback = evaluateGuess(secret, guess);
+const onNewGame = () => {
+  removePegs();
+  showSecretPanelCover();
+  hideNewGameButton();
+  showEnterButton();
+  state.gameState = S.IN_PROGRESS;
+  state.secret = generateRandomCode();
+  state.guessRows = [];
+  state.activeGuessRowIndex = 0;
+};
 
-setGuess(0, guess);
-setFeedback(0, feedback);
+const onEnter = () => {
+  if (state.gameState !== S.IN_PROGRESS) return;
+  const guess = generateRandomCode();
+  const feedback = evaluateGuess(state.secret, guess);
+  setGuess(state.activeGuessRowIndex, guess);
+  setFeedback(state.activeGuessRowIndex, feedback);
+  if (feedback.blacks === 4) {
+    state.gameState = S.WON;
+  }
+  else {
+    state.activeGuessRowIndex++;
+    if (state.activeGuessRowIndex === 10) {
+      state.gameState = S.LOST;
+    }
+  }
+  if (state.gameState === S.WON || state.gameState === S.LOST) {
+    hideSecretPanelCover();
+    showSecret(state.secret);
+    hideEnterButton();
+    showNewGameButton();
+  }
+};
 
-setTimeout(() => {
-  hideSecretPanelCover();
-  showSecret(secret);
-}, 2000);
-
-// add New Game button
-// add Enter button
-
-// onNewGame
-// - removePieces()
-// - generate seret
-// - cover secret
-// - set activeGuessRowIndex = 0
-
-// onEnter
-// - generate guess
-// - evaluate guess
-// - set guess
-// - set feedback
-// - if guess correct
-//  - won
-//  - reveal secret
-// - else
-//  - bump activeGuessRowIndex
-//  - if activeGuessRowIndex === 10
-//   - lost
-//   - reveal secret
+btnNewGame.addEventListener("click", onNewGame);
+btnEnter.addEventListener("click", onEnter);
 
 // Allow choosing of peg colours for a guess
 // Disable Enter button until a colour has been chosen for all pegs
 
 // Show win feedback
-// - words + trophy
+// - words + trophy stock image
 
 // Show loss feedback
-// - words + ???
+// - words + sad face stock image
