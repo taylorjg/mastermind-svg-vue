@@ -250,6 +250,7 @@ const addLargePeg = (row, n, colour) => {
   circle.setAttribute("r", LARGE_PEG_RADIUS);
   circle.setAttribute("fill", colour);
   circle.setAttribute("data-piece", "large-peg");
+  circle.addEventListener("click", makeLargePegClickHandler(row, n));
   board.appendChild(circle);
 };
 
@@ -323,6 +324,21 @@ const onEnter = () => {
     showNewGameButton();
   }
 };
+
+const makeLargePegClickHandler = (row, n) => () => {
+  // show a ring of pegs centred around the clicked peg
+  // add a handler to each of the pegs in the ring
+  // if the large peg is clicked again:
+  // - remove the ring
+  // - need a way to know if ring is displayed or not
+  // if a ring peg is clicked:
+  // - if the colour of the clicked ring peg is different to the current large peg colour:
+  //  - remove the large peg
+  //  - re-add the large peg with the selected colour
+};
+
+// const makeRingPegClickHandler = (row, n, colour) => {
+// };
 
 btnNewGame.addEventListener("click", onNewGame);
 btnEnter.addEventListener("click", onEnter);
