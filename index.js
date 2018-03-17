@@ -1,9 +1,54 @@
-const R = "#FF0000";
-const G = "#00FF00";
-const B = "#0000FF";
-const Y = "#FFFF00";
-const BL = "#000000";
-const WH = "#FFFFFF";
+const C = {
+  R: "#FF0000",
+  G: "#00FF00",
+  B: "#0000FF",
+  Y: "#FFFF00",
+  BL: "#000000",
+  WH: "#FFFFFF"
+};
+
+const P = {
+  R: Symbol('red'),
+  G: Symbol('green'),
+  B: Symbol('blue'),
+  Y: Symbol('yellow'),
+  BL: Symbol('black'),
+  WH: Symbol('white')
+};
+
+const PEGS = Object.values(P);
+
+const S = {
+  INITIALISED: Symbol('initialised'),
+  IN_PROGRESS: Symbol('in progress'),
+  WON: Symbol('won'),
+  LOST: Symbol('lost')
+};
+
+const state = {
+  gameState: S.INITIALISED,
+  secret: Array(4).fill(P.U),
+  guessRows: [],
+  activeGuessRowIndex: -1
+};
+
+const randomCode = () => {
+  const chooseRandomPeg = () => {
+      const randomIndex = Math.floor((Math.random() * PEGS.length));
+      return PEGS[randomIndex];
+  };
+  return [0, 1, 2, 3].map(chooseRandomPeg);
+};
+
+const evaluateGuess = (secret, guess) => {
+  const count = (xs, p) => xs.filter(x => x === p).length;
+  const add = (a, b) => a + b;
+  const sum = PEGS.map(p => Math.min(count(secret, p), count(guess, p))).reduce(add);
+  const blacks = secret.filter((peg, index) => peg === guess[index]).length;
+  const whites = sum - blacks;
+  return { blacks, whites };
+};
+
 const LARGE_PEG_RADIUS = 15;
 const SMALL_PEG_RADIUS = 7;
 const SMALL_PEG_HOLE_RADIUS = 6;
@@ -165,8 +210,8 @@ const addSmallPeg = (row, n, colour) => {
 };
 
 const addLargePeg = (row, n, colour) => {
-  const row2 = 9 - row;
-  const cy = FIRST_ROW_CENTRE_Y + (row2 * ROW_GAP_Y);
+  const inverseRowNumber = 9 - row;
+  const cy = (row < 0) ? 38 : FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
   const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "large-peg");
@@ -177,15 +222,41 @@ const addLargePeg = (row, n, colour) => {
   board.appendChild(circle);
 };
 
+const PEG_TO_COLOUR = {
+  [P.R]: C.R,
+  [P.G]: C.G,
+  [P.B]: C.B,
+  [P.Y]: C.Y,
+  [P.BL]: C.BL,
+  [P.WH]: C.WH,
+};
+
+const setSecret = secret => {
+  const colours = secret.map(peg => PEG_TO_COLOUR[peg]);
+  colours.forEach((colour, index) => addLargePeg(-1, index, colour));
+};
+
+const setGuess = (row, guess) => {
+  const colours = guess.map(peg => PEG_TO_COLOUR[peg]);
+  colours.forEach((colour, index) => addLargePeg(row, index, colour));
+};
+
+const setFeedback = (row, feedback) => {
+  const blacks = Array(feedback.blacks).fill(C.BL);
+  const whites = Array(feedback.whites).fill(C.WH);
+  const colours = [...blacks, ...whites];
+  colours.forEach((colour, index) => addSmallPeg(row, index, colour));
+};
+
 addSecretPanel();
-addSecretPanelCover();
+// addSecretPanelCover();
 addRows();
 addMainPanel();
 
-addLargePeg(0, 0, R);
-addLargePeg(0, 1, R);
-addLargePeg(0, 2, Y);
-addLargePeg(0, 3, WH);
+const secret = randomCode();
+const guess = randomCode();
+const feedback = evaluateGuess(secret, guess);
 
-addSmallPeg(0, 0, BL);
-addSmallPeg(0, 1, WH);
+setSecret(secret);
+setGuess(0, guess);
+setFeedback(0, feedback);
