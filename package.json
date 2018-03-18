@@ -3,12 +3,21 @@
   "version": "0.0.1",
   "description": "Mastermind with SVG UI",
   "scripts": {
+    "start": "node server",
+    "heroku-postbuild": "webpack"
   },
   "author": "Jonathan Taylor",
   "license": "MIT",
   "dependencies": {
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "copy-webpack-plugin": "^4.5.1",
     "eslint": "^4.18.2",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "html-webpack-plugin": "^3.0.6",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.2"
   },
   "repository": {
     "type": "git",
