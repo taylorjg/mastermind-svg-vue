@@ -7,6 +7,8 @@ const C = {
   WH: "#FFFFFF"
 };
 
+const COLOURS = Object.values(C);
+
 const P = {
   R: Symbol('red'),
   G: Symbol('green'),
@@ -15,6 +17,8 @@ const P = {
   BL: Symbol('black'),
   WH: Symbol('white')
 };
+
+const PEGS = Object.values(P);
 
 const PEG_TO_COLOUR = {
   [P.R]: C.R,
@@ -25,8 +29,17 @@ const PEG_TO_COLOUR = {
   [P.WH]: C.WH,
 };
 
-const PEGS = Object.values(P);
+const COLOUR_TO_PEG = {
+  [C.R]: P.R,
+  [C.G]: P.G,
+  [C.B]: P.B,
+  [C.Y]: P.Y,
+  [C.BL]: P.BL,
+  [C.WH]: P.WH,
+};
 
+const BOARD_WIDTH = 414;
+const BOARD_HEIGHT = 736;
 const LARGE_PEG_RADIUS = 15;
 const SMALL_PEG_RADIUS = 7;
 const SMALL_PEG_HOLE_RADIUS = 6;
@@ -49,9 +62,10 @@ const S = {
 
 const state = {
   gameState: S.INITIALISED,
-  secret: Array(4).fill(P.U),
-  guessRows: [],
-  activeGuessRowIndex: -1
+  secret: [],
+  guess: [],
+  activeGuessRowIndex: -1,
+  showingColourMenuFor: -1
 };
 
 const board = document.getElementById("board");
@@ -89,7 +103,7 @@ const addSecretPanel = () => {
 };
 
 const addSecretPanelLargePegHole = n =>
-  addLargePegHole(SECRET_ROW_CENTRE_Y, n);
+  (-1, n, SECRET_ROW_CENTRE_Y);
 
 const showSecretPanelCover = () => {
 
@@ -164,16 +178,27 @@ const addRowLargePegHoles = row => {
 
 const addRowLargePegHole = (row, n) => {
   const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
-  addLargePegHole(cy, n);
+  addLargePegHole(row, n, cy);
 };
 
-const addLargePegHole = (cy, n) => {
+const makeLargePegClickHandler = (row, n) => () => {
+  if (row !== state.activeGuessRowIndex) return;
+  if (state.showingColourMenuFor >= 0 && state.showingColourMenuFor !== n) {
+    hideColourMenu();
+    return;
+  }
+  toggleColourMenuFor(n);
+};
+
+const addLargePegHole = (row, n, cy) => {
+  const inverseRowNumber = 9 - row;
   const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const circle = createSVGElement("circle");
   circle.setAttribute("class", "large-peg-hole");
   circle.setAttribute("cx", cx);
   circle.setAttribute("cy", cy);
   circle.setAttribute("r", LARGE_PEG_HOLE_RADIUS);
+  circle.addEventListener("click", makeLargePegClickHandler(inverseRowNumber, n));
   board.appendChild(circle);
 };
 
@@ -239,6 +264,7 @@ const addSmallPeg = (row, n, colour) => {
 
 const addLargePeg = (row, n, colour) => {
   const inverseRowNumber = 9 - row;
+  const position = `${row}:${n}`;
   const cy = (row < 0)
     ? SECRET_ROW_CENTRE_Y
     : FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
@@ -250,8 +276,16 @@ const addLargePeg = (row, n, colour) => {
   circle.setAttribute("r", LARGE_PEG_RADIUS);
   circle.setAttribute("fill", colour);
   circle.setAttribute("data-piece", "large-peg");
+  circle.setAttribute("data-position", position);
   circle.addEventListener("click", makeLargePegClickHandler(row, n));
   board.appendChild(circle);
+};
+
+const removeLargePeg = (row, n) => {
+  const position = `${row}:${n}`;
+  document
+    .querySelectorAll(`[data-position='${position}']`)
+    .forEach(piece => piece.remove());
 };
 
 const removePegs = () => {
@@ -268,11 +302,6 @@ const showSecret = secret => {
   colours.forEach((colour, index) => addLargePeg(-1, index, colour));
 };
 
-const setGuess = (row, guess) => {
-  const colours = guess.map(peg => PEG_TO_COLOUR[peg]);
-  colours.forEach((colour, index) => addLargePeg(row, index, colour));
-};
-
 const setFeedback = (row, feedback) => {
   const blacks = Array(feedback.blacks).fill(C.BL);
   const whites = Array(feedback.whites).fill(C.WH);
@@ -284,7 +313,8 @@ const showNewGameButton = () => btnNewGame.style.display = "block";
 const hideNewGameButton = () => btnNewGame.style.display = "none";
 const showEnterButton = () => btnEnter.style.display = "block";
 const hideEnterButton = () => btnEnter.style.display = "none";
-
+const enableEnterButton = () => btnEnter.disabled = false;
+const disableEnterButton = () => btnEnter.disabled = true;
 
 hideEnterButton();
 addSecretPanel();
@@ -296,17 +326,17 @@ const onNewGame = () => {
   showSecretPanelCover();
   hideNewGameButton();
   showEnterButton();
+  disableEnterButton();
   state.gameState = S.IN_PROGRESS;
   state.secret = generateRandomCode();
-  state.guessRows = [];
+  state.guess = Array(4).fill({});
   state.activeGuessRowIndex = 0;
 };
 
 const onEnter = () => {
   if (state.gameState !== S.IN_PROGRESS) return;
-  const guess = generateRandomCode();
+  const guess = state.guess.map(g => g.peg);
   const feedback = evaluateGuess(state.secret, guess);
-  setGuess(state.activeGuessRowIndex, guess);
   setFeedback(state.activeGuessRowIndex, feedback);
   if (feedback.blacks === 4) {
     state.gameState = S.WON;
@@ -323,31 +353,56 @@ const onEnter = () => {
     hideEnterButton();
     showNewGameButton();
   }
+  else {
+    disableEnterButton();
+  }
 };
 
-const makeLargePegClickHandler = (row, n) => () => {
-  // show a ring of pegs centred around the clicked peg
-  // add a handler to each of the pegs in the ring
-  // if the large peg is clicked again:
-  // - remove the ring
-  // - need a way to know if ring is displayed or not
-  // if a ring peg is clicked:
-  // - if the colour of the clicked ring peg is different to the current large peg colour:
-  //  - remove the large peg
-  //  - re-add the large peg with the selected colour
+const makeColourSwatchClickHandler = colour => () => {
+  const row = state.activeGuessRowIndex;
+  const n = state.showingColourMenuFor;
+  removeLargePeg(row, n);
+  addLargePeg(row, n, colour);
+  state.guess[n] = { peg: COLOUR_TO_PEG[colour] };
+  if (state.guess.length === 4 && state.guess.every(g => !!g.peg)) {
+    enableEnterButton();
+  }
+  hideColourMenu();
 };
 
-// const makeRingPegClickHandler = (row, n, colour) => {
-// };
+const createColourMenu = () => {
+  const dx = BOARD_WIDTH / 8;
+  const height = dx;
+  const baseHeight = BOARD_HEIGHT / 2 - height;
+  const group = createSVGElement("g");
+  group.setAttribute("class", "colour-menu");
+  COLOURS.forEach((colour, index) => {
+    const colourSwatch = createSVGElement("rect");
+    colourSwatch.setAttribute("x", dx + (2 * dx * (index % 3)));
+    colourSwatch.setAttribute("y", baseHeight + Math.floor(index / 3) * height);
+    colourSwatch.setAttribute("width", dx * 2);
+    colourSwatch.setAttribute("height", height);
+    colourSwatch.setAttribute("fill", colour);
+    colourSwatch.addEventListener("click", makeColourSwatchClickHandler(colour));
+    group.appendChild(colourSwatch);
+  });
+  return group;
+};
+
+const showColourMenuFor = n => {
+  board.appendChild(colourMenu);
+  state.showingColourMenuFor = n;
+};
+
+const hideColourMenu = () => {
+  board.removeChild(colourMenu);
+  state.showingColourMenuFor = -1;
+};
+
+const colourMenu = createColourMenu();
+
+const toggleColourMenuFor = n =>
+  state.showingColourMenuFor >= 0 ? hideColourMenu() : showColourMenuFor(n);
 
 btnNewGame.addEventListener("click", onNewGame);
 btnEnter.addEventListener("click", onEnter);
-
-// Allow choosing of peg colours for a guess
-// Disable Enter button until a colour has been chosen for all pegs
-
-// Show win feedback
-// - words + trophy stock image
-
-// Show loss feedback
-// - words + sad face stock image

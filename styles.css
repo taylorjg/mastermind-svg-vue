@@ -84,6 +84,10 @@ html, body {
   fill-opacity: 1;
 }
 
+.colour-menu {
+  filter: url(#shadow2);
+}
+
 #btnNewGame {
   position: absolute;
   top: 20px;

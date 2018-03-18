@@ -11,9 +11,8 @@ I created this separate repo to play around with it.
 * [x] Add HTML "New Game" button
 * [x] Add HTML "Enter" button to enter a guess
 * [x] Show/hide secret panel cover
-* [ ] Show a ring of colours when clicking an active large peg hole
-* [ ] Allow selection of a colour from the ring
-* [ ] Add a flashing focus circle to the large peg holes for the active row
+* [x] Allow selection of a peg colour from a colour menu
+* [ ] Add flashing focus circles to the large peg holes for the active row
 * [ ] Use SVG buttons instead of HTML buttons
 * [ ] Add some fanfare around game win/loss
 * [ ] Add shine/gloss to large/small pegs
