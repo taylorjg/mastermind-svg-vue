@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/taylorjg/mastermind-svg-prototype/tree/master.svg?style=svg)](https://circleci.com/gh/taylorjg/mastermind-svg-prototype/tree/master)
+
 # Description
 
 I previously implemented [Mastermind in React](https://github.com/taylorjg/Mastermind).
@@ -27,5 +29,5 @@ I created this separate repo to play around with it.
 
 ## Boring things
 
-* [ ] Add CI/CD via CircleCI 2.0
-* [ ] Deploy to Heroku
+* [x] Add CI/CD via CircleCI 2.0
+* [x] Deploy to Heroku
