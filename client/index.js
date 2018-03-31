@@ -60,8 +60,6 @@ const S = {
   LOST: Symbol('lost')
 };
 
-const EMPTY_GUESS = Array(4).fill({});
-
 const state = {
   gameState: S.INITIALISED,
   secret: [],
@@ -332,7 +330,7 @@ const onNewGame = () => {
   disableEnterButton();
   state.gameState = S.IN_PROGRESS;
   state.secret = generateRandomSecret();
-  state.guess = EMPTY_GUESS;
+  state.guess = Array(4).fill({});
   state.activeGuessRowIndex = 0;
 };
 
@@ -345,7 +343,7 @@ const onEnter = () => {
     state.gameState = S.WON;
   }
   else {
-    state.guess = EMPTY_GUESS;
+    state.guess = Array(4).fill({});
     state.activeGuessRowIndex++;
     if (state.activeGuessRowIndex === 10) {
       state.gameState = S.LOST;
