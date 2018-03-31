@@ -85,7 +85,18 @@ html, body {
 }
 
 .colour-menu {
-  filter: url(#shadow2);
+  fill: rgb(141, 97, 40);
+  filter: url(#shadow);
+  stroke: rgb(141, 97, 40);
+  stroke-width: 6;
+  rx: 5;
+  ry: 5;
+}
+
+.colour-menu-inner {
+  fill: rgb(90, 58, 16);
+  rx: 5;
+  ry: 5;
 }
 
 #btnNewGame {

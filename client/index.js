@@ -182,6 +182,7 @@ const addRowLargePegHole = (row, n) => {
 };
 
 const makeLargePegClickHandler = (row, n) => () => {
+  if (state.gameState !== S.IN_PROGRESS) return;
   if (row !== state.activeGuessRowIndex) return;
   if (state.showingColourMenuFor >= 0 && state.showingColourMenuFor !== n) {
     hideColourMenu();
@@ -371,17 +372,31 @@ const makeColourSwatchClickHandler = colour => () => {
 };
 
 const createColourMenu = () => {
-  const dx = BOARD_WIDTH / 8;
-  const height = dx;
-  const baseHeight = BOARD_HEIGHT / 2 - height;
   const group = createSVGElement("g");
-  group.setAttribute("class", "colour-menu");
+  const rect = createSVGElement("rect");
+  rect.setAttribute("x", 30);
+  rect.setAttribute("y", 10);
+  rect.setAttribute("width", 344);
+  rect.setAttribute("height", 70);
+  rect.setAttribute("class", "colour-menu");
+  group.appendChild(rect);
+  const rect2 = createSVGElement("rect");
+  rect2.setAttribute("x", 36);
+  rect2.setAttribute("y", 16);
+  rect2.setAttribute("width", 368 - 36);
+  rect2.setAttribute("height", 74 - 16);
+  rect2.setAttribute("class", "colour-menu-inner");
+  group.appendChild(rect2);
+  const gap = (368 - 36) / 6;
+  const hgap = gap / 2;
   COLOURS.forEach((colour, index) => {
-    const colourSwatch = createSVGElement("rect");
-    colourSwatch.setAttribute("x", dx + (2 * dx * (index % 3)));
-    colourSwatch.setAttribute("y", baseHeight + Math.floor(index / 3) * height);
-    colourSwatch.setAttribute("width", dx * 2);
-    colourSwatch.setAttribute("height", height);
+    const cx = 36 + hgap + gap * index;
+    const cy = (16 + 74) / 2;
+    const colourSwatch = createSVGElement("circle");
+    colourSwatch.setAttribute("class", "large-peg");
+    colourSwatch.setAttribute("cx", cx);
+    colourSwatch.setAttribute("cy", cy);
+    colourSwatch.setAttribute("r", LARGE_PEG_RADIUS);
     colourSwatch.setAttribute("fill", colour);
     colourSwatch.addEventListener("click", makeColourSwatchClickHandler(colour));
     group.appendChild(colourSwatch);
