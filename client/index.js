@@ -1,3 +1,5 @@
+import { TweenMax, Expo } from "gsap";
+
 const C = {
   R: "#FF0000",
   G: "#00FF00",
@@ -406,13 +408,21 @@ const createColourMenu = () => {
 };
 
 const showColourMenuFor = n => {
-  board.appendChild(colourMenu);
   state.showingColourMenuFor = n;
+  colourMenu.style.opacity = 1;
+  board.appendChild(colourMenu);
+  TweenMax.from(colourMenu, 1, {
+    opacity: 0, ease: Expo.easeOut
+  });
 };
 
 const hideColourMenu = () => {
-  board.removeChild(colourMenu);
   state.showingColourMenuFor = -1;
+  TweenMax.to(colourMenu, 1, {
+    opacity: 0, ease: Expo.easeOut, onComplete() {
+      board.removeChild(colourMenu);
+    }
+  });
 };
 
 const colourMenu = createColourMenu();
