@@ -375,21 +375,25 @@ const makeColourSwatchClickHandler = colour => () => {
 };
 
 const createColourMenu = () => {
-  const group = createSVGElement("g");
-  const rect = createSVGElement("rect");
-  rect.setAttribute("x", 30);
-  rect.setAttribute("y", 10);
-  rect.setAttribute("width", 344);
-  rect.setAttribute("height", 70);
-  rect.setAttribute("class", "colour-menu");
-  group.appendChild(rect);
-  const rect2 = createSVGElement("rect");
-  rect2.setAttribute("x", 36);
-  rect2.setAttribute("y", 16);
-  rect2.setAttribute("width", 368 - 36);
-  rect2.setAttribute("height", 74 - 16);
-  rect2.setAttribute("class", "colour-menu-inner");
-  group.appendChild(rect2);
+
+  const outerRect = createSVGElement("rect");
+  outerRect.setAttribute("x", 30);
+  outerRect.setAttribute("y", 10);
+  outerRect.setAttribute("width", 344);
+  outerRect.setAttribute("height", 70);
+  outerRect.setAttribute("class", "colour-menu");
+
+  const innerRect = createSVGElement("rect");
+  innerRect.setAttribute("x", 36);
+  innerRect.setAttribute("y", 16);
+  innerRect.setAttribute("width", 368 - 36);
+  innerRect.setAttribute("height", 74 - 16);
+  innerRect.setAttribute("class", "colour-menu-inner");
+
+  const colourMenu = createSVGElement("g");
+  colourMenu.appendChild(outerRect);
+  colourMenu.appendChild(innerRect);
+  
   const gap = (368 - 36) / 6;
   const hgap = gap / 2;
   COLOURS.forEach((colour, index) => {
@@ -402,30 +406,52 @@ const createColourMenu = () => {
     colourSwatch.setAttribute("r", LARGE_PEG_RADIUS);
     colourSwatch.setAttribute("fill", colour);
     colourSwatch.addEventListener("click", makeColourSwatchClickHandler(colour));
-    group.appendChild(colourSwatch);
+    colourMenu.appendChild(colourSwatch);
   });
-  return group;
+
+  const centreX = FIRST_LARGE_PEG_X;
+  const pointer = createSVGElement("path");
+  const pathData = `M${centreX} 98 L${centreX - 10} 83 L${centreX + 10} 83 Z`;
+  pointer.setAttribute("d", pathData);
+  pointer.setAttribute("class", "colou-menu-pointer");
+
+  return { colourMenu, pointer };
 };
 
 const showColourMenuFor = n => {
   state.showingColourMenuFor = n;
+  const row = state.activeGuessRowIndex;
+  const inverseRowNumber = 9 - row;
+
+  const txColourMenu = 0;
+  const tyColourMenu = FIRST_ROW_CENTRE_Y + ((inverseRowNumber - 2) * ROW_GAP_Y);
+  colourMenu.setAttribute("transform", `translate(${txColourMenu}, ${tyColourMenu})`);
   colourMenu.style.opacity = 1;
+
+  const txPointer = n * LARGE_PEG_GAP_X;
+  const tyPointer = FIRST_ROW_CENTRE_Y + ((inverseRowNumber - 2) * ROW_GAP_Y);
+  pointer.setAttribute("transform", `translate(${txPointer}, ${tyPointer})`);
+  pointer.style.opacity = 1;
+
   board.appendChild(colourMenu);
-  TweenMax.from(colourMenu, 1, {
+  board.appendChild(pointer);
+
+  TweenMax.from([colourMenu, pointer], 1, {
     opacity: 0, ease: Expo.easeOut
   });
 };
 
 const hideColourMenu = () => {
   state.showingColourMenuFor = -1;
-  TweenMax.to(colourMenu, 1, {
+  TweenMax.to([colourMenu, pointer], 1, {
     opacity: 0, ease: Expo.easeOut, onComplete() {
       board.removeChild(colourMenu);
+      board.removeChild(pointer);
     }
   });
 };
 
-const colourMenu = createColourMenu();
+const { colourMenu, pointer } = createColourMenu();
 
 const toggleColourMenuFor = n =>
   state.showingColourMenuFor >= 0 ? hideColourMenu() : showColourMenuFor(n);

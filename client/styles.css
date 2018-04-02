@@ -99,6 +99,10 @@ html, body {
   ry: 5;
 }
 
+.colou-menu-pointer {
+  fill: rgb(90, 58, 16);
+}
+
 #btnNewGame {
   position: absolute;
   top: 20px;
