@@ -187,10 +187,11 @@ const makeLargePegClickHandler = (row, n) => () => {
   if (state.gameState !== S.IN_PROGRESS) return;
   if (row !== state.activeGuessRowIndex) return;
   if (state.showingColourMenuFor >= 0 && state.showingColourMenuFor !== n) {
-    hideColourMenu();
-    return;
+    showColourMenuFor(n, 0);
   }
-  toggleColourMenuFor(n);
+  else {
+    toggleColourMenuFor(n);
+  }
 };
 
 const addLargePegHole = (row, n, cy) => {
@@ -393,7 +394,7 @@ const createColourMenu = () => {
   const colourMenu = createSVGElement("g");
   colourMenu.appendChild(outerRect);
   colourMenu.appendChild(innerRect);
-  
+
   const gap = (368 - 36) / 6;
   const hgap = gap / 2;
   COLOURS.forEach((colour, index) => {
@@ -411,14 +412,14 @@ const createColourMenu = () => {
 
   const centreX = FIRST_LARGE_PEG_X;
   const pointer = createSVGElement("path");
-  const pathData = `M${centreX} 98 L${centreX - 10} 83 L${centreX + 10} 83 Z`;
+  const pathData = `M${centreX} 97 L${centreX - 10} 83 L${centreX + 10} 83 Z`;
   pointer.setAttribute("d", pathData);
   pointer.setAttribute("class", "colou-menu-pointer");
 
   return { colourMenu, pointer };
 };
 
-const showColourMenuFor = n => {
+const showColourMenuFor = (n, duration = 1) => {
   state.showingColourMenuFor = n;
   const row = state.activeGuessRowIndex;
   const inverseRowNumber = 9 - row;
@@ -436,7 +437,7 @@ const showColourMenuFor = n => {
   board.appendChild(colourMenu);
   board.appendChild(pointer);
 
-  TweenMax.from([colourMenu, pointer], 1, {
+  TweenMax.from([colourMenu, pointer], duration, {
     opacity: 0, ease: Expo.easeOut
   });
 };
