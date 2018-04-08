@@ -429,9 +429,13 @@ const onNewGame = () => {
   state.secret = generateRandomSecret();
   state.guess = Array(4).fill({});
   state.activeGuessRowIndex = 0;
+  console.log(`secret: ${state.secret.map(p => p.toString())}`);
 };
 
 const onEnter = () => {
+  if (state.showingColourMenuFor >= 0) {
+    hideColourMenu();
+  }
   if (state.gameState !== S.IN_PROGRESS) return;
   const guess = state.guess.map(g => g.peg);
   const feedback = evaluateGuess(state.secret, guess);
@@ -447,10 +451,15 @@ const onEnter = () => {
     }
   }
   if (state.gameState === S.WON || state.gameState === S.LOST) {
+    if (state.gameState === S.WON) {
+      showGameWonModal();
+    }
+    if (state.gameState === S.LOST) {
+      showGameLostModal();
+    }
     hideSecretPanelCover();
     showSecret(state.secret);
     hideEnterButton();
-    showNewGameButton();
   }
   else {
     disableEnterButton();
@@ -559,6 +568,94 @@ const { colourMenu, pointer } = createColourMenu();
 
 const toggleColourMenuFor = n =>
   state.showingColourMenuFor >= 0 ? hideColourMenu() : showColourMenuFor(n);
+
+const showGameWonModal = () =>
+  showModal("You Won!", "Congratulations!", "#trophy", 448.35);
+
+// scale = 0.14486150377967807
+// width="579.8642" => 84
+// height="189.18237" => 27.405242606803455
+const showGameLostModal = () =>
+  showModal("You Lost!", "Commiserations", "#spoon", 579.8642);
+
+const MODAL_OUTER_BORDER = 6;
+const MODAL_OUTER_X = BOARD_WIDTH / 4;
+const MODAL_OUTER_Y = BOARD_HEIGHT / 4;
+const MODAL_OUTER_WIDTH = BOARD_WIDTH / 2;
+const MODAL_OUTER_HEIGHT = BOARD_HEIGHT / 2;
+
+const MODAL_INNER_X = MODAL_OUTER_X + MODAL_OUTER_BORDER;
+const MODAL_INNER_Y = MODAL_OUTER_Y + MODAL_OUTER_BORDER;
+const MODAL_INNER_WIDTH = MODAL_OUTER_WIDTH - 2 * MODAL_OUTER_BORDER;
+const MODAL_INNER_HEIGHT = MODAL_OUTER_HEIGHT - 2 * MODAL_OUTER_BORDER;
+
+const showModal = (message1, message2, graphicId, size) => {
+
+  const outerRect = createSVGElement("rect");
+  outerRect.setAttribute("x", MODAL_OUTER_X);
+  outerRect.setAttribute("y", MODAL_OUTER_Y);
+  outerRect.setAttribute("rx", 5);
+  outerRect.setAttribute("ry", 5);
+  outerRect.setAttribute("width", MODAL_OUTER_WIDTH);
+  outerRect.setAttribute("height", MODAL_OUTER_HEIGHT);
+  outerRect.setAttribute("stroke-width", MODAL_OUTER_BORDER);
+  outerRect.setAttribute("class", "modal-outer");
+
+  const innerRect = createSVGElement("rect");
+  innerRect.setAttribute("x", MODAL_INNER_X);
+  innerRect.setAttribute("y", MODAL_INNER_Y);
+  innerRect.setAttribute("rx", 5);
+  innerRect.setAttribute("ry", 5);
+  innerRect.setAttribute("width", MODAL_INNER_WIDTH);
+  innerRect.setAttribute("height", MODAL_INNER_HEIGHT);
+  innerRect.setAttribute("class", "modal-inner");
+
+  const text1 = createSVGElement("text");
+  text1.setAttribute("x", BOARD_WIDTH / 2);
+  text1.setAttribute("y", MODAL_INNER_Y + 30);
+  text1.setAttribute("class", "modal-text-1");
+  text1.appendChild(document.createTextNode(message1));
+
+  const text2 = createSVGElement("text");
+  text2.setAttribute("x", BOARD_WIDTH / 2);
+  text2.setAttribute("y", MODAL_INNER_Y + MODAL_INNER_HEIGHT - 30);
+  text2.setAttribute("class", "modal-text-2");
+  text2.appendChild(document.createTextNode(message2));
+
+  const scale = MODAL_INNER_WIDTH / 2 / size;
+  const graphicX = MODAL_INNER_X + MODAL_INNER_WIDTH / 4;
+  const graphicY = MODAL_INNER_Y + MODAL_INNER_HEIGHT / 3;
+  const graphic = createSVGElement("use");
+  graphic.setAttributeNS("http://www.w3.org/1999/xlink", "href", graphicId);
+  graphic.setAttribute("transform", `translate(${graphicX}, ${graphicY}) scale(${scale}, ${scale})`);
+
+  const cx = MODAL_OUTER_X + MODAL_OUTER_WIDTH - COLOUR_MENU_BORDER / 2;
+  const cy = MODAL_OUTER_Y + COLOUR_MENU_BORDER / 2;
+  const closeButton = createSVGElement("g");
+  const circle = createSVGElement("circle");
+  circle.setAttribute("cx", cx);
+  circle.setAttribute("cy", cy);
+  circle.setAttribute("r", 12);
+  circle.setAttribute("class", "modal-close-button-circle");
+  const cross = createSVGElement("path");
+  cross.setAttribute("d", `M${cx - 5},${cy - 5} l10,10 M${cx + 5},${cy - 5} l-10,10`);
+  cross.setAttribute("class", "modal-close-button-cross");
+  closeButton.appendChild(circle);
+  closeButton.appendChild(cross);
+  closeButton.addEventListener("click", () => {
+    board.removeChild(modal);
+    showNewGameButton();
+  });
+
+  const modal = createSVGElement("g");
+  modal.appendChild(outerRect);
+  modal.appendChild(innerRect);
+  modal.appendChild(text1);
+  modal.appendChild(graphic);
+  modal.appendChild(text2);
+  modal.appendChild(closeButton);
+  board.appendChild(modal);
+};
 
 btnNewGame.addEventListener("click", onNewGame);
 btnEnter.addEventListener("click", onEnter);

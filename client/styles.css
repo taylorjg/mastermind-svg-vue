@@ -88,6 +88,42 @@ html, body {
   fill: rgb(90, 58, 16);
 }
 
+.modal-outer {
+  fill: rgb(141, 97, 40);
+  filter: url(#shadow2);
+  stroke: rgb(141, 97, 40);
+}
+
+.modal-inner {
+  fill: rgb(90, 58, 16);
+}
+
+.modal-text-1 {
+  fill: rgb(141, 97, 40);
+  text-anchor: middle;
+  font-family: Arial;
+  font-size: 24px;
+}
+
+.modal-text-2 {
+  fill: rgb(141, 97, 40);
+  text-anchor: middle;
+  font-family: Arial;
+  font-size: 16px;
+}
+
+.modal-close-button-circle {
+  fill-opacity: 1;
+  fill: black;
+  stroke-width: 2;
+  stroke: white;
+}
+
+.modal-close-button-cross {
+  stroke-width: 2;
+  stroke: white;
+}
+
 #btnNewGame {
   position: absolute;
   top: 20px;
