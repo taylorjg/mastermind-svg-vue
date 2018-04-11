@@ -173,7 +173,7 @@ const addSecretPanel = () => {
 };
 
 const addSecretPanelLargePegHole = n =>
-  (-1, n, SECRET_ROW_CENTRE_Y);
+  addLargePegHole(-1, n, SECRET_ROW_CENTRE_Y);
 
 const showSecretPanelCover = () => {
 
