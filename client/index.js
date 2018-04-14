@@ -63,7 +63,7 @@ const LARGE_PEG_GAP_X = BOARD_HEIGHT / 13.544973544973545;
 const MAIN_PANEL_HEIGHT = 10 * ROW_GAP_Y;
 const MAIN_PANEL_Y = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - GUTTER_Y;
 const SECRET_PANEL_Y = GUTTER_Y;
-const SECRET_PANEL_HEIGHT = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - 4 * GUTTER_Y;
+const SECRET_PANEL_HEIGHT = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - 3 * GUTTER_Y;
 const FIRST_ROW_CENTRE_Y = MAIN_PANEL_Y + ROW_GAP_Y / 2;
 
 const LARGE_PEG_HOLE_OUTER_RADIUS = BOARD_HEIGHT / 26;
@@ -95,7 +95,7 @@ const SMALL_PEG_RIGHT_X = MAIN_PANEL_X + 3 * SMALL_CUTOUT_WIDTH / 4;
 
 const SECRET_PANEL_PADDING_Y = BOARD_WIDTH - GUTTER_X - (FIRST_LARGE_PEG_X + 3 * LARGE_PEG_GAP_X);
 const SECRET_PANEL_WIDTH = 3 * LARGE_PEG_GAP_X + 2 * SECRET_PANEL_PADDING_Y;
-const SECRET_PANEL_X = FIRST_LARGE_PEG_X - SECRET_PANEL_PADDING_Y;
+const SECRET_PANEL_X = FIRST_LARGE_PEG_X - SECRET_PANEL_PADDING_Y + HALF_BORDER / 2;
 
 const S = {
   INITIALISED: Symbol('initialised'),
@@ -155,7 +155,7 @@ const addSecretPanel = () => {
 
   const path = createSVGElement("path");
   path.setAttribute("d", pathData);
-  path.setAttribute("stroke-width", BORDER);
+  path.setAttribute("stroke-width", HALF_BORDER);
   path.setAttribute("class", "secret-panel");
   board.appendChild(path);
   range(4).forEach(addSecretPanelLargePegHole);
@@ -468,21 +468,21 @@ const makeColourSwatchClickHandler = colour => () => {
 
 const createColourMenu = () => {
 
-  const COLOUR_MENU_OUTER_X = GUTTER_X;
-  const COLOUR_MENU_OUTER_Y = SECRET_PANEL_Y;
-  const COLOUR_MENU_OUTER_WIDTH = MAIN_PANEL_WIDTH;
-  const COLOUR_MENU_OUTER_HEIGHT = SECRET_PANEL_HEIGHT;
-
-  const COLOUR_MENU_INNER_X = COLOUR_MENU_OUTER_X + BORDER;
-  const COLOUR_MENU_INNER_Y = COLOUR_MENU_OUTER_Y + BORDER;
-  const COLOUR_MENU_INNER_WIDTH = COLOUR_MENU_OUTER_WIDTH - 2 * BORDER;
-  const COLOUR_MENU_INNER_HEIGHT = COLOUR_MENU_OUTER_HEIGHT - 2 * BORDER;
-
-  const POINTER_WIDTH = 20;
+  const POINTER_WIDTH = 1.5 * LARGE_PEG_HOLE_RADIUS;
   const POINTER_HALF_WIDTH = POINTER_WIDTH / 2;
-  const POINTER_HEIGHT = 14;
+  const POINTER_HEIGHT = LARGE_PEG_HOLE_RADIUS;
   const POINTER_TIP_X = FIRST_LARGE_PEG_X;
-  const POINTER_TIP_Y = COLOUR_MENU_OUTER_Y + COLOUR_MENU_OUTER_HEIGHT + HALF_BORDER + POINTER_HEIGHT;
+  const POINTER_TIP_Y = FIRST_ROW_CENTRE_Y - LARGE_PEG_RADIUS;
+
+  const COLOUR_MENU_OUTER_WIDTH = MAIN_PANEL_WIDTH;
+  const COLOUR_MENU_OUTER_HEIGHT = LARGE_PEG_RADIUS * 4;
+  const COLOUR_MENU_OUTER_X = MAIN_PANEL_X;
+  const COLOUR_MENU_OUTER_Y = POINTER_TIP_Y - POINTER_HEIGHT - COLOUR_MENU_OUTER_HEIGHT - HALF_BORDER / 2;
+
+  const COLOUR_MENU_INNER_X = COLOUR_MENU_OUTER_X + HALF_BORDER;
+  const COLOUR_MENU_INNER_Y = COLOUR_MENU_OUTER_Y + HALF_BORDER;
+  const COLOUR_MENU_INNER_WIDTH = COLOUR_MENU_OUTER_WIDTH - BORDER;
+  const COLOUR_MENU_INNER_HEIGHT = COLOUR_MENU_OUTER_HEIGHT - BORDER;
 
   const outerRect = createSVGElement("rect");
   outerRect.setAttribute("x", COLOUR_MENU_OUTER_X);
@@ -491,7 +491,7 @@ const createColourMenu = () => {
   outerRect.setAttribute("ry", 5);
   outerRect.setAttribute("width", COLOUR_MENU_OUTER_WIDTH);
   outerRect.setAttribute("height", COLOUR_MENU_OUTER_HEIGHT);
-  outerRect.setAttribute("stroke-width", BORDER);
+  outerRect.setAttribute("stroke-width", HALF_BORDER);
   outerRect.setAttribute("class", "colour-menu");
 
   const innerRect = createSVGElement("rect");
@@ -541,12 +541,12 @@ const showColourMenuFor = (n, duration = 1) => {
   const inverseRowNumber = 9 - row;
 
   const txColourMenu = 0;
-  const tyColourMenu = FIRST_ROW_CENTRE_Y + ((inverseRowNumber - 2) * ROW_GAP_Y);
+  const tyColourMenu = inverseRowNumber * ROW_GAP_Y;
   colourMenu.setAttribute("transform", `translate(${txColourMenu}, ${tyColourMenu})`);
   colourMenu.style.opacity = 1;
 
   const txPointer = n * LARGE_PEG_GAP_X;
-  const tyPointer = FIRST_ROW_CENTRE_Y + ((inverseRowNumber - 2) * ROW_GAP_Y);
+  const tyPointer = inverseRowNumber * ROW_GAP_Y;
   pointer.setAttribute("transform", `translate(${txPointer}, ${tyPointer})`);
   pointer.style.opacity = 1;
 
