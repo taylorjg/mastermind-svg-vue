@@ -1,6 +1,6 @@
 {
   "name": "mastermind-svg-prototype",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Mastermind with SVG UI",
   "scripts": {
     "start": "node server",

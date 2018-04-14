@@ -40,75 +40,62 @@ const COLOUR_TO_PEG = {
   [C.WH]: P.WH,
 };
 
-// document.body.clientWidth
-// document.body.clientHeight
-// Moto G (4): 360 x 512
-const BOARD_WIDTH = 360;
-const BOARD_HEIGHT = 512;
-// const BOARD_WIDTH = 414;
-// const BOARD_HEIGHT = 736;
+// Galaxy S5: 360 x 640 (according to Chrome dev tools)
+const DEFAULT_WIDTH = 360;
+const DEFAULT_HEIGHT = 640;
 
-const GUTTER_TOP = 10;
-const GUTTER_BOTTOM = 10;
-const GUTTER_LEFT = 55;
-const GUTTER_RIGHT = 35;
+const CLIENT_WIDTH = document.body.clientWidth;
+const CLIENT_HEIGHT = document.body.clientHeight;
 
-const SECRET_PANEL_WIDTH = 200;
-const SECRET_PANEL_HEIGHT = 45;
-const SECRET_PANEL_X = BOARD_WIDTH - SECRET_PANEL_WIDTH - GUTTER_RIGHT;
-const SECRET_PANEL_Y = GUTTER_TOP;
-const SECRET_PANEL_LIP = 10;
-const SECRET_PANEL_BORDER = 6;
-const SECRET_PANEL_HALF_BORDER = SECRET_PANEL_BORDER / 2;
+// Bootstrap 4
+// > Extra small devices (portrait phones, less than 576px)
+const IS_EXTRA_SMALL_DEVICE = CLIENT_WIDTH < 576;
+const BOARD_WIDTH = IS_EXTRA_SMALL_DEVICE ? CLIENT_WIDTH : DEFAULT_WIDTH;
+const BOARD_HEIGHT = IS_EXTRA_SMALL_DEVICE ? CLIENT_HEIGHT : DEFAULT_HEIGHT;
 
-// We are only using stroke to get a rounding effect
-const MAIN_PANEL_STROKE = 6;
-const MAIN_PANEL_X = GUTTER_LEFT;
-const MAIN_PANEL_Y = SECRET_PANEL_Y + SECRET_PANEL_HEIGHT + 10; // TODO: hard-coded value
-const MAIN_PANEL_WIDTH = BOARD_WIDTH - GUTTER_LEFT - GUTTER_RIGHT;
-const MAIN_PANEL_HEIGHT = BOARD_HEIGHT - MAIN_PANEL_Y - GUTTER_BOTTOM;
+const GUTTER_Y = 10;
+const BORDER = 6;
+const HALF_BORDER = BORDER / 2;
 
-const SMALL_CUTOUT_X = MAIN_PANEL_X;
-const SMALL_CUTOUT_WIDTH = 50;
-const SMALL_CUTOUT_HALF_HEIGHT = 20;
+const ROW_GAP_Y = BOARD_HEIGHT / 11.906976744186047;
+const LARGE_PEG_GAP_X = BOARD_HEIGHT / 13.544973544973545;
 
-const LARGE_HOLE_CUTOUT_RADIUS = 21;
+const MAIN_PANEL_HEIGHT = 10 * ROW_GAP_Y;
+const MAIN_PANEL_Y = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - GUTTER_Y;
+const SECRET_PANEL_Y = GUTTER_Y;
+const SECRET_PANEL_HEIGHT = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - 4 * GUTTER_Y;
+const FIRST_ROW_CENTRE_Y = MAIN_PANEL_Y + ROW_GAP_Y / 2;
 
-const LARGE_PEG_RADIUS = 12;
-const SMALL_PEG_RADIUS = 5;
+const LARGE_PEG_HOLE_OUTER_RADIUS = BOARD_HEIGHT / 26;
+const LARGE_PEG_HOLE_RADIUS = BOARD_HEIGHT / 51.2;
+const LARGE_PEG_HOLE_STROKE = LARGE_PEG_HOLE_RADIUS / 4;
+const LARGE_PEG_RADIUS = LARGE_PEG_HOLE_RADIUS + LARGE_PEG_HOLE_STROKE / 2;
 
-const SMALL_PEG_HOLE_RADIUS = 4;
-const SMALL_PEG_HOLE_STROKE = 1;
+const SMALL_CUTOUT_WIDTH = 2.5 * LARGE_PEG_HOLE_OUTER_RADIUS;
+const SMALL_CUTOUT_HEIGHT = 2 * LARGE_PEG_HOLE_OUTER_RADIUS;
 
-const LARGE_PEG_HOLE_RADIUS = 10;
-const LARGE_PEG_HOLE_STROKE = 4;
+const SMALL_PEG_HOLE_RADIUS = BOARD_HEIGHT / 128;
+const SMALL_PEG_HOLE_STROKE = SMALL_PEG_HOLE_RADIUS / 4;
+const SMALL_PEG_RADIUS = SMALL_PEG_HOLE_RADIUS + SMALL_PEG_HOLE_STROKE / 2;
+
 const SECRET_ROW_CENTRE_Y = SECRET_PANEL_Y + SECRET_PANEL_HEIGHT / 2;
-const FIRST_ROW_CENTRE_Y = 87;
-const ROW_GAP_Y = 43;
-const FIRST_LARGE_PEG_X = SECRET_PANEL_X + 2 * LARGE_PEG_RADIUS;
-const LARGE_PEG_GAP_X = 50;
-const SMALL_PEG_GAP_Y = 7;
-const SMALL_PEG_LEFT_X = MAIN_PANEL_X + 12; // TODO: hard-coded value
-const SMALL_PEG_RIGHT_X = SMALL_PEG_LEFT_X + 26; // TODO: hard-coded value
 
-const COLOUR_MENU_BORDER = 3;
-const COLOUR_MENU_HALF_BORDER = COLOUR_MENU_BORDER / 2;
+const LARGE_CUTOUT_WIDTH = 3 * LARGE_PEG_GAP_X + LARGE_PEG_HOLE_OUTER_RADIUS;
+const SPARE_WIDTH = BOARD_WIDTH - SMALL_CUTOUT_WIDTH - LARGE_CUTOUT_WIDTH;
 
-const COLOUR_MENU_OUTER_X = GUTTER_LEFT;
-const COLOUR_MENU_OUTER_Y = SECRET_PANEL_Y;
-const COLOUR_MENU_OUTER_WIDTH = MAIN_PANEL_WIDTH;
-const COLOUR_MENU_OUTER_HEIGHT = SECRET_PANEL_HEIGHT;
+const GUTTER_X = SPARE_WIDTH / 5;
+const FIRST_LARGE_PEG_X = BOARD_WIDTH - GUTTER_X - LARGE_CUTOUT_WIDTH;
+const MAIN_PANEL_X = GUTTER_X;
+const MAIN_PANEL_WIDTH = BOARD_WIDTH - 2 * GUTTER_X;
+const SMALL_CUTOUT_X = MAIN_PANEL_X;
 
-const COLOUR_MENU_INNER_X = COLOUR_MENU_OUTER_X + COLOUR_MENU_BORDER;
-const COLOUR_MENU_INNER_Y = COLOUR_MENU_OUTER_Y + COLOUR_MENU_BORDER;
-const COLOUR_MENU_INNER_WIDTH = COLOUR_MENU_OUTER_WIDTH - 2 * COLOUR_MENU_BORDER;
-const COLOUR_MENU_INNER_HEIGHT = COLOUR_MENU_OUTER_HEIGHT - 2 * COLOUR_MENU_BORDER;
+const SMALL_PEG_GAP_Y = SMALL_CUTOUT_HEIGHT / 5;
+const SMALL_PEG_LEFT_X = MAIN_PANEL_X + SMALL_CUTOUT_WIDTH / 4;
+const SMALL_PEG_RIGHT_X = MAIN_PANEL_X + 3 * SMALL_CUTOUT_WIDTH / 4;
 
-const POINTER_WIDTH = 20;
-const POINTER_HALF_WIDTH = POINTER_WIDTH / 2;
-const POINTER_HEIGHT = 14;
-const POINTER_TIP_X = FIRST_LARGE_PEG_X;
-const POINTER_TIP_Y = COLOUR_MENU_OUTER_Y + COLOUR_MENU_OUTER_HEIGHT + COLOUR_MENU_HALF_BORDER + POINTER_HEIGHT;
+const SECRET_PANEL_PADDING_Y = BOARD_WIDTH - GUTTER_X - (FIRST_LARGE_PEG_X + 3 * LARGE_PEG_GAP_X);
+const SECRET_PANEL_WIDTH = 3 * LARGE_PEG_GAP_X + 2 * SECRET_PANEL_PADDING_Y;
+const SECRET_PANEL_X = FIRST_LARGE_PEG_X - SECRET_PANEL_PADDING_Y;
 
 const S = {
   INITIALISED: Symbol('initialised'),
@@ -155,6 +142,8 @@ const createSVGElement = elementName =>
 
 const addSecretPanel = () => {
 
+  const SECRET_PANEL_LIP = 10;
+
   const pathData = `
     M${SECRET_PANEL_X + SECRET_PANEL_LIP},${SECRET_PANEL_Y}
     h${-SECRET_PANEL_LIP}
@@ -166,7 +155,7 @@ const addSecretPanel = () => {
 
   const path = createSVGElement("path");
   path.setAttribute("d", pathData);
-  path.setAttribute("stroke-width", SECRET_PANEL_BORDER);
+  path.setAttribute("stroke-width", BORDER);
   path.setAttribute("class", "secret-panel");
   board.appendChild(path);
   range(4).forEach(addSecretPanelLargePegHole);
@@ -177,11 +166,11 @@ const addSecretPanelLargePegHole = n =>
 
 const showSecretPanelCover = () => {
 
-  const x = SECRET_PANEL_X + SECRET_PANEL_HALF_BORDER;
-  const y = SECRET_PANEL_Y + SECRET_PANEL_HALF_BORDER;
-  const w = SECRET_PANEL_WIDTH - SECRET_PANEL_BORDER;
-  const h = SECRET_PANEL_HEIGHT - SECRET_PANEL_BORDER;
-  const MARGIN = SECRET_PANEL_BORDER * 3;
+  const x = SECRET_PANEL_X + HALF_BORDER;
+  const y = SECRET_PANEL_Y + HALF_BORDER;
+  const w = SECRET_PANEL_WIDTH - BORDER;
+  const h = SECRET_PANEL_HEIGHT - BORDER;
+  const MARGIN = BORDER * 3;
 
   const pathData = `M${x},${y} v${h} h${w} v${-h} z`;
 
@@ -202,7 +191,7 @@ const showSecretPanelCover = () => {
 
   const text2 = createSVGElement("text");
   text2.setAttribute("x", x + w - MARGIN);
-  text2.setAttribute("y", y + h - SECRET_PANEL_HALF_BORDER);
+  text2.setAttribute("y", y + h - HALF_BORDER);
   text2.setAttribute("class", "secret-panel-cover-text-2");
   text2.appendChild(document.createTextNode("MIND"));
   group.appendChild(text2);
@@ -285,25 +274,24 @@ const addLargePegHole = (row, n, cy) => {
 };
 
 const buildPathDataForSmallHolesCutOut = row => {
-  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
-  const y = cy - SMALL_CUTOUT_HALF_HEIGHT;
-  const d = `
-    M${SMALL_CUTOUT_X},${y}
+
+  const rowCentreY = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
+
+  return `
+    M${SMALL_CUTOUT_X},${rowCentreY - SMALL_CUTOUT_HEIGHT / 2}
     h${SMALL_CUTOUT_WIDTH}
-    v${(2 * SMALL_CUTOUT_HALF_HEIGHT)}
+    v${SMALL_CUTOUT_HEIGHT}
     h${-SMALL_CUTOUT_WIDTH}
     z
   `;
-  return d;
 };
 
 const buildPathDataForLargeHolesCutOut = row => {
 
-  const r = LARGE_HOLE_CUTOUT_RADIUS;
+  const r = LARGE_PEG_HOLE_OUTER_RADIUS;
   const theta = 0.6805212246672144; // about 39 degrees
   const dx = r * Math.cos(theta);
   const dy = r * Math.sin(theta);
-
   const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
   const arcWidth = 2 * dx;
   const arcHeight = 2 * dy;
@@ -343,7 +331,7 @@ const addMainPanel = () => {
   ].join(" ");
   const path = createSVGElement("path");
   path.setAttribute("d", pathData);
-  path.setAttribute("stroke-width", MAIN_PANEL_STROKE);
+  path.setAttribute("stroke-width", BORDER);
   path.setAttribute("class", "main-panel");
   board.appendChild(path);
 };
@@ -480,6 +468,22 @@ const makeColourSwatchClickHandler = colour => () => {
 
 const createColourMenu = () => {
 
+  const COLOUR_MENU_OUTER_X = GUTTER_X;
+  const COLOUR_MENU_OUTER_Y = SECRET_PANEL_Y;
+  const COLOUR_MENU_OUTER_WIDTH = MAIN_PANEL_WIDTH;
+  const COLOUR_MENU_OUTER_HEIGHT = SECRET_PANEL_HEIGHT;
+
+  const COLOUR_MENU_INNER_X = COLOUR_MENU_OUTER_X + BORDER;
+  const COLOUR_MENU_INNER_Y = COLOUR_MENU_OUTER_Y + BORDER;
+  const COLOUR_MENU_INNER_WIDTH = COLOUR_MENU_OUTER_WIDTH - 2 * BORDER;
+  const COLOUR_MENU_INNER_HEIGHT = COLOUR_MENU_OUTER_HEIGHT - 2 * BORDER;
+
+  const POINTER_WIDTH = 20;
+  const POINTER_HALF_WIDTH = POINTER_WIDTH / 2;
+  const POINTER_HEIGHT = 14;
+  const POINTER_TIP_X = FIRST_LARGE_PEG_X;
+  const POINTER_TIP_Y = COLOUR_MENU_OUTER_Y + COLOUR_MENU_OUTER_HEIGHT + HALF_BORDER + POINTER_HEIGHT;
+
   const outerRect = createSVGElement("rect");
   outerRect.setAttribute("x", COLOUR_MENU_OUTER_X);
   outerRect.setAttribute("y", COLOUR_MENU_OUTER_Y);
@@ -487,7 +491,7 @@ const createColourMenu = () => {
   outerRect.setAttribute("ry", 5);
   outerRect.setAttribute("width", COLOUR_MENU_OUTER_WIDTH);
   outerRect.setAttribute("height", COLOUR_MENU_OUTER_HEIGHT);
-  outerRect.setAttribute("stroke-width", COLOUR_MENU_BORDER);
+  outerRect.setAttribute("stroke-width", BORDER);
   outerRect.setAttribute("class", "colour-menu");
 
   const innerRect = createSVGElement("rect");
@@ -572,24 +576,20 @@ const toggleColourMenuFor = n =>
 const showGameWonModal = () =>
   showModal("You Won!", "Congratulations!", "#trophy", 448.35);
 
-// scale = 0.14486150377967807
-// width="579.8642" => 84
-// height="189.18237" => 27.405242606803455
 const showGameLostModal = () =>
-  showModal("You Lost!", "Commiserations", "#spoon", 579.8642);
-
-const MODAL_OUTER_BORDER = 6;
-const MODAL_OUTER_X = BOARD_WIDTH / 4;
-const MODAL_OUTER_Y = BOARD_HEIGHT / 4;
-const MODAL_OUTER_WIDTH = BOARD_WIDTH / 2;
-const MODAL_OUTER_HEIGHT = BOARD_HEIGHT / 2;
-
-const MODAL_INNER_X = MODAL_OUTER_X + MODAL_OUTER_BORDER;
-const MODAL_INNER_Y = MODAL_OUTER_Y + MODAL_OUTER_BORDER;
-const MODAL_INNER_WIDTH = MODAL_OUTER_WIDTH - 2 * MODAL_OUTER_BORDER;
-const MODAL_INNER_HEIGHT = MODAL_OUTER_HEIGHT - 2 * MODAL_OUTER_BORDER;
+  showModal("You Lost!", "Commiserations!", "#spoon", 579.8642);
 
 const showModal = (message1, message2, graphicId, size) => {
+
+  const MODAL_OUTER_WIDTH = BOARD_WIDTH / 2;
+  const MODAL_OUTER_HEIGHT = MODAL_OUTER_WIDTH / 2 * 3;
+  const MODAL_OUTER_X = BOARD_WIDTH / 4;
+  const MODAL_OUTER_Y = (BOARD_HEIGHT - MODAL_OUTER_HEIGHT) / 2;
+
+  const MODAL_INNER_X = MODAL_OUTER_X + BORDER;
+  const MODAL_INNER_Y = MODAL_OUTER_Y + BORDER;
+  const MODAL_INNER_WIDTH = MODAL_OUTER_WIDTH - 2 * BORDER;
+  const MODAL_INNER_HEIGHT = MODAL_OUTER_HEIGHT - 2 * BORDER;
 
   const outerRect = createSVGElement("rect");
   outerRect.setAttribute("x", MODAL_OUTER_X);
@@ -598,7 +598,7 @@ const showModal = (message1, message2, graphicId, size) => {
   outerRect.setAttribute("ry", 5);
   outerRect.setAttribute("width", MODAL_OUTER_WIDTH);
   outerRect.setAttribute("height", MODAL_OUTER_HEIGHT);
-  outerRect.setAttribute("stroke-width", MODAL_OUTER_BORDER);
+  outerRect.setAttribute("stroke-width", BORDER);
   outerRect.setAttribute("class", "modal-outer");
 
   const innerRect = createSVGElement("rect");
@@ -629,16 +629,21 @@ const showModal = (message1, message2, graphicId, size) => {
   graphic.setAttributeNS("http://www.w3.org/1999/xlink", "href", graphicId);
   graphic.setAttribute("transform", `translate(${graphicX}, ${graphicY}) scale(${scale}, ${scale})`);
 
-  const cx = MODAL_OUTER_X + MODAL_OUTER_WIDTH - COLOUR_MENU_BORDER / 2;
-  const cy = MODAL_OUTER_Y + COLOUR_MENU_BORDER / 2;
+  const cx = MODAL_OUTER_X + MODAL_OUTER_WIDTH - BORDER / 2;
+  const cy = MODAL_OUTER_Y + HALF_BORDER / 2;
+  const r = 12;
   const closeButton = createSVGElement("g");
   const circle = createSVGElement("circle");
   circle.setAttribute("cx", cx);
   circle.setAttribute("cy", cy);
-  circle.setAttribute("r", 12);
+  circle.setAttribute("r", r);
   circle.setAttribute("class", "modal-close-button-circle");
+  const d = 5;
+  const dd = d * 2;
+  const diagonal1 = `M${cx - d},${cy - d} l${+dd},${dd}`;
+  const diagonal2 = `M${cx + d},${cy - d} l${-dd},${dd}`;
   const cross = createSVGElement("path");
-  cross.setAttribute("d", `M${cx - 5},${cy - 5} l10,10 M${cx + 5},${cy - 5} l-10,10`);
+  cross.setAttribute("d", `${diagonal1} ${diagonal2}`);
   cross.setAttribute("class", "modal-close-button-cross");
   closeButton.appendChild(circle);
   closeButton.appendChild(cross);
@@ -651,8 +656,8 @@ const showModal = (message1, message2, graphicId, size) => {
   modal.appendChild(outerRect);
   modal.appendChild(innerRect);
   modal.appendChild(text1);
-  modal.appendChild(graphic);
   modal.appendChild(text2);
+  modal.appendChild(graphic);
   modal.appendChild(closeButton);
   board.appendChild(modal);
 };
