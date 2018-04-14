@@ -1,14 +1,5 @@
 {
     "presets": [
-        [
-            "env",
-            {
-                "targets": {
-                    "browsers": [
-                        "ios_saf >= 5"
-                    ]
-                }
-            }
-        ]
+        "env"
     ]
 }
