@@ -58,7 +58,7 @@ const BORDER = 6;
 const HALF_BORDER = BORDER / 2;
 
 const ROW_GAP_Y = BOARD_HEIGHT / 11.906976744186047;
-const LARGE_PEG_GAP_X = BOARD_HEIGHT / 13.544973544973545;
+const LARGE_PEG_GAP_X = BOARD_HEIGHT / 12.5;
 
 const MAIN_PANEL_HEIGHT = 10 * ROW_GAP_Y;
 const MAIN_PANEL_Y = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - GUTTER_Y;
@@ -408,23 +408,58 @@ const enableEnterButton = () => btnEnter.disabled = false;
 const disableEnterButton = () => btnEnter.disabled = true;
 
 const onNewGame = () => {
+  console.log("removePegs");
   removePegs();
+  console.log("showSecretPanelCover");
   showSecretPanelCover();
+  console.log("hideNewGameButton");
   hideNewGameButton();
+  console.log("showEnterButton");
   showEnterButton();
+  console.log("disableEnterButton");
   disableEnterButton();
   state.gameState = S.IN_PROGRESS;
+  console.log("generateRandomSecret");
   state.secret = generateRandomSecret();
+  console.log("fill");
   state.guess = Array(4).fill({});
   state.activeGuessRowIndex = 0;
+  addFocusCircles(state.activeGuessRowIndex);
   console.log(`secret: ${state.secret.map(p => p.toString())}`);
 };
 
+const addFocusCircles = row => {
+  const inverseRowNumber = 9 - row;
+  const cy = FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
+  range(4).forEach(n => {
+    const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
+    const focusCircle = createSVGElement("circle");
+    focusCircle.setAttribute("cx", cx);
+    focusCircle.setAttribute("cy", cy);
+    focusCircle.setAttribute("r", (LARGE_PEG_HOLE_OUTER_RADIUS + LARGE_PEG_HOLE_RADIUS) / 2);
+    focusCircle.setAttribute("stroke", "#88ABFF");
+    focusCircle.setAttribute("stroke-width", 1);
+    focusCircle.setAttribute("stroke-dasharray", "3 3");
+    focusCircle.setAttribute("fill", "transparent");
+    focusCircle.setAttribute("class", "focus-circle");
+    focusCircle.setAttribute("data-piece", "focus-circle");
+    focusCircle.addEventListener("click", makeLargePegClickHandler(row, n));
+    board.appendChild(focusCircle);
+  });
+};
+
+const removeFocusCircles = () => {
+  document
+    .querySelectorAll("[data-piece='focus-circle']")
+    .forEach(piece => piece.remove());
+};
+
 const onEnter = () => {
+  if (state.gameState !== S.IN_PROGRESS) return;
   if (state.showingColourMenuFor >= 0) {
     hideColourMenu();
   }
-  if (state.gameState !== S.IN_PROGRESS) return;
+  removeFocusCircles();
   const guess = state.guess.map(g => g.peg);
   const feedback = evaluateGuess(state.secret, guess);
   setFeedback(state.activeGuessRowIndex, feedback);
@@ -450,6 +485,7 @@ const onEnter = () => {
     hideEnterButton();
   }
   else {
+    addFocusCircles(state.activeGuessRowIndex);
     disableEnterButton();
   }
 };
