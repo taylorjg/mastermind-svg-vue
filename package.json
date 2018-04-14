@@ -1,6 +1,6 @@
 {
   "name": "mastermind-svg-prototype",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Mastermind with SVG UI",
   "scripts": {
     "start": "node server",
@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-loader": "^7.1.4",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "copy-webpack-plugin": "^4.5.1",

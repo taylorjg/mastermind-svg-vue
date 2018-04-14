@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import { TweenMax, Expo } from "gsap";
 
 const C = {
