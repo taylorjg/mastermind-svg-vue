@@ -64,7 +64,7 @@ const MAIN_PANEL_HEIGHT = 10 * ROW_GAP_Y;
 const MAIN_PANEL_Y = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - GUTTER_Y;
 const SECRET_PANEL_Y = GUTTER_Y;
 const SECRET_PANEL_HEIGHT = BOARD_HEIGHT - MAIN_PANEL_HEIGHT - 3 * GUTTER_Y;
-const FIRST_ROW_CENTRE_Y = MAIN_PANEL_Y + ROW_GAP_Y / 2;
+const FIRST_ROW_CENTRE_Y = MAIN_PANEL_Y + 9.5 * ROW_GAP_Y;
 
 const LARGE_PEG_HOLE_OUTER_RADIUS = BOARD_HEIGHT / 26;
 const LARGE_PEG_HOLE_RADIUS = BOARD_HEIGHT / 51.2;
@@ -215,12 +215,11 @@ const addRow = row => {
 };
 
 const addRowNumber = row => {
-  const inverseRowNumber = 9 - row;
   const text = createSVGElement("text");
   text.setAttribute("x", (SMALL_PEG_RIGHT_X + SMALL_PEG_LEFT_X) / 2);
-  text.setAttribute("y", FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + 4);
+  text.setAttribute("y", FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y + 4);
   text.setAttribute("class", "row-number-text");
-  text.appendChild(document.createTextNode(`${inverseRowNumber + 1}`));
+  text.appendChild(document.createTextNode(`${row + 1}`));
   board.appendChild(text);
 };
 
@@ -230,7 +229,7 @@ const addRowSmallPegHoles = row => {
 
 const addRowSmallPegHole = (row, n) => {
   const cx = n % 2 === 0 ? SMALL_PEG_LEFT_X : SMALL_PEG_RIGHT_X;
-  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y) + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
+  const cy = FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
   const circle = createSVGElement("circle");
   circle.setAttribute("cx", cx);
   circle.setAttribute("cy", cy);
@@ -245,7 +244,7 @@ const addRowLargePegHoles = row => {
 };
 
 const addRowLargePegHole = (row, n) => {
-  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
+  const cy = FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y;
   addLargePegHole(row, n, cy);
 };
 
@@ -261,7 +260,6 @@ const makeLargePegClickHandler = (row, n) => () => {
 };
 
 const addLargePegHole = (row, n, cy) => {
-  const inverseRowNumber = 9 - row;
   const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const circle = createSVGElement("circle");
   circle.setAttribute("cx", cx);
@@ -269,13 +267,13 @@ const addLargePegHole = (row, n, cy) => {
   circle.setAttribute("r", LARGE_PEG_HOLE_RADIUS);
   circle.setAttribute("stroke-width", LARGE_PEG_HOLE_STROKE);
   circle.setAttribute("class", "large-peg-hole");
-  circle.addEventListener("click", makeLargePegClickHandler(inverseRowNumber, n));
+  circle.addEventListener("click", makeLargePegClickHandler(row, n));
   board.appendChild(circle);
 };
 
 const buildPathDataForSmallHolesCutOut = row => {
 
-  const rowCentreY = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
+  const rowCentreY = FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y;
 
   return `
     M${SMALL_CUTOUT_X},${rowCentreY - SMALL_CUTOUT_HEIGHT / 2}
@@ -292,7 +290,7 @@ const buildPathDataForLargeHolesCutOut = row => {
   const theta = 0.6805212246672144; // about 39 degrees
   const dx = r * Math.cos(theta);
   const dy = r * Math.sin(theta);
-  const cy = FIRST_ROW_CENTRE_Y + (row * ROW_GAP_Y);
+  const cy = FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y;
   const arcWidth = 2 * dx;
   const arcHeight = 2 * dy;
   const interArcGap = LARGE_PEG_GAP_X - 2 * dx;
@@ -337,12 +335,8 @@ const addMainPanel = () => {
 };
 
 const addSmallPeg = (row, n, colour) => {
-  const inverseRowNumber = 9 - row;
   const cx = n % 2 === 0 ? SMALL_PEG_LEFT_X : SMALL_PEG_RIGHT_X;
-  const cy =
-    FIRST_ROW_CENTRE_Y +
-    (inverseRowNumber * ROW_GAP_Y) +
-    SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
+  const cy = FIRST_ROW_CENTRE_Y - (row * ROW_GAP_Y) + SMALL_PEG_GAP_Y * (n >= 2 ? +1 : -1);
   const circle = createSVGElement("circle");
   circle.setAttribute("cx", cx);
   circle.setAttribute("cy", cy);
@@ -354,11 +348,10 @@ const addSmallPeg = (row, n, colour) => {
 };
 
 const addLargePeg = (row, n, colour) => {
-  const inverseRowNumber = 9 - row;
   const position = `${row}:${n}`;
   const cy = (row < 0)
     ? SECRET_ROW_CENTRE_Y
-    : FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
+    : FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y;
   const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
   const circle = createSVGElement("circle");
   circle.setAttribute("cx", cx);
@@ -429,8 +422,7 @@ const onNewGame = () => {
 };
 
 const addFocusCircles = row => {
-  const inverseRowNumber = 9 - row;
-  const cy = FIRST_ROW_CENTRE_Y + (inverseRowNumber * ROW_GAP_Y);
+  const cy = FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y;
   range(4).forEach(n => {
     const cx = FIRST_LARGE_PEG_X + (n * LARGE_PEG_GAP_X);
     const focusCircle = createSVGElement("circle");
@@ -574,15 +566,14 @@ const createColourMenu = () => {
 const showColourMenuFor = (n, duration = 1) => {
   state.showingColourMenuFor = n;
   const row = state.activeGuessRowIndex;
-  const inverseRowNumber = 9 - row;
 
   const txColourMenu = 0;
-  const tyColourMenu = inverseRowNumber * ROW_GAP_Y;
+  const tyColourMenu = row * ROW_GAP_Y;
   colourMenu.setAttribute("transform", `translate(${txColourMenu}, ${tyColourMenu})`);
   colourMenu.style.opacity = 1;
 
   const txPointer = n * LARGE_PEG_GAP_X;
-  const tyPointer = inverseRowNumber * ROW_GAP_Y;
+  const tyPointer = row * ROW_GAP_Y;
   pointer.setAttribute("transform", `translate(${txPointer}, ${tyPointer})`);
   pointer.style.opacity = 1;
 
