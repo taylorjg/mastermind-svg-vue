@@ -568,12 +568,12 @@ const showColourMenuFor = (n, duration = 1) => {
   const row = state.activeGuessRowIndex;
 
   const txColourMenu = 0;
-  const tyColourMenu = row * ROW_GAP_Y;
+  const tyColourMenu = -row * ROW_GAP_Y;
   colourMenu.setAttribute("transform", `translate(${txColourMenu}, ${tyColourMenu})`);
   colourMenu.style.opacity = 1;
 
   const txPointer = n * LARGE_PEG_GAP_X;
-  const tyPointer = row * ROW_GAP_Y;
+  const tyPointer = -row * ROW_GAP_Y;
   pointer.setAttribute("transform", `translate(${txPointer}, ${tyPointer})`);
   pointer.style.opacity = 1;
 
