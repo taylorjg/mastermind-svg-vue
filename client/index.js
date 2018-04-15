@@ -1,5 +1,3 @@
-import { TweenMax, Expo } from "gsap";
-
 const C = {
   R: "#FF0000",
   G: "#00FF00",
@@ -57,7 +55,7 @@ const GUTTER_Y = 10;
 const BORDER = 6;
 const HALF_BORDER = BORDER / 2;
 
-const ROW_GAP_Y = BOARD_HEIGHT / 11.906976744186047;
+const ROW_GAP_Y = BOARD_HEIGHT / 12;
 const LARGE_PEG_GAP_X = BOARD_HEIGHT / 12.5;
 
 const MAIN_PANEL_HEIGHT = 10 * ROW_GAP_Y;
@@ -115,8 +113,6 @@ const state = {
 const board = document.getElementById("board");
 board.setAttribute("width", BOARD_WIDTH);
 board.setAttribute("height", BOARD_HEIGHT);
-const btnNewGame = document.getElementById("btnNewGame");
-const btnEnter = document.getElementById("btnEnter");
 
 const generateRandomSecret = () => {
   const chooseRandomPeg = () => {
@@ -217,7 +213,7 @@ const addRow = row => {
 const addRowNumber = row => {
   const text = createSVGElement("text");
   text.setAttribute("x", (SMALL_PEG_RIGHT_X + SMALL_PEG_LEFT_X) / 2);
-  text.setAttribute("y", FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y + 4);
+  text.setAttribute("y", FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y);
   text.setAttribute("class", "row-number-text");
   text.appendChild(document.createTextNode(`${row + 1}`));
   board.appendChild(text);
@@ -393,28 +389,43 @@ const setFeedback = (row, feedback) => {
   colours.forEach((colour, index) => addSmallPeg(row, index, colour));
 };
 
-const showNewGameButton = () => btnNewGame.style.display = "block";
-const hideNewGameButton = () => btnNewGame.style.display = "none";
-const showEnterButton = () => btnEnter.style.display = "block";
-const hideEnterButton = () => btnEnter.style.display = "none";
-const enableEnterButton = () => btnEnter.disabled = false;
-const disableEnterButton = () => btnEnter.disabled = true;
+const showNewGameButton = () => {
+  addButton(
+    "New Game",
+    {
+      x: GUTTER_X,
+      y: GUTTER_Y,
+      width: 80,
+      height: 30
+    },
+    onNewGame);
+};
+
+const hideNewGameButton = () =>
+  removeButton("New Game");
+
+const showEnterButton = row => {
+  const rowCentreY = FIRST_ROW_CENTRE_Y - row * ROW_GAP_Y;
+  addButton(
+    "Enter",
+    {
+      x: SMALL_CUTOUT_X + BORDER,
+      y: rowCentreY - SMALL_CUTOUT_HEIGHT / 2 + BORDER,
+      width: SMALL_CUTOUT_WIDTH - 2 * BORDER,
+      height: SMALL_CUTOUT_HEIGHT - 2 * BORDER
+    },
+    onEnter);
+};
+
+const hideEnterButton = () =>
+  removeButton("Enter");
 
 const onNewGame = () => {
-  console.log("removePegs");
   removePegs();
-  console.log("showSecretPanelCover");
   showSecretPanelCover();
-  console.log("hideNewGameButton");
   hideNewGameButton();
-  console.log("showEnterButton");
-  showEnterButton();
-  console.log("disableEnterButton");
-  disableEnterButton();
   state.gameState = S.IN_PROGRESS;
-  console.log("generateRandomSecret");
   state.secret = generateRandomSecret();
-  console.log("fill");
   state.guess = Array(4).fill({});
   state.activeGuessRowIndex = 0;
   addFocusCircles(state.activeGuessRowIndex);
@@ -451,6 +462,7 @@ const onEnter = () => {
   if (state.showingColourMenuFor >= 0) {
     hideColourMenu();
   }
+  hideEnterButton();
   removeFocusCircles();
   const guess = state.guess.map(g => g.peg);
   const feedback = evaluateGuess(state.secret, guess);
@@ -474,11 +486,9 @@ const onEnter = () => {
     }
     hideSecretPanelCover();
     showSecret(state.secret);
-    hideEnterButton();
   }
   else {
     addFocusCircles(state.activeGuessRowIndex);
-    disableEnterButton();
   }
 };
 
@@ -489,7 +499,7 @@ const makeColourSwatchClickHandler = colour => () => {
   addLargePeg(row, n, colour);
   state.guess[n] = { peg: COLOUR_TO_PEG[colour] };
   if (state.guess.length === 4 && state.guess.every(g => !!g.peg)) {
-    enableEnterButton();
+    showEnterButton(row);
   }
   hideColourMenu();
 };
@@ -563,7 +573,7 @@ const createColourMenu = () => {
   return { colourMenu, pointer };
 };
 
-const showColourMenuFor = (n, duration = 1) => {
+const showColourMenuFor = n => {
   state.showingColourMenuFor = n;
   const row = state.activeGuessRowIndex;
 
@@ -579,20 +589,56 @@ const showColourMenuFor = (n, duration = 1) => {
 
   board.appendChild(colourMenu);
   board.appendChild(pointer);
-
-  TweenMax.from([colourMenu, pointer], duration, {
-    opacity: 0, ease: Expo.easeOut
-  });
 };
 
 const hideColourMenu = () => {
   state.showingColourMenuFor = -1;
-  TweenMax.to([colourMenu, pointer], 1, {
-    opacity: 0, ease: Expo.easeOut, onComplete() {
-      board.removeChild(colourMenu);
-      board.removeChild(pointer);
-    }
-  });
+  board.removeChild(colourMenu);
+  board.removeChild(pointer);
+};
+
+const addButton = (label, { x, y, width, height }, handler) => {
+
+  const cleanedLabel = label.toLowerCase().replace(/\s/g, '-');
+  if (document.querySelectorAll(`[data-piece='button-${cleanedLabel}']`).length > 0) {
+    return;
+  }
+
+  const outerRect = createSVGElement("rect");
+  outerRect.setAttribute("x", x);
+  outerRect.setAttribute("y", y);
+  outerRect.setAttribute("width", width);
+  outerRect.setAttribute("height", height);
+  outerRect.setAttribute("stroke-width", 3);
+  outerRect.setAttribute("class", "my-button-outer-rect");
+
+  const innerRect = createSVGElement("rect");
+  innerRect.setAttribute("x", x + 3);
+  innerRect.setAttribute("y", y + 3);
+  innerRect.setAttribute("width", width - 6);
+  innerRect.setAttribute("height", height - 6);
+  innerRect.setAttribute("class", "my-button-inner-rect");
+
+  const text = createSVGElement("text");
+  text.setAttribute("x", x + width / 2);
+  text.setAttribute("y", y + height / 2);
+  text.appendChild(document.createTextNode(label));
+
+  const group = createSVGElement("g");
+  group.setAttribute("data-piece", `button-${cleanedLabel}`);
+  group.setAttribute("class", "my-button");
+  group.appendChild(outerRect);
+  group.appendChild(innerRect);
+  group.appendChild(text);
+  group.addEventListener("click", handler);
+  board.appendChild(group);
+};
+
+const removeButton = label => {
+  const cleanedLabel = label.toLowerCase().replace(/\s/g, '-');
+  document
+    .querySelectorAll(`[data-piece='button-${cleanedLabel}']`)
+    .forEach(piece => piece.remove());
 };
 
 const { colourMenu, pointer } = createColourMenu();
@@ -659,7 +705,6 @@ const showModal = (message1, message2, graphicId, size) => {
   const cx = MODAL_OUTER_X + MODAL_OUTER_WIDTH - BORDER / 2;
   const cy = MODAL_OUTER_Y + HALF_BORDER / 2;
   const r = 12;
-  const closeButton = createSVGElement("g");
   const circle = createSVGElement("circle");
   circle.setAttribute("cx", cx);
   circle.setAttribute("cy", cy);
@@ -672,6 +717,8 @@ const showModal = (message1, message2, graphicId, size) => {
   const cross = createSVGElement("path");
   cross.setAttribute("d", `${diagonal1} ${diagonal2}`);
   cross.setAttribute("class", "modal-close-button-cross");
+  const closeButton = createSVGElement("g");
+  closeButton.setAttribute("class", "modal-close-button");
   closeButton.appendChild(circle);
   closeButton.appendChild(cross);
   closeButton.addEventListener("click", () => {
@@ -689,28 +736,7 @@ const showModal = (message1, message2, graphicId, size) => {
   board.appendChild(modal);
 };
 
-btnNewGame.addEventListener("click", onNewGame);
-btnEnter.addEventListener("click", onEnter);
-
-hideEnterButton();
 addSecretPanel();
 addRows();
 addMainPanel();
-
-// https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
-(function (arr) {
-  arr.forEach(function (item) {
-    if (item.hasOwnProperty("remove")) {
-      return;
-    }
-    Object.defineProperty(item, "remove", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: function remove() {
-        if (this.parentNode !== null)
-          this.parentNode.removeChild(this);
-      }
-    });
-  });
-})([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
+showNewGameButton();

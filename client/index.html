@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Mastermind SVG Prototype (version:
         <%= htmlWebpackPlugin.options.version %>)</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -18,6 +17,14 @@
             </filter>
             <filter id="shadow2">
                 <feDropShadow dx="3" dy="3" stdDeviation="6" flood-color="rgb(90, 58, 16)" />
+            </filter>
+            <filter id="glow" x="-10%" y="-10%" width="110%" height="110%">
+                <feGaussianBlur stdDeviation="1 1" result="glow" />
+                <feMerge>
+                    <feMergeNode in="glow" />
+                    <feMergeNode in="glow" />
+                    <feMergeNode in="glow" />
+                </feMerge>
             </filter>
             <!-- https://www.shareicon.net/download/2016/07/10/794118_cup.svg -->
             <g id="trophy">
@@ -94,10 +101,6 @@
 
         </defs>
     </svg>
-    <div>
-        <button class="btn btn-primary btn-xs" id="btnNewGame">New Game</button>
-        <button class="btn btn-primary btn-xs" id="btnEnter">Enter</button>
-    </div>
 </body>
 
 </html>

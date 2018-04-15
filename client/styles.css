@@ -41,6 +41,7 @@ html, body {
 .row-number-text {
   fill: rgb(146, 106, 54);
   text-anchor: middle;
+  dominant-baseline: central;
   font-family: Arial;
   font-size: 12px;
   filter: url(#shadow);
@@ -112,6 +113,10 @@ html, body {
   font-size: 16px;
 }
 
+.modal-close-button {
+  cursor: pointer;
+}
+
 .modal-close-button-circle {
   fill-opacity: 1;
   fill: black;
@@ -124,14 +129,27 @@ html, body {
   stroke: white;
 }
 
-#btnNewGame {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+.my-button {
+  cursor: pointer;  
 }
 
-#btnEnter {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+.my-button text:hover {
+  font-weight: bolder;
+}
+
+.my-button-outer-rect {
+  stroke: rgb(90, 58, 16);
+  fill: rgb(141, 97, 40);
+}
+
+.my-button-inner-rect {
+  fill: rgb(90, 58, 16);
+}
+
+.my-button text {
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-family: Arial;
+  font-size: 12px;
 }
