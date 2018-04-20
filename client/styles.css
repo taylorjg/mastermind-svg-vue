@@ -133,7 +133,7 @@ html, body {
   cursor: pointer;  
 }
 
-.my-button text:hover {
+.my-button:hover text {
   font-weight: bolder;
 }
 

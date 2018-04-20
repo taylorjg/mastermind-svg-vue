@@ -31,8 +31,16 @@ module.exports = {
                 test: /\.(js)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader'
-            }
-        ]
+            },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
+                        js: 'babel-loader'
+                    }
+                }
+            }]
     },
     devtool: 'source-map',
     devServer: {
