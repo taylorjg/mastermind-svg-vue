@@ -33,9 +33,7 @@ export default {
   },
   methods: {
     onClick: function() {
-      if (this.handler) {
-        this.handler(this.row, this.col);
-      }
+      this.handler && this.handler(this.row, this.col);
     }
   }
 };

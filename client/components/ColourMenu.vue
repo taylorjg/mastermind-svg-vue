@@ -21,7 +21,13 @@
         ry="5"
       />
       <template v-for="(colour, index) in COLOURS">
-        <LargePeg :cx="colourCx(index)" :cy="colourCy" :fill="colour" :key="colour" />
+        <LargePeg
+          :cx="colourCx(index)"
+          :cy="colourCy"
+          :fill="colour"
+          :key="colour"
+          :handler="makeOnClickHandler(colour, index)"
+        />
       </template>
     </g>
     <path
@@ -33,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
 import * as D from "../dimensions";
 import { COLOURS } from "../constants";
 import LargePeg from "./LargePeg.vue";
@@ -102,17 +109,25 @@ export default {
       z`,
     colourMenuTransform: function() {
       const tx = 0;
-      const ty = -this.row * D.rowGapY;
+      const ty = -(this.row - 1) * D.rowGapY;
       return `translate(${tx}, ${ty})`;
     },
     pointerTransform: function() {
-      const tx = this.col * D.largePegGapX;
-      const ty = -this.row * D.rowGapY;
+      const tx = (this.col - 1) * D.largePegGapX;
+      const ty = -(this.row - 1)* D.rowGapY;
       return `translate(${tx}, ${ty})`;
     }
   },
   methods: {
-    colourCx: index => COLOUR_MENU_INNER_X + halfGap + gap * index
+    colourCx: index => COLOUR_MENU_INNER_X + halfGap + gap * index,
+    makeOnClickHandler(colour, index) {
+      return () => {
+        console.log(`[ColourMenu#onClick] colour: ${colour}; index: ${index}`);
+        // TODO: set/update peg colour in the active row
+        this.hideColourMenu();
+      };
+    },
+    ...mapMutations("logic", ["hideColourMenu"])
   },
   components: {
     LargePeg

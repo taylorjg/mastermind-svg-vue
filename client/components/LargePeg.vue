@@ -5,6 +5,7 @@
     :cy="cy"
     :r="r"
     :fill="fill"
+    @click="onClick"
   />
 </template>
 
@@ -13,9 +14,14 @@ import * as D from "../dimensions";
 
 export default {
   name: "LargePeg",
-  props: ["cx", "cy", "fill"],
+  props: ["cx", "cy", "fill", "handler"],
   computed: {
     r: () => D.largePegRadius
+  },
+  methods: {
+    onClick: function() {
+      this.handler && this.handler();
+    }
   }
 };
 </script>

@@ -10,6 +10,7 @@ html, body {
   background-color: rgb(141, 97, 40);
 }
 
+/* 
 .secret-panel {
   stroke: rgb(141, 97, 40);
   stroke-linecap: square;
@@ -152,4 +153,4 @@ html, body {
   dominant-baseline: central;
   font-family: Arial;
   font-size: 12px;
-}
+} */
