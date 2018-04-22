@@ -1,15 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import logic from "./modules/logic";
 
 Vue.use(Vuex);
 
-const state = {
-};
-
-const mutations = {
-};
-
 export default new Vuex.Store({
-  state,
-  mutations
+  modules: {
+    logic
+  }
 });
