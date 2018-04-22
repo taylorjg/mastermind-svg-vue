@@ -25,8 +25,8 @@
           :cx="colourCx(index)"
           :cy="colourCy"
           :fill="colour"
-          :key="colour"
-          :handler="makeOnClickHandler(colour, index)"
+          :key="`colour-${index}`"
+          :handler="makeOnClickHandler(colour)"
         />
       </template>
     </g>
@@ -109,20 +109,19 @@ export default {
       z`,
     colourMenuTransform: function() {
       const tx = 0;
-      const ty = -(this.row - 1) * D.rowGapY;
+      const ty = -this.row * D.rowGapY;
       return `translate(${tx}, ${ty})`;
     },
     pointerTransform: function() {
-      const tx = (this.col - 1) * D.largePegGapX;
-      const ty = -(this.row - 1)* D.rowGapY;
+      const tx = this.col * D.largePegGapX;
+      const ty = -this.row * D.rowGapY;
       return `translate(${tx}, ${ty})`;
     }
   },
   methods: {
     colourCx: index => COLOUR_MENU_INNER_X + halfGap + gap * index,
-    makeOnClickHandler(colour, index) {
+    makeOnClickHandler(colour) {
       return () => {
-        console.log(`[ColourMenu#onClick] colour: ${colour}; index: ${index}`);
         this.setPeg({
           peg: COLOUR_TO_PEG[colour]
         });

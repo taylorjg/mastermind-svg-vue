@@ -1,5 +1,5 @@
 <template>
-  <text class="row-number" :x="x" :y="y">{{row}}</text>
+  <text class="row-number" :x="x" :y="y">{{ row + 1 }}</text>
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
       return (D.smallPegLeftX + D.smallPegRightX) / 2;
     },
     y: function() {
-      return D.firstRowCentreY - (this.row - 1) * D.rowGapY;
+      return D.firstRowCentreY - this.row * D.rowGapY;
     }
   }
 };

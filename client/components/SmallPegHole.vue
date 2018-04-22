@@ -19,7 +19,7 @@ export default {
       return this.col % 2 === 1 ? D.smallPegLeftX : D.smallPegRightX;
     },
     cy: function() {
-      return D.firstRowCentreY - (this.row - 1) * D.rowGapY + D.smallPegGapY * (this.col >= 3 ? +1 : -1);
+      return D.firstRowCentreY - this.row * D.rowGapY + D.smallPegGapY * (this.col >= 2 ? +1 : -1);
     },
     r: function() {
       return D.smallPegHoleRadius;

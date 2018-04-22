@@ -26,8 +26,8 @@ const getters = {
   showNewGameButton: state =>
     state.gameState === GAME_STATES.INITIALISED ||
     (state.gameState === GAME_STATES.GAME_OVER && !state.showingOutcomeModal),
-  showingColourMenuFor: state =>
-    state.showingColourMenuFor
+  showingColourMenuFor: state => state.showingColourMenuFor,
+  activeRowIndex: state => state.activeRowIndex
 };
 
 const mutations = {
@@ -41,8 +41,8 @@ const mutations = {
   },
   setPeg: (state, payload) => {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
-      const row = state.showingColourMenuFor.row - 1;
-      const col = state.showingColourMenuFor.col - 1;
+      const row = state.showingColourMenuFor.row;
+      const col = state.showingColourMenuFor.col;
       state.guesses[row][col].peg = payload.peg;
     }
   },

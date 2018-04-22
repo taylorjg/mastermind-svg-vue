@@ -17,12 +17,12 @@ export default {
   props: ["row", "col", "handler"],
   computed: {
     cx: function() {
-      return D.firstLargePegX + (this.col - 1) * D.largePegGapX;
+      return D.firstLargePegX + this.col * D.largePegGapX;
     },
     cy: function() {
       return this.row < 0
         ? D.secretRowCentreY
-        : D.firstRowCentreY - (this.row - 1) * D.rowGapY;
+        : D.firstRowCentreY - this.row * D.rowGapY;
     },
     r: function() {
       return D.largePegHoleRadius;

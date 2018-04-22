@@ -15,7 +15,7 @@
       :width="innerRectWidth"
       :height="innerRectHeight"
     />
-    <text class="button-text" :x="textX" :y="textY">{{label}}</text>
+    <text class="button-text" :x="textX" :y="textY">{{ label }}</text>
   </g>
 </template>
 

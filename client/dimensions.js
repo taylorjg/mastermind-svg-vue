@@ -51,7 +51,6 @@ export const recalculateDimensions = () => {
 
   const clientWidth = document.body.clientWidth;
   const clientHeight = document.body.clientHeight;
-  console.log(`clientWidth: ${clientWidth}; clientHeight: ${clientHeight}`);
 
   // Bootstrap 4
   // > Extra small devices (portrait phones, less than 576px)

@@ -1,11 +1,11 @@
 <template>
   <g>
     <SecretPanel />
-    <template v-for="col in 4">
+    <template v-for="(_, col) in 4">
       <LargePegHole :row="-1" :col="col" :key="`secret-large-peg-hole-${col}`" />
     </template>
-    <template v-for="row in 10">
-      <template v-for="col in 4">
+    <template v-for="(_, row) in 10">
+      <template v-for="(_, col) in 4">
         <SmallPegHole :row="row" :col="col" :key="`small-peg-hole-${row}-${col}`" />
         <LargePegHole
           :row="row"
@@ -14,7 +14,7 @@
           :key="`guess-large-peg-hole-${row}-${col}`"
         />
       </template>
-      <RowNumber :row="row" :key="row" />
+      <RowNumber :row="row" :key="`row-number-${row}`" />
     </template>
     <MainPanel />
     <ColourMenu
@@ -48,12 +48,15 @@ export default {
   computed: {
     ...mapGetters("logic", [
       "showNewGameButton",
-      "showingColourMenuFor"
+      "showingColourMenuFor",
+      "activeRowIndex"
     ])
   },
   methods: {
     onLargePegHoleClick(row, col) {
-      this.showColourMenuFor({ row, col });
+      if (row === this.activeRowIndex) {
+        this.showColourMenuFor({ row, col });
+      }
     },
     ...mapMutations("logic", ["showColourMenuFor"])
   }

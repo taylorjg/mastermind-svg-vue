@@ -2,7 +2,7 @@
   <g>
     <Background />
     <Button
-      v-show="showNewGameButton"
+      v-if="showNewGameButton"
       :x="x"
       :y="y"
       :width="80"
