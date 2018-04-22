@@ -3,7 +3,7 @@
     <rect
       class="button-outer-rect"
       :x="outerRectX"
-      :y="outerRectX"
+      :y="outerRectY"
       :width="outerRectWidth"
       :height="outerRectHeight"
       :stroke-width="outerRectStrokeWidth"

@@ -12,6 +12,7 @@
       <RowNumber :row="row" :key="row" />
     </template>
     <MainPanel />
+    <!-- <ColourMenu :row="4" :col="2" /> -->
   </g>
 </template>
 
@@ -22,6 +23,7 @@ import MainPanel from "./MainPanel.vue";
 import SmallPegHole from "./SmallPegHole.vue";
 import LargePegHole from "./LargePegHole.vue";
 import RowNumber from "./RowNumber.vue";
+import ColourMenu from "./ColourMenu.vue";
 
 export default {
   name: "Background",
@@ -30,7 +32,8 @@ export default {
     MainPanel,
     SmallPegHole,
     LargePegHole,
-    RowNumber
+    RowNumber,
+    ColourMenu
   }
 };
 </script>
