@@ -16,6 +16,8 @@ const state = {
   gameState: GAME_STATES.INITIALISED,
   outcome: OUTCOMES.NONE,
   secret: [],
+  guesses: [],
+  activeRowIndex: -1,
   showingColourMenuFor: undefined,
   showingOutcomeModal: false
 };
@@ -32,6 +34,17 @@ const mutations = {
   start: state => {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.secret = generateRandomSecret();
+    state.guesses = [
+      [{}, {}, {}, {}]
+    ];
+    state.activeRowIndex = 0;
+  },
+  setPeg: (state, payload) => {
+    if (state.gameState === GAME_STATES.IN_PROGRESS) {
+      const row = state.showingColourMenuFor.row - 1;
+      const col = state.showingColourMenuFor.col - 1;
+      state.guesses[row][col].peg = payload.peg;
+    }
   },
   showColourMenuFor: (state, payload) => {
     state.showingColourMenuFor = {

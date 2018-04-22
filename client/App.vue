@@ -3,10 +3,10 @@
     <Background />
     <Button
       v-show="showNewGameButton"
-      :x="10"
-      :y="10"
+      :x="x"
+      :y="y"
       :width="80"
-      :height="40"
+      :height="30"
       :label="'New Game'"
       :handler="onNewGame"
     />
@@ -15,7 +15,7 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { recalculateDimensions } from "./dimensions";
+import * as D from "./dimensions";
 import Background from "./components/Background.vue";
 import Button from "./components/Button.vue";
 
@@ -29,11 +29,13 @@ export default {
     Button
   },
   computed: {
+    x: () => D.gutterX - D.HALF_BORDER / 2,
+    y: () => D.GUTTER_Y,
     ...mapGetters("logic", ["showNewGameButton"])
   },
   created() {
-    recalculateDimensions();
-    window.addEventListener("resize", recalculateDimensions);
+    D.recalculateDimensions();
+    window.addEventListener("resize", D.recalculateDimensions);
   }
 };
 </script>

@@ -41,7 +41,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import * as D from "../dimensions";
-import { COLOURS } from "../constants";
+import { COLOURS, COLOUR_TO_PEG } from "../constants";
 import LargePeg from "./LargePeg.vue";
 
 let POINTER_TIP_X;
@@ -123,11 +123,13 @@ export default {
     makeOnClickHandler(colour, index) {
       return () => {
         console.log(`[ColourMenu#onClick] colour: ${colour}; index: ${index}`);
-        // TODO: set/update peg colour in the active row
+        this.setPeg({
+          peg: COLOUR_TO_PEG[colour]
+        });
         this.hideColourMenu();
       };
     },
-    ...mapMutations("logic", ["hideColourMenu"])
+    ...mapMutations("logic", ["setPeg", "hideColourMenu"])
   },
   components: {
     LargePeg
