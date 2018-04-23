@@ -9,10 +9,10 @@ export default {
   name: "RowNumber",
   props: ["row"],
   computed: {
-    x: function() {
+    x() {
       return (D.smallPegLeftX + D.smallPegRightX) / 2;
     },
-    y: function() {
+    y() {
       return D.firstRowCentreY - this.row * D.rowGapY;
     }
   }

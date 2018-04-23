@@ -15,16 +15,16 @@ export default {
   name: "SmallPegHole",
   props: ["row", "col"],
   computed: {
-    cx: function() {
+    cx() {
       return this.col % 2 === 1 ? D.smallPegLeftX : D.smallPegRightX;
     },
-    cy: function() {
+    cy() {
       return D.firstRowCentreY - this.row * D.rowGapY + D.smallPegGapY * (this.col >= 2 ? +1 : -1);
     },
-    r: function() {
+    r() {
       return D.smallPegHoleRadius;
     },
-    strokeWidth: function() {
+    strokeWidth() {
       return D.smallPegHoleStroke;
     }
   }

@@ -27,7 +27,12 @@ const getters = {
     state.gameState === GAME_STATES.INITIALISED ||
     (state.gameState === GAME_STATES.GAME_OVER && !state.showingOutcomeModal),
   showingColourMenuFor: state => state.showingColourMenuFor,
-  activeRowIndex: state => state.activeRowIndex
+  secret: state => {
+    return state.secret;
+  },
+  activeRowIndex: state => state.activeRowIndex,
+  gameInProgress: state => state.gameState === GAME_STATES.IN_PROGRESS,
+  gameOver: state => state.gameState === GAME_STATES.GAME_OVER
 };
 
 const mutations = {

@@ -26,35 +26,37 @@ export default {
   name: "Button",
   props: ["x", "y", "width", "height", "label", "handler"],
   computed: {
-    outerRectX: function() {
+    outerRectX() {
       return this.x;
     },
-    outerRectY: function() {
+    outerRectY() {
       return this.y;
     },
-    outerRectWidth: function() {
+    outerRectWidth() {
       return this.width;
     },
-    outerRectHeight: function() {
+    outerRectHeight() {
       return this.height;
     },
-    outerRectStrokeWidth: () => D.HALF_BORDER,
-    innerRectX: function() {
+    outerRectStrokeWidth() {
+      return D.HALF_BORDER;
+    },
+    innerRectX() {
       return this.x + D.HALF_BORDER;
     },
-    innerRectY: function() {
+    innerRectY() {
       return this.y + D.HALF_BORDER;
     },
-    innerRectWidth: function() {
+    innerRectWidth() {
       return this.width - D.BORDER;
     },
-    innerRectHeight: function() {
+    innerRectHeight() {
       return this.height - D.BORDER;
     },
-    textX: function() {
+    textX() {
       return this.x + this.width / 2;
     },
-    textY: function() {
+    textY() {
       return this.y + this.height / 2;
     }
   }

@@ -21,11 +21,11 @@
         ry="5"
       />
       <template v-for="(colour, index) in COLOURS">
-        <LargePeg
+        <LargePegRaw
           :cx="colourCx(index)"
           :cy="colourCy"
           :fill="colour"
-          :key="`colour-${index}`"
+          :key="`colour-swatch-${index}`"
           :handler="makeOnClickHandler(colour)"
         />
       </template>
@@ -42,7 +42,7 @@
 import { mapGetters, mapMutations } from "vuex";
 import * as D from "../dimensions";
 import { COLOURS, COLOUR_TO_PEG } from "../constants";
-import LargePeg from "./LargePeg.vue";
+import LargePegRaw from "./LargePegRaw.vue";
 
 let POINTER_TIP_X;
 let POINTER_TIP_Y;
@@ -107,12 +107,12 @@ export default {
       l${-POINTER_HALF_WIDTH},${-POINTER_HEIGHT}
       h${POINTER_WIDTH}
       z`,
-    colourMenuTransform: function() {
+    colourMenuTransform() {
       const tx = 0;
       const ty = -this.row * D.rowGapY;
       return `translate(${tx}, ${ty})`;
     },
-    pointerTransform: function() {
+    pointerTransform() {
       const tx = this.col * D.largePegGapX;
       const ty = -this.row * D.rowGapY;
       return `translate(${tx}, ${ty})`;
@@ -131,7 +131,7 @@ export default {
     ...mapMutations("logic", ["setPeg", "hideColourMenu"])
   },
   components: {
-    LargePeg
+    LargePegRaw
   }
 };
 </script>

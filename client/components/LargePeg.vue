@@ -1,33 +1,31 @@
 <template>
-  <circle
-    class="large-peg"
+  <LargePegRaw
     :cx="cx"
     :cy="cy"
-    :r="r"
-    :fill="fill"
-    @click="onClick"
+    :colour="colour"
+    :handler="handler"
   />
 </template>
 
 <script>
 import * as D from "../dimensions";
+import LargePegRaw from "./LargePegRaw.vue";
 
 export default {
   name: "LargePeg",
-  props: ["cx", "cy", "fill", "handler"],
+  props: ["row", "col", "colour", "handler"],
   computed: {
-    r: () => D.largePegRadius
-  },
-  methods: {
-    onClick: function() {
-      this.handler && this.handler();
+    cx() {
+      return D.firstLargePegX + this.col * D.largePegGapX;
+    },
+    cy() {
+      return this.row < 0
+        ? D.secretRowCentreY
+        : D.firstRowCentreY - this.row * D.rowGapY;
     }
+  },
+  components: {
+    LargePegRaw
   }
 };
 </script>
-
-<style>
-.large-peg {
-  fill-opacity: 1;
-}
-</style>

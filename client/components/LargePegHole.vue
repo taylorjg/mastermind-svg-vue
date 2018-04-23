@@ -16,23 +16,23 @@ export default {
   name: "LargePegHole",
   props: ["row", "col", "handler"],
   computed: {
-    cx: function() {
+    cx() {
       return D.firstLargePegX + this.col * D.largePegGapX;
     },
-    cy: function() {
+    cy() {
       return this.row < 0
         ? D.secretRowCentreY
         : D.firstRowCentreY - this.row * D.rowGapY;
     },
-    r: function() {
+    r() {
       return D.largePegHoleRadius;
     },
-    strokeWidth: function() {
+    strokeWidth() {
       return D.largePegHoleStroke;
     }
   },
   methods: {
-    onClick: function() {
+    onClick() {
       this.handler && this.handler(this.row, this.col);
     }
   }
