@@ -22,7 +22,7 @@ import Button from "./components/Button.vue";
 export default {
   name: "App",
   methods: {
-    ...mapMutations("logic", { onNewGame: "start" })
+    ...mapMutations("logic", { onNewGame: "newGame" })
   },
   components: {
     Background,

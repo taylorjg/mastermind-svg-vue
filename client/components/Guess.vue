@@ -32,10 +32,10 @@ export default {
   props: ["row"],
   computed: {
     colours() {
-      const guess = this.guess(this.row);
+      const guess = this.guessAtIndex(this.row);
       return guess ? guess.map(peg => PEG_TO_COLOUR[peg]) : [];
     },
-    ...mapGetters("logic", ["activeRowIndex", "guess"])
+    ...mapGetters("logic", ["activeRowIndex", "guessAtIndex"])
   },
   methods: {
     onLargePegHoleClick(row, col) {
@@ -51,7 +51,3 @@ export default {
   }
 };
 </script>
-
-<style>
-
-</style>

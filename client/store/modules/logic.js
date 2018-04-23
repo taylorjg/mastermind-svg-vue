@@ -27,30 +27,37 @@ const getters = {
   showNewGameButton: state =>
     state.gameState === GAME_STATES.INITIALISED ||
     (state.gameState === GAME_STATES.GAME_OVER && !state.showingOutcomeModal),
-  showingColourMenuFor: state => state.showingColourMenuFor,
-  secret: state => {
-    return state.secret;
-  },
-  activeRowIndex: state => state.activeRowIndex,
-  guess: state => index =>
+  showingColourMenuFor: state =>
+    state.showingColourMenuFor,
+  secret: state =>
+    state.secret,
+  activeRowIndex: state =>
+    state.activeRowIndex,
+  guessAtIndex: state => index =>
     state.guesses[index]
       ? state.guesses[index].pegs
       : undefined,
-  feedback: state => index =>
+  feedbackAtIndex: state => index =>
     state.guesses[index]
       ? state.guesses[index].feedback
       : undefined,
-  gameInProgress: state => state.gameState === GAME_STATES.IN_PROGRESS,
-  gameOver: state => state.gameState === GAME_STATES.GAME_OVER
+  canSubmitRow: state => row =>
+    state.guesses[row] &&
+    state.guesses[row].pegs.every(peg => !!peg) &&
+    state.guesses[row].feedback === undefined,
+  gameInProgress: state =>
+    state.gameState === GAME_STATES.IN_PROGRESS,
+  gameOver: state =>
+    state.gameState === GAME_STATES.GAME_OVER
 };
 
 const mutations = {
-  start: state => {
+  newGame: state => {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.secret = generateRandomSecret();
     state.guesses = [
       {
-        pegs: Array(4),
+        pegs: Array(4).fill(undefined),
         feedback: undefined
       }
     ];
