@@ -17,12 +17,22 @@
       :label="'Enter'"
       :handler="onEnter"
     />
+    <template v-for="(colour, col) in colours">
+      <SmallPeg
+        v-if="colour"
+        :row="row"
+        :col="col"
+        :colour="colour"
+        :key="`feedback-small-peg-${row}-${col}`"
+      />
+    </template>
   </g>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import * as D from "../dimensions";
+import { C } from "../constants";
 import SmallPegHole from "./SmallPegHole.vue";
 import SmallPeg from "./SmallPeg.vue";
 import RowNumber from "./RowNumber.vue";
@@ -43,13 +53,21 @@ export default {
     canSubmitThisRow() {
       return this.canSubmitRow(this.row);
     },
-    ...mapGetters("logic", ["canSubmitRow"])
+    colours() {
+      const feedback = this.feedbackAtIndex(this.row);
+      if (!feedback) return [];
+      const blacks = Array(feedback.blacks).fill(C.BL);
+      const whites = Array(feedback.whites).fill(C.WH);
+      const colours = [...blacks, ...whites];
+      return colours;
+    },
+    ...mapGetters("logic", ["canSubmitRow", "feedbackAtIndex"])
   },
   methods: {
     onEnter() {
-      console.log("[Feedback#onEnter]");
-      // this.submitRow(this.row);
-    }
+      this.submitRow();
+    },
+    ...mapMutations("logic", ["submitRow"])
   },
   components: {
     SmallPegHole,

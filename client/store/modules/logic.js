@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { generateRandomSecret } from "../../logic";
+import { generateRandomSecret, evaluateGuess } from "../../logic";
 
 const GAME_STATES = {
   INITIALISED: Symbol("initialised"),
@@ -68,6 +68,20 @@ const mutations = {
       const row = state.showingColourMenuFor.row;
       const col = state.showingColourMenuFor.col;
       Vue.set(state.guesses[row].pegs, col, payload.peg);
+    }
+  },
+  submitRow: (state) => {
+    if (state.gameState === GAME_STATES.IN_PROGRESS) {
+      const guess = state.guesses[state.activeRowIndex].pegs;
+      const feedback = evaluateGuess(state.secret, guess);
+      state.guesses[state.activeRowIndex].feedback = feedback;
+      // TODO: check for game won (feedback.blacks === 4)
+      state.activeRowIndex++;
+      // TODO: check for game lost (state.activeRowIndex === 10)
+      state.guesses.push({
+        pegs: Array(4).fill(undefined),
+        feedback: undefined
+      });
     }
   },
   showColourMenuFor: (state, payload) => {

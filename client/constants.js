@@ -1,4 +1,4 @@
-const C = {
+export const C = {
   R: "#FF0000",
   G: "#00FF00",
   B: "#0000FF",
@@ -9,7 +9,7 @@ const C = {
 
 export const COLOURS = Object.values(C);
 
-const P = {
+export const P = {
   R: Symbol('red'),
   G: Symbol('green'),
   B: Symbol('blue'),
