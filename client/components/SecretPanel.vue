@@ -1,13 +1,20 @@
 <template>
-  <path
-    class="secret-panel"
-    :d="pathData"
-    :stroke-width="strokeWidth"
-    />
+  <g>
+    <path
+      class="secret-panel"
+      :d="pathData"
+      :stroke-width="strokeWidth"
+      />
+    <template v-for="(_, col) in 4">
+      <LargePegHole :row="-1" :col="col" :key="`secret-large-peg-hole-${col}`" />
+    </template>
+  </g>
 </template>
 
 <script>
 import * as D from "../dimensions";
+import LargePegHole from "./LargePegHole.vue";
+import LargePeg from "./LargePeg.vue";
 
 const SECRET_PANEL_LIP = 10;
 
@@ -22,6 +29,10 @@ export default {
       v${-D.secretPanelHeight}
       h${-SECRET_PANEL_LIP}`,
     strokeWidth: () => D.HALF_BORDER
+  },
+  components: {
+    LargePegHole,
+    LargePeg
   }
 };
 </script>

@@ -11,13 +11,6 @@ html, body {
 }
 
 /* 
-.secret-panel {
-  stroke: rgb(141, 97, 40);
-  stroke-linecap: square;
-  fill-opacity: 0;
-  filter: url(#shadow);
-}
-
 .secret-panel-cover {
   fill: rgb(146, 106, 54);
   fill-opacity: 1;
@@ -37,57 +30,6 @@ html, body {
   font-family: Arial;
   font-size: 24px;
   filter: url(#shadow);
-}
-
-.row-number-text {
-  fill: rgb(146, 106, 54);
-  text-anchor: middle;
-  dominant-baseline: central;
-  font-family: Arial;
-  font-size: 12px;
-  filter: url(#shadow);
-}
-
-.main-panel {
-  fill: rgb(141, 97, 40);
-  fill-rule: evenodd;
-  filter: url(#shadow);
-  stroke: rgb(141, 97, 40);
-  stroke-linejoin: round;
-}
-
-.small-peg-hole {
-  stroke: rgb(146, 106, 54);
-  fill-opacity: 1;
-  fill: rgb(90, 58, 16);
-}
-
-.large-peg-hole {
-  stroke: rgb(146, 106, 54);
-  fill-opacity: 1;
-  fill: rgb(90, 58, 16);
-}
-
-.small-peg {
-  fill-opacity: 1;
-}
-
-.large-peg {
-  fill-opacity: 1;
-}
-
-.colour-menu {
-  fill: rgb(141, 97, 40);
-  filter: url(#shadow);
-  stroke: rgb(141, 97, 40);
-}
-
-.colour-menu-inner {
-  fill: rgb(90, 58, 16);
-}
-
-.colour-menu-pointer {
-  fill: rgb(90, 58, 16);
 }
 
 .modal-outer {
@@ -129,28 +71,4 @@ html, body {
   stroke-width: 2;
   stroke: white;
 }
-
-.my-button {
-  cursor: pointer;  
-}
-
-.my-button:hover text {
-  font-weight: bolder;
-}
-
-.my-button-outer-rect {
-  stroke: rgb(90, 58, 16);
-  fill: rgb(141, 97, 40);
-}
-
-.my-button-inner-rect {
-  fill: rgb(90, 58, 16);
-}
-
-.my-button text {
-  fill: #fff;
-  text-anchor: middle;
-  dominant-baseline: central;
-  font-family: Arial;
-  font-size: 12px;
-} */
+*/
