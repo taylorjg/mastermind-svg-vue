@@ -1,3 +1,4 @@
+import Vue from "vue";
 import { generateRandomSecret } from "../../logic";
 
 const GAME_STATES = {
@@ -31,6 +32,14 @@ const getters = {
     return state.secret;
   },
   activeRowIndex: state => state.activeRowIndex,
+  guess: state => index =>
+    state.guesses[index]
+      ? state.guesses[index].pegs
+      : undefined,
+  feedback: state => index =>
+    state.guesses[index]
+      ? state.guesses[index].feedback
+      : undefined,
   gameInProgress: state => state.gameState === GAME_STATES.IN_PROGRESS,
   gameOver: state => state.gameState === GAME_STATES.GAME_OVER
 };
@@ -40,7 +49,10 @@ const mutations = {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.secret = generateRandomSecret();
     state.guesses = [
-      [{}, {}, {}, {}]
+      {
+        pegs: Array(4),
+        feedback: undefined
+      }
     ];
     state.activeRowIndex = 0;
   },
@@ -48,7 +60,7 @@ const mutations = {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
       const row = state.showingColourMenuFor.row;
       const col = state.showingColourMenuFor.col;
-      state.guesses[row][col].peg = payload.peg;
+      Vue.set(state.guesses[row].pegs, col, payload.peg);
     }
   },
   showColourMenuFor: (state, payload) => {
