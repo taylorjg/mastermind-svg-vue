@@ -81,12 +81,14 @@ const mutations = {
       if (feedback.blacks === 4) {
         state.gameState = GAME_STATES.GAME_OVER;
         state.outcome = OUTCOMES.WON;
+        state.activeRowIndex = -1;
       }
       else {
         state.activeRowIndex++;
         if (state.activeRowIndex === 10) {
           state.gameState = GAME_STATES.GAME_OVER;
           state.outcome = OUTCOMES.LOST;
+          state.activeRowIndex = -1;
         }
         else {
           state.rows.push({

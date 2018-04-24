@@ -8,6 +8,7 @@
     <template v-for="(_, col) in 4">
       <LargePegHole :row="-1" :col="col" :key="`secret-large-peg-hole-${col}`" />
     </template>
+    <SecretPanelCover v-if="gameInProgress" />
     <template v-if="gameOver" v-for="(colour, col) in colours">
       <LargePeg :row="-1" :col="col" :colour="colour" :key="`secret-large-peg-${col}`" />
     </template>
@@ -18,6 +19,7 @@
 import { mapGetters } from "vuex";
 import * as D from "../dimensions";
 import { PEG_TO_COLOUR } from "../constants";
+import SecretPanelCover from "./SecretPanelCover.vue";
 import LargePegHole from "./LargePegHole.vue";
 import LargePeg from "./LargePeg.vue";
 
@@ -40,6 +42,7 @@ export default {
     ...mapGetters("logic", ["gameOver", "gameInProgress", "secret"])
   },
   components: {
+    SecretPanelCover,
     LargePegHole,
     LargePeg
   }

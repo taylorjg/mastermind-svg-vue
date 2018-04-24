@@ -32,6 +32,7 @@ import Feedback from "./components/Feedback.vue";
 import Guess from "./components/Guess.vue";
 import MainPanel from "./components/MainPanel.vue";
 import ColourMenu from "./components/ColourMenu.vue";
+import OutcomeModal from "./components/OutcomeModal.vue";
 
 export default {
   name: "App",
@@ -59,7 +60,8 @@ export default {
     Feedback,
     Guess,
     MainPanel,
-    ColourMenu
+    ColourMenu,
+    OutcomeModal
   }
 };
 </script>

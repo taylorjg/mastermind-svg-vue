@@ -17,6 +17,13 @@
         :handler="onPegClick"
         :key="`guess-large-peg-${row}-${col}`"
       />
+      <FocusRing
+        :v-if="row == activeRowIndex"
+        :row="row"
+        :col="col"
+        :handler="onPegClick"
+        :key="`focus-ring-${row}-${col}`"
+      />
     </template>
   </g>
 </template>
@@ -27,6 +34,7 @@ import * as D from "../dimensions";
 import { PEG_TO_COLOUR } from "../constants";
 import LargePegHole from "./LargePegHole.vue";
 import LargePeg from "./LargePeg.vue";
+import FocusRing from "./FocusRing.vue";
 
 export default {
   name: "Guess",
@@ -48,7 +56,8 @@ export default {
   },
   components: {
     LargePegHole,
-    LargePeg
+    LargePeg,
+    FocusRing
   }
 };
 </script>
