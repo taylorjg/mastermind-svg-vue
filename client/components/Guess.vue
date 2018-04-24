@@ -7,6 +7,13 @@
         :handler="onPegClick"
         :key="`guess-large-peg-hole-${row}-${col}`"
       />
+      <FocusRing
+        v-if="row === activeRowIndex"
+        :row="row"
+        :col="col"
+        :handler="onPegClick"
+        :key="`focus-ring-${row}-${col}`"
+      />
     </template>
     <template v-for="(colour, col) in colours">
       <LargePeg
@@ -16,13 +23,6 @@
         :colour="colour"
         :handler="onPegClick"
         :key="`guess-large-peg-${row}-${col}`"
-      />
-      <FocusRing
-        :v-if="row == activeRowIndex"
-        :row="row"
-        :col="col"
-        :handler="onPegClick"
-        :key="`focus-ring-${row}-${col}`"
       />
     </template>
   </g>
