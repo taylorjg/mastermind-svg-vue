@@ -55,6 +55,7 @@ const mutations = {
   newGame: state => {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.secret = generateRandomSecret();
+    console.log(`secret: ${state.secret.map(peg => peg.toString())}`);
     state.guesses = [
       {
         pegs: Array(4).fill(undefined),
@@ -75,13 +76,23 @@ const mutations = {
       const guess = state.guesses[state.activeRowIndex].pegs;
       const feedback = evaluateGuess(state.secret, guess);
       state.guesses[state.activeRowIndex].feedback = feedback;
-      // TODO: check for game won (feedback.blacks === 4)
-      state.activeRowIndex++;
-      // TODO: check for game lost (state.activeRowIndex === 10)
-      state.guesses.push({
-        pegs: Array(4).fill(undefined),
-        feedback: undefined
-      });
+      if (feedback.blacks === 4) {
+        state.gameState = GAME_STATES.GAME_OVER;
+        state.outcome = OUTCOMES.WON;
+      }
+      else {
+        state.activeRowIndex++;
+        if (state.activeRowIndex === 10) {
+          state.gameState = GAME_STATES.GAME_OVER;
+          state.outcome = OUTCOMES.LOST;
+        }
+        else {
+          state.guesses.push({
+            pegs: Array(4).fill(undefined),
+            feedback: undefined
+          });
+        }
+      }
     }
   },
   showColourMenuFor: (state, payload) => {

@@ -10,10 +10,10 @@
     <RowNumber :row="row" :key="`feedback-row-number-${row}`" />
     <Button
       v-if="canSubmitThisRow"
-      :x="enterButtonLocation.x"
-      :y="enterButtonLocation.y"
-      :width="enterButtonLocation.width"
-      :height="enterButtonLocation.height"
+      :x="enterButtonBox.x"
+      :y="enterButtonBox.y"
+      :width="enterButtonBox.width"
+      :height="enterButtonBox.height"
       :label="'Enter'"
       :handler="onEnter"
     />
@@ -42,7 +42,7 @@ export default {
   name: "Feedback",
   props: ["row"],
   computed: {
-    enterButtonLocation() {
+    enterButtonBox() {
       const rowCentreY = D.firstRowCentreY - this.row * D.rowGapY;
       const x = D.smallCutoutX + D.BORDER;
       const y = rowCentreY - D.smallCutoutHeight / 2 + D.BORDER;
