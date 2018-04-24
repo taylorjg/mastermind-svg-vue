@@ -4,7 +4,7 @@
       <LargePegHole
         :row="row"
         :col="col"
-        :handler="onLargePegHoleClick"
+        :handler="onPegClick"
         :key="`guess-large-peg-hole-${row}-${col}`"
       />
     </template>
@@ -14,6 +14,7 @@
         :row="row"
         :col="col"
         :colour="colour"
+        :handler="onPegClick"
         :key="`guess-large-peg-${row}-${col}`"
       />
     </template>
@@ -38,7 +39,7 @@ export default {
     ...mapGetters("logic", ["activeRowIndex", "guessAtIndex"])
   },
   methods: {
-    onLargePegHoleClick(row, col) {
+    onPegClick(row, col) {
       if (row === this.activeRowIndex) {
         this.showColourMenuFor({ row, col });
       }

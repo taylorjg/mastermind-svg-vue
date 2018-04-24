@@ -3,7 +3,7 @@
     :cx="cx"
     :cy="cy"
     :colour="colour"
-    :handler="handler"
+    :handler="handler && handler.bind(this, row, col)"
   />
 </template>
 

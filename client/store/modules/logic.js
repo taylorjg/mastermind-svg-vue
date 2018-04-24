@@ -73,6 +73,7 @@ const mutations = {
   },
   submitRow: (state) => {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
+      state.showingColourMenuFor = undefined;
       const guess = state.guesses[state.activeRowIndex].pegs;
       const feedback = evaluateGuess(state.secret, guess);
       state.guesses[state.activeRowIndex].feedback = feedback;
@@ -96,10 +97,12 @@ const mutations = {
     }
   },
   showColourMenuFor: (state, payload) => {
-    state.showingColourMenuFor = {
-      row: payload.row,
-      col: payload.col
-    };
+    if (state.gameState === GAME_STATES.IN_PROGRESS) {
+      state.showingColourMenuFor = {
+        row: payload.row,
+        col: payload.col
+      };
+    }
   },
   hideColourMenu: state => {
     state.showingColourMenuFor = undefined;
