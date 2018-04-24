@@ -69,7 +69,7 @@ export default {
 }
 
 .button:hover text {
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .button-outer-rect {

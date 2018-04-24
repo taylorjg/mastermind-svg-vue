@@ -17,7 +17,7 @@ const state = {
   gameState: GAME_STATES.INITIALISED,
   outcome: OUTCOMES.NONE,
   secret: [],
-  guesses: [],
+  rows: [],
   activeRowIndex: -1,
   showingColourMenuFor: undefined,
   showingOutcomeModal: false
@@ -33,18 +33,18 @@ const getters = {
     state.secret,
   activeRowIndex: state =>
     state.activeRowIndex,
-  guessAtIndex: state => index =>
-    state.guesses[index]
-      ? state.guesses[index].pegs
+  guessAtRow: state => row =>
+    state.rows[row]
+      ? state.rows[row].pegs
       : undefined,
-  feedbackAtIndex: state => index =>
-    state.guesses[index]
-      ? state.guesses[index].feedback
+  feedbackAtRow: state => row =>
+    state.rows[row]
+      ? state.rows[row].feedback
       : undefined,
   canSubmitRow: state => row =>
-    state.guesses[row] &&
-    state.guesses[row].pegs.every(peg => !!peg) &&
-    state.guesses[row].feedback === undefined,
+    state.rows[row] &&
+    state.rows[row].pegs.every(peg => !!peg) &&
+    state.rows[row].feedback === undefined,
   gameInProgress: state =>
     state.gameState === GAME_STATES.IN_PROGRESS,
   gameOver: state =>
@@ -56,7 +56,7 @@ const mutations = {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.secret = generateRandomSecret();
     console.log(`secret: ${state.secret.map(peg => peg.toString())}`);
-    state.guesses = [
+    state.rows = [
       {
         pegs: Array(4).fill(undefined),
         feedback: undefined
@@ -68,15 +68,16 @@ const mutations = {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
       const row = state.showingColourMenuFor.row;
       const col = state.showingColourMenuFor.col;
-      Vue.set(state.guesses[row].pegs, col, payload.peg);
+      Vue.set(state.rows[row].pegs, col, payload.peg);
     }
   },
-  submitRow: (state) => {
+  submitRow: (state, payload) => {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
       state.showingColourMenuFor = undefined;
-      const guess = state.guesses[state.activeRowIndex].pegs;
+      const row = payload.row;
+      const guess = state.rows[row].pegs;
       const feedback = evaluateGuess(state.secret, guess);
-      state.guesses[state.activeRowIndex].feedback = feedback;
+      state.rows[row].feedback = feedback;
       if (feedback.blacks === 4) {
         state.gameState = GAME_STATES.GAME_OVER;
         state.outcome = OUTCOMES.WON;
@@ -88,7 +89,7 @@ const mutations = {
           state.outcome = OUTCOMES.LOST;
         }
         else {
-          state.guesses.push({
+          state.rows.push({
             pegs: Array(4).fill(undefined),
             feedback: undefined
           });

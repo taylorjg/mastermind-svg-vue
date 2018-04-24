@@ -33,10 +33,10 @@ export default {
   props: ["row"],
   computed: {
     colours() {
-      const guess = this.guessAtIndex(this.row);
+      const guess = this.guessAtRow(this.row);
       return guess ? guess.map(peg => PEG_TO_COLOUR[peg]) : [];
     },
-    ...mapGetters("logic", ["activeRowIndex", "guessAtIndex"])
+    ...mapGetters("logic", ["activeRowIndex", "guessAtRow"])
   },
   methods: {
     onPegClick(row, col) {

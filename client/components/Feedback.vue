@@ -9,13 +9,13 @@
     </template>
     <RowNumber :row="row" :key="`feedback-row-number-${row}`" />
     <Button
-      v-if="canSubmitThisRow"
+      v-if="canSubmitRow(row)"
       :x="enterButtonBox.x"
       :y="enterButtonBox.y"
       :width="enterButtonBox.width"
       :height="enterButtonBox.height"
-      :label="'Enter'"
-      :handler="onEnter"
+      :label="'Submit'"
+      :handler="onSubmit"
     />
     <template v-for="(colour, col) in colours">
       <SmallPeg
@@ -50,22 +50,19 @@ export default {
       const height = D.smallCutoutHeight - 2 * D.BORDER;
       return { x, y, width, height };
     },
-    canSubmitThisRow() {
-      return this.canSubmitRow(this.row);
-    },
     colours() {
-      const feedback = this.feedbackAtIndex(this.row);
+      const feedback = this.feedbackAtRow(this.row);
       if (!feedback) return [];
       const blacks = Array(feedback.blacks).fill(C.BL);
       const whites = Array(feedback.whites).fill(C.WH);
       const colours = [...blacks, ...whites];
       return colours;
     },
-    ...mapGetters("logic", ["canSubmitRow", "feedbackAtIndex"])
+    ...mapGetters("logic", ["canSubmitRow", "feedbackAtRow"])
   },
   methods: {
-    onEnter() {
-      this.submitRow();
+    onSubmit() {
+      this.submitRow({ row: this.row });
     },
     ...mapMutations("logic", ["submitRow"])
   },
