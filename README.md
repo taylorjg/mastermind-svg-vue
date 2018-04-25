@@ -14,18 +14,18 @@ I created this separate repo to play around with it.
 * [x] Add HTML "Enter" button to enter a guess
 * [x] Show/hide secret panel cover
 * [x] Allow selection of a peg colour from a colour menu
-* [ ] Add flashing focus circles to the large peg holes for the active row
-* [ ] Use SVG buttons instead of HTML buttons
-* [ ] Add some fanfare around game win/loss
+* [x] Add focus circles to the large peg holes for the active row
+* [x] Use SVG buttons instead of HTML buttons
+* [x] Add some fanfare around game won/lost
 * [ ] Add shine/gloss to large/small pegs
 * [ ] Add animations (e.g. when revealing the secret code)
-* [ ] Responsive UI: size of device
+* [x] Responsive UI: size of device
 * [ ] Responsive UI: orientation of device
 
 ## Non-UI things
 
 * [x] Add basic game logic
-* [ ] Use [Vue.js](https://vuejs.org/) (my first Vue.js app!)
+* [x] Use [Vue.js](https://vuejs.org/) (my first Vue.js app!)
 
 ## Boring things
 
