@@ -48,12 +48,17 @@ const getters = {
   gameInProgress: state =>
     state.gameState === GAME_STATES.IN_PROGRESS,
   gameOver: state =>
-    state.gameState === GAME_STATES.GAME_OVER
+    state.gameState === GAME_STATES.GAME_OVER,
+  gameWon: state =>
+    state.outcome === OUTCOMES.WON,
+  showingOutcomeModal: state =>
+    state.showingOutcomeModal
 };
 
 const mutations = {
   newGame: state => {
     state.gameState = GAME_STATES.IN_PROGRESS;
+    state.outcome = OUTCOMES.NONE;
     state.secret = generateRandomSecret();
     console.log(`secret: ${state.secret.map(peg => peg.toString())}`);
     state.rows = [
@@ -82,6 +87,7 @@ const mutations = {
         state.gameState = GAME_STATES.GAME_OVER;
         state.outcome = OUTCOMES.WON;
         state.activeRowIndex = -1;
+        state.showingOutcomeModal = true;
       }
       else {
         state.activeRowIndex++;
@@ -89,6 +95,7 @@ const mutations = {
           state.gameState = GAME_STATES.GAME_OVER;
           state.outcome = OUTCOMES.LOST;
           state.activeRowIndex = -1;
+          state.showingOutcomeModal = true;
         }
         else {
           state.rows.push({
@@ -109,6 +116,9 @@ const mutations = {
   },
   hideColourMenu: state => {
     state.showingColourMenuFor = undefined;
+  },
+  hideOutcomeModal: state => {
+    state.showingOutcomeModal = false;
   }
 };
 

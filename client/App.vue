@@ -20,6 +20,10 @@
       :row="showingColourMenuFor.row"
       :col="showingColourMenuFor.col"
     />
+    <OutcomeModal
+      v-if="showingOutcomeModal"
+      :gameWon="gameWon"
+    />
   </g>
 </template>
 
@@ -49,7 +53,12 @@ export default {
         height: 30
       };
     },
-    ...mapGetters("logic", ["showNewGameButton", "showingColourMenuFor"])
+    ...mapGetters("logic", [
+      "showNewGameButton",
+      "showingColourMenuFor",
+      "showingOutcomeModal",
+      "gameWon"
+    ])
   },
   methods: {
     ...mapMutations("logic", { onNewGame: "newGame" })
