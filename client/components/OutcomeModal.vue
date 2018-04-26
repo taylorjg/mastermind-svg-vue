@@ -19,7 +19,7 @@
       rx="5"
       ry="5"
     />
-    <ModalCloseButton :cx="modalCloseButton.cx" :cy="modalCloseButton.cy" :onClose="onClose" />
+    <CloseButton :cx="closeButtonData.cx" :cy="closeButtonData.cy" :onClose="onClose" />
     <text class="outcome-modal-text-1" :x="text1.x" :y="text1.y">{{ text1.text }}</text>
     <use :href="graphic.href" :transform="graphic.transform" />
     <text class="outcome-modal-text-2" :x="text2.x" :y="text2.y">{{ text2.text }}</text>
@@ -29,7 +29,7 @@
 <script>
 import { mapMutations } from "vuex";
 import * as D from "../dimensions";
-import ModalCloseButton from "./ModalCloseButton.vue";
+import CloseButton from "./CloseButton.vue";
 
 let modalOuterWidth;
 let modalOuterHeight;
@@ -75,7 +75,7 @@ export default {
         height: modalInnerHeight
       };
     },
-    modalCloseButton() {
+    closeButtonData() {
       return {
         cx: modalOuterX + modalOuterWidth - D.BORDER / 2,
         cy: modalOuterY + D.HALF_BORDER / 2
@@ -113,7 +113,7 @@ export default {
     ...mapMutations("logic", ["hideOutcomeModal"])
   },
   components: {
-    ModalCloseButton
+    CloseButton
   }
 };
 </script>
@@ -141,21 +141,5 @@ export default {
   text-anchor: middle;
   font-family: Arial;
   font-size: 16px;
-}
-
-.outcome-modal-close-button {
-  cursor: pointer;
-}
-
-.outcome-modal-close-button circle {
-  fill-opacity: 1;
-  fill: black;
-  stroke-width: 2;
-  stroke: white;
-}
-
-.outcome-modal-close-button path {
-  stroke-width: 2;
-  stroke: white;
 }
 </style>

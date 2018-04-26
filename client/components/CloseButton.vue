@@ -1,5 +1,5 @@
 <template>
-  <g class="modal-close-button" @click="onClose">
+  <g class="close-button" @click="onClose">
     <circle :cx="cx" :cy="cy" :r="r" />
     <path :d="crossPathData" />
   </g>
@@ -9,7 +9,7 @@
 import * as D from "../dimensions";
 
 export default {
-  name: "ModalCloseButton",
+  name: "CloseButton",
   props: ["cx", "cy", "onClose"],
   computed: {
     r() {
@@ -27,18 +27,18 @@ export default {
 </script>
 
 <style scoped>
-.modal-close-button {
+.close-button {
   cursor: pointer;
 }
 
-.modal-close-button circle {
+.close-button circle {
   fill-opacity: 1;
   fill: black;
   stroke-width: 2;
   stroke: white;
 }
 
-.modal-close-button path {
+.close-button path {
   stroke-width: 2;
   stroke: white;
 }
