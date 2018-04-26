@@ -14,7 +14,7 @@
       :y="enterButtonBox.y"
       :width="enterButtonBox.width"
       :height="enterButtonBox.height"
-      :label="'Submit'"
+      :label="'Go'"
       :handler="onSubmit"
     />
     <template v-for="(colour, col) in colours">

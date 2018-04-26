@@ -7,7 +7,6 @@
         :y="outerRectY"
         :width="outerRectWidth"
         :height="outerRectHeight"
-        :stroke-width="outerRectStrokeWidth"
         rx="5"
         ry="5"
       />
@@ -75,17 +74,13 @@ export default {
 
     COLOUR_MENU_OUTER_X = D.mainPanelX;
     COLOUR_MENU_OUTER_HEIGHT = D.largePegRadius * 4;
-    COLOUR_MENU_OUTER_Y =
-      POINTER_TIP_Y -
-      POINTER_HEIGHT -
-      COLOUR_MENU_OUTER_HEIGHT -
-      D.HALF_BORDER / 2;
+    COLOUR_MENU_OUTER_Y = POINTER_TIP_Y - POINTER_HEIGHT - COLOUR_MENU_OUTER_HEIGHT;
     COLOUR_MENU_OUTER_WIDTH = D.mainPanelWidth;
 
-    COLOUR_MENU_INNER_X = COLOUR_MENU_OUTER_X + D.HALF_BORDER;
-    COLOUR_MENU_INNER_Y = COLOUR_MENU_OUTER_Y + D.HALF_BORDER;
-    COLOUR_MENU_INNER_WIDTH = COLOUR_MENU_OUTER_WIDTH - D.BORDER;
-    COLOUR_MENU_INNER_HEIGHT = COLOUR_MENU_OUTER_HEIGHT - D.BORDER;
+    COLOUR_MENU_INNER_X = COLOUR_MENU_OUTER_X + D.BORDER;
+    COLOUR_MENU_INNER_Y = COLOUR_MENU_OUTER_Y + D.BORDER;
+    COLOUR_MENU_INNER_WIDTH = COLOUR_MENU_OUTER_WIDTH - 2 * D.BORDER;
+    COLOUR_MENU_INNER_HEIGHT = COLOUR_MENU_OUTER_HEIGHT - 2 * D.BORDER;
 
     gap = COLOUR_MENU_INNER_WIDTH / COLOURS.length;
     halfGap = gap / 2;
@@ -96,7 +91,6 @@ export default {
     outerRectY: () => COLOUR_MENU_OUTER_Y,
     outerRectWidth: () => COLOUR_MENU_OUTER_WIDTH,
     outerRectHeight: () => COLOUR_MENU_OUTER_HEIGHT,
-    outerRectStrokeWidth: () => D.HALF_BORDER,
     innerRectX: () => COLOUR_MENU_INNER_X,
     innerRectY: () => COLOUR_MENU_INNER_Y,
     innerRectWidth: () => COLOUR_MENU_INNER_WIDTH,
@@ -138,7 +132,6 @@ export default {
 
 <style>
 .colour-menu-outer-rect {
-  stroke: rgb(141, 97, 40);
   fill: rgb(141, 97, 40);
   filter: url(#shadow);
 }

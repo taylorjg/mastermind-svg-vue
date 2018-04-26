@@ -6,7 +6,6 @@
       :y="outerRectBox.y"
       :width="outerRectBox.width"
       :height="outerRectBox.height"
-      :stroke-width="outerRectStroke"
       rx="5"
       ry="5"
     />
@@ -31,7 +30,6 @@
 <script>
 import * as D from "../dimensions";
 import CloseButton from "./CloseButton.vue";
-import { HALF_BORDER } from "../dimensions";
 
 export default {
   name: "Modal",
@@ -45,9 +43,6 @@ export default {
         height: this.height + 2 * D.BORDER
       };
     },
-    outerRectStroke() {
-      return D.BORDER;
-    },
     innerRectBox() {
       return {
         x: this.x,
@@ -58,8 +53,8 @@ export default {
     },
     closeButtonData() {
       return {
-        cx: this.x + this.width + 1.5 * D.HALF_BORDER,
-        cy: this.y - 1.5 * HALF_BORDER
+        cx: this.x + this.width + D.HALF_BORDER,
+        cy: this.y - D.HALF_BORDER
       };
     }
   },
@@ -73,7 +68,6 @@ export default {
 .modal-outer-rect {
   fill: rgb(141, 97, 40);
   filter: url(#shadow2);
-  stroke: rgb(141, 97, 40);
 }
 
 .modal-inner-rect {
