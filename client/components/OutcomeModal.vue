@@ -1,105 +1,65 @@
 <template>
   <g>
-    <rect
-      class="outcome-modal-outer-rect"
-      :x="outerRectBox.x"
-      :y="outerRectBox.y"
-      :width="outerRectBox.width"
-      :height="outerRectBox.height"
-      :stroke-width="outerRectStroke"
-      rx="5"
-      ry="5"
-    />
-    <rect
-      class="outcome-modal-inner-rect"
-      :x="innerRectBox.x"
-      :y="innerRectBox.y"
-      :width="innerRectBox.width"
-      :height="innerRectBox.height"
-      rx="5"
-      ry="5"
-    />
-    <CloseButton :cx="closeButtonData.cx" :cy="closeButtonData.cy" :onClose="onClose" />
-    <text class="outcome-modal-text-1" :x="text1.x" :y="text1.y">{{ text1.text }}</text>
-    <use :href="graphic.href" :transform="graphic.transform" />
-    <text class="outcome-modal-text-2" :x="text2.x" :y="text2.y">{{ text2.text }}</text>
+    <Modal
+      :x="contentBox.x"
+      :y="contentBox.y"
+      :width="contentBox.width"
+      :height="contentBox.height"
+      :onClose="onClose">
+      <text class="outcome-modal-text-1" :x="text1.x" :y="text1.y">{{ text1.text }}</text>
+      <use :href="graphic.href" :transform="graphic.transform" />
+      <text class="outcome-modal-text-2" :x="text2.x" :y="text2.y">{{ text2.text }}</text>
+    </Modal>
   </g>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
 import * as D from "../dimensions";
-import CloseButton from "./CloseButton.vue";
+import Modal from "./Modal.vue";
 
-let modalOuterWidth;
-let modalOuterHeight;
-let modalOuterX;
-let modalOuterY;
-
-let modalInnerX;
-let modalInnerY;
-let modalInnerWidth;
-let modalInnerHeight;
+let contentX;
+let contentY;
+let contentWidth;
+let contentHeight;
 
 export default {
   name: "OutcomeModal",
   props: ["gameWon"],
   created() {
-    modalOuterWidth = D.boardWidth / 2;
-    modalOuterHeight = modalOuterWidth / 2 * 3;
-    modalOuterX = D.boardWidth / 4;
-    modalOuterY = (D.boardHeight - modalOuterHeight) / 2;
-
-    modalInnerX = modalOuterX + D.BORDER;
-    modalInnerY = modalOuterY + D.BORDER;
-    modalInnerWidth = modalOuterWidth - 2 * D.BORDER;
-    modalInnerHeight = modalOuterHeight - 2 * D.BORDER;
+    contentWidth = D.boardWidth / 2;
+    contentHeight = contentWidth * 1.5;
+    contentX = (D.boardWidth - contentWidth) / 2;
+    contentY = (D.boardHeight - contentHeight) / 2;
   },
   computed: {
-    outerRectBox() {
+    contentBox() {
       return {
-        x: modalOuterX,
-        y: modalOuterY,
-        width: modalOuterWidth,
-        height: modalOuterHeight
-      };
-    },
-    outerRectStroke() {
-      return D.BORDER;
-    },
-    innerRectBox() {
-      return {
-        x: modalInnerX,
-        y: modalInnerY,
-        width: modalInnerWidth,
-        height: modalInnerHeight
-      };
-    },
-    closeButtonData() {
-      return {
-        cx: modalOuterX + modalOuterWidth - D.BORDER / 2,
-        cy: modalOuterY + D.HALF_BORDER / 2
+        x: contentX,
+        y: contentY,
+        width: contentWidth,
+        height: contentHeight
       };
     },
     text1() {
       return {
         x: D.boardWidth / 2,
-        y: modalInnerY + 30,
+        y: contentY + 40,
         text: this.gameWon ? "You Won!" : "You Lost!"
       };
     },
     text2() {
       return {
         x: D.boardWidth / 2,
-        y: modalInnerY + modalInnerHeight - 30,
+        y: contentY + contentHeight - 30,
         text: this.gameWon ? "Congratulations!" : "Commiserations!"
       };
     },
     graphic() {
       const size = this.gameWon ? 448.35 : 579.8642;
-      const scale = modalInnerWidth / 2 / size;
-      const tx = modalInnerX + modalInnerWidth / 4;
-      const ty = modalInnerY + modalInnerHeight / 3;
+      const scale = contentWidth / 2 / size;
+      const tx = contentX + contentWidth / 4;
+      const ty = contentY + contentHeight / 3;
       return {
         href: this.gameWon ? "#trophy" : "#spoon",
         transform: `translate(${tx}, ${ty}) scale(${scale}, ${scale})`
@@ -113,22 +73,12 @@ export default {
     ...mapMutations("logic", ["hideOutcomeModal"])
   },
   components: {
-    CloseButton
+    Modal
   }
 };
 </script>
 
 <style>
-.outcome-modal-outer-rect {
-  fill: rgb(141, 97, 40);
-  filter: url(#shadow2);
-  stroke: rgb(141, 97, 40);
-}
-
-.outcome-modal-inner-rect {
-  fill: rgb(90, 58, 16);
-}
-
 .outcome-modal-text-1 {
   fill: rgb(141, 97, 40);
   text-anchor: middle;

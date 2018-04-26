@@ -1,6 +1,6 @@
 <template>
   <g class="close-button" @click="onClose">
-    <circle :cx="cx" :cy="cy" :r="r" />
+    <circle :cx="cx" :cy="cy" r="12" />
     <path :d="crossPathData" />
   </g>
 </template>
@@ -12,9 +12,6 @@ export default {
   name: "CloseButton",
   props: ["cx", "cy", "onClose"],
   computed: {
-    r() {
-      return 12;
-    },
     crossPathData() {
       const d = 5;
       const dd = d * 2;
@@ -26,7 +23,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .close-button {
   cursor: pointer;
 }
