@@ -19,10 +19,7 @@
       rx="5"
       ry="5"
     />
-    <g class="outcome-modal-close-button" @click="onClose">
-      <circle :cx="circleData.cx" :cy="circleData.cy" :r="circleData.r" />
-      <path :d="crossPathData" />
-    </g>
+    <ModalCloseButton :cx="modalCloseButton.cx" :cy="modalCloseButton.cy" :onClose="onClose" />
     <text class="outcome-modal-text-1" :x="text1.x" :y="text1.y">{{ text1.text }}</text>
     <use :href="graphic.href" :transform="graphic.transform" />
     <text class="outcome-modal-text-2" :x="text2.x" :y="text2.y">{{ text2.text }}</text>
@@ -32,6 +29,7 @@
 <script>
 import { mapMutations } from "vuex";
 import * as D from "../dimensions";
+import ModalCloseButton from "./ModalCloseButton.vue";
 
 let modalOuterWidth;
 let modalOuterHeight;
@@ -77,21 +75,11 @@ export default {
         height: modalInnerHeight
       };
     },
-    circleData() {
+    modalCloseButton() {
       return {
         cx: modalOuterX + modalOuterWidth - D.BORDER / 2,
-        cy: modalOuterY + D.HALF_BORDER / 2,
-        r: 12
+        cy: modalOuterY + D.HALF_BORDER / 2
       };
-    },
-    crossPathData() {
-      const cx = modalOuterX + modalOuterWidth - D.BORDER / 2;
-      const cy = modalOuterY + D.HALF_BORDER / 2;
-      const d = 5;
-      const dd = d * 2;
-      const diagonal1 = `M${cx - d},${cy - d} l${+dd},${dd}`;
-      const diagonal2 = `M${cx + d},${cy - d} l${-dd},${dd}`;
-      return `${diagonal1} ${diagonal2}`;
     },
     text1() {
       return {
@@ -123,6 +111,9 @@ export default {
       this.hideOutcomeModal();
     },
     ...mapMutations("logic", ["hideOutcomeModal"])
+  },
+  components: {
+    ModalCloseButton
   }
 };
 </script>
