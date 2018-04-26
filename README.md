@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/taylorjg/mastermind-svg-prototype/tree/master.svg?style=svg)](https://circleci.com/gh/taylorjg/mastermind-svg-prototype/tree/master)
+[![CircleCI](https://circleci.com/gh/taylorjg/mastermind-svg-vue/tree/master.svg?style=svg)](https://circleci.com/gh/taylorjg/mastermind-svg-vue/tree/master)
 
 # Description
 
