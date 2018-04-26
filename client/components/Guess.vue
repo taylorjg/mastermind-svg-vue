@@ -4,7 +4,6 @@
       <LargePegHole
         :row="row"
         :col="col"
-        :handler="onPegClick"
         :key="`guess-large-peg-hole-${row}-${col}`"
       />
       <FocusRing
@@ -44,15 +43,25 @@ export default {
       const guess = this.guessAtRow(this.row);
       return guess ? guess.map(peg => PEG_TO_COLOUR[peg]) : [];
     },
-    ...mapGetters("logic", ["activeRowIndex", "guessAtRow"])
+    ...mapGetters("logic", [
+      "activeRowIndex",
+      "guessAtRow",
+      "showingColourMenuFor"
+    ])
   },
   methods: {
     onPegClick(row, col) {
-      if (row === this.activeRowIndex) {
+      if (this.showingColourMenuFor) {
+        if (this.showingColourMenuFor.col === col) {
+          this.hideColourMenu();
+        } else {
+          this.showColourMenuFor({ row, col });
+        }
+      } else {
         this.showColourMenuFor({ row, col });
       }
     },
-    ...mapMutations("logic", ["showColourMenuFor"])
+    ...mapMutations("logic", ["showColourMenuFor", "hideColourMenu"])
   },
   components: {
     LargePegHole,
