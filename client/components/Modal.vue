@@ -6,8 +6,8 @@
       :y="outerRectBox.y"
       :width="outerRectBox.width"
       :height="outerRectBox.height"
-      rx="5"
-      ry="5"
+      :rx="outerRectBox.rx"
+      :ry="outerRectBox.ry"
     />
     <rect
       class="modal-inner-rect"
@@ -15,8 +15,8 @@
       :y="innerRectBox.y"
       :width="innerRectBox.width"
       :height="innerRectBox.height"
-      rx="5"
-      ry="5"
+      :rx="innerRectBox.rx"
+      :ry="innerRectBox.ry"
     />
     <CloseButton
       :cx="closeButtonData.cx"
@@ -40,7 +40,9 @@ export default {
         x: this.x - D.BORDER,
         y: this.y - D.BORDER,
         width: this.width + 2 * D.BORDER,
-        height: this.height + 2 * D.BORDER
+        height: this.height + 2 * D.BORDER,
+        rx: 5,
+        ry: 5
       };
     },
     innerRectBox() {
@@ -48,7 +50,9 @@ export default {
         x: this.x,
         y: this.y,
         width: this.width,
-        height: this.height
+        height: this.height,
+        rx: 5,
+        ry: 5
       };
     },
     closeButtonData() {

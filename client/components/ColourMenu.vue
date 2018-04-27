@@ -1,39 +1,50 @@
 <template>
   <g>
+
+    <defs>
+      <clipPath v-for="(_, col) in 4" :id="`clipPath${col}`" :key="`clip-path-${col}`">
+        <rect
+          :x="outerRectBox.x"
+          :y="outerRectBox.y"
+          :width="outerRectBox.width"
+          :height="outerRectBox.height"
+          :rx="outerRectBox.rx"
+          :ry="outerRectBox.ry"
+        />
+        <path :d="pointerPathData(col)" />
+      </clipPath>
+    </defs>
+
     <g :transform="colourMenuTransform">
-      <rect
-        class="colour-menu-outer-rect"
-        :x="outerRectX"
-        :y="outerRectY"
-        :width="outerRectWidth"
-        :height="outerRectHeight"
-        rx="5"
-        ry="5"
-      />
+      <g filter="url(#shadow2)">
+        <rect
+          class="colour-menu-border"
+          :x="borderBox.x"
+          :y="borderBox.y"
+          :width="borderBox.width"
+          :height="borderBox.height"
+          :clip-path="`url(#clipPath${col})`"
+        />
+      </g>
       <rect
         class="colour-menu-inner-rect"
-        :x="innerRectX"
-        :y="innerRectY"
-        :width="innerRectWidth"
-        :height="innerRectHeight"
-        rx="5"
-        ry="5"
+        :x="innerRectBox.x"
+        :y="innerRectBox.y"
+        :width="innerRectBox.width"
+        :height="innerRectBox.height"
+        :rx="innerRectBox.rx"
+        :ry="innerRectBox.ry"
       />
-      <template v-for="(colour, index) in COLOURS">
+      <template v-for="(colour, index) in colours">
         <LargePegRaw
           :cx="colourCx(index)"
           :cy="colourCy"
           :fill="colour"
-          :key="`colour-swatch-${index}`"
+          :key="`colour-${index}`"
           :handler="makeOnClickHandler(colour)"
         />
       </template>
     </g>
-    <path
-      class="colour-menu-pointer"
-      :d="pointerPathData"
-      :transform="pointerTransform"
-    />
   </g>
 </template>
 
@@ -86,33 +97,46 @@ export default {
     halfGap = gap / 2;
   },
   computed: {
-    COLOURS: () => COLOURS,
-    outerRectX: () => COLOUR_MENU_OUTER_X,
-    outerRectY: () => COLOUR_MENU_OUTER_Y,
-    outerRectWidth: () => COLOUR_MENU_OUTER_WIDTH,
-    outerRectHeight: () => COLOUR_MENU_OUTER_HEIGHT,
-    innerRectX: () => COLOUR_MENU_INNER_X,
-    innerRectY: () => COLOUR_MENU_INNER_Y,
-    innerRectWidth: () => COLOUR_MENU_INNER_WIDTH,
-    innerRectHeight: () => COLOUR_MENU_INNER_HEIGHT,
-    colourCy: () => COLOUR_MENU_INNER_Y + COLOUR_MENU_INNER_HEIGHT / 2,
-    pointerPathData: () => `
-      M${POINTER_TIP_X},${POINTER_TIP_Y}
-      l${-POINTER_HALF_WIDTH},${-POINTER_HEIGHT}
-      h${POINTER_WIDTH}
-      z`,
-    colourMenuTransform() {
-      const tx = 0;
-      const ty = -this.row * D.rowGapY;
-      return `translate(${tx}, ${ty})`;
+    colours: () => COLOURS,
+    borderBox() {
+      return {
+        x: COLOUR_MENU_OUTER_X,
+        y: COLOUR_MENU_OUTER_Y,
+        width: COLOUR_MENU_OUTER_WIDTH,
+        height: COLOUR_MENU_OUTER_HEIGHT + POINTER_HEIGHT
+      };
     },
-    pointerTransform() {
-      const tx = this.col * D.largePegGapX;
-      const ty = -this.row * D.rowGapY;
-      return `translate(${tx}, ${ty})`;
+    outerRectBox() {
+      return {
+        x: COLOUR_MENU_OUTER_X,
+        y: COLOUR_MENU_OUTER_Y,
+        width: COLOUR_MENU_OUTER_WIDTH,
+        height: COLOUR_MENU_OUTER_HEIGHT,
+        rx: 5,
+        ry: 5
+      };
+    },
+    innerRectBox() {
+      return {
+        x: COLOUR_MENU_INNER_X,
+        y: COLOUR_MENU_INNER_Y,
+        width: COLOUR_MENU_INNER_WIDTH,
+        height: COLOUR_MENU_INNER_HEIGHT,
+        rx: 5,
+        ry: 5
+      };
+    },
+    colourCy: () => COLOUR_MENU_INNER_Y + COLOUR_MENU_INNER_HEIGHT / 2,
+    colourMenuTransform() {
+      return `translate(0, ${-this.row * D.rowGapY})`;
     }
   },
   methods: {
+    pointerPathData: col => `
+      M${POINTER_TIP_X + col * D.largePegGapX},${POINTER_TIP_Y}
+      l${-POINTER_HALF_WIDTH},${-POINTER_HEIGHT}
+      h${POINTER_WIDTH}
+      z`,
     colourCx: index => COLOUR_MENU_INNER_X + halfGap + gap * index,
     makeOnClickHandler(colour) {
       return () => {
@@ -131,16 +155,11 @@ export default {
 </script>
 
 <style>
-.colour-menu-outer-rect {
+.colour-menu-border {
   fill: rgb(141, 97, 40);
-  filter: url(#shadow);
 }
 
 .colour-menu-inner-rect {
-  fill: rgb(90, 58, 16);
-}
-
-.colour-menu-pointer {
   fill: rgb(90, 58, 16);
 }
 </style>
