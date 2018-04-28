@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import logic from "./modules/logic";
+import autosolve from "./modules/autosolve";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    logic
+    logic,
+    autosolve
   }
 });

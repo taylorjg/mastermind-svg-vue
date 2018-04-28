@@ -10,12 +10,12 @@ export const C = {
 export const COLOURS = Object.values(C);
 
 export const P = {
-  R: Symbol('red'),
-  G: Symbol('green'),
-  B: Symbol('blue'),
-  Y: Symbol('yellow'),
-  BL: Symbol('black'),
-  WH: Symbol('white')
+  R: "R",
+  G: "G",
+  B: "B",
+  Y: "Y",
+  BL: "BL",
+  WH: "WH"
 };
 
 export const PEGS = Object.values(P);

@@ -51,20 +51,20 @@ export default {
       return { x, y, width, height };
     },
     colours() {
-      const feedback = this.feedbackAtRow(this.row);
+      const feedback = this.feedbackAtRowIndex(this.row);
       if (!feedback) return [];
       const blacks = Array(feedback.blacks).fill(C.BL);
       const whites = Array(feedback.whites).fill(C.WH);
       const colours = [...blacks, ...whites];
       return colours;
     },
-    ...mapGetters("logic", ["canSubmitRow", "feedbackAtRow"])
+    ...mapGetters("logic", ["canSubmitRow", "feedbackAtRowIndex"])
   },
   methods: {
     onSubmit() {
-      this.submitRow({ row: this.row });
+      this.submit();
     },
-    ...mapMutations("logic", ["submitRow"])
+    ...mapMutations("logic", ["submit"])
   },
   components: {
     SmallPegHole,

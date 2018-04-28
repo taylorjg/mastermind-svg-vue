@@ -7,7 +7,7 @@
         :key="`guess-large-peg-hole-${row}-${col}`"
       />
       <FocusRing
-        v-if="row === activeRowIndex"
+        v-if="activeRow"
         :row="row"
         :col="col"
         :handler="onPegClick"
@@ -40,25 +40,29 @@ export default {
   props: ["row"],
   computed: {
     colours() {
-      const guess = this.guessAtRow(this.row);
+      const guess = this.guessAtRowIndex(this.row);
       return guess ? guess.map(peg => PEG_TO_COLOUR[peg]) : [];
+    },
+    activeRow() {
+      return this.row === this.activeRowIndex;
     },
     ...mapGetters("logic", [
       "activeRowIndex",
-      "guessAtRow",
+      "guessAtRowIndex",
       "showingColourMenuFor"
     ])
   },
   methods: {
     onPegClick(row, col) {
-      if (this.showingColourMenuFor) {
-        if (this.showingColourMenuFor.col === col) {
+      if (this.activeRow) {
+        if (
+          this.showingColourMenuFor &&
+          this.showingColourMenuFor.col === col
+        ) {
           this.hideColourMenu();
         } else {
           this.showColourMenuFor({ row, col });
         }
-      } else {
-        this.showColourMenuFor({ row, col });
       }
     },
     ...mapMutations("logic", ["showColourMenuFor", "hideColourMenu"])

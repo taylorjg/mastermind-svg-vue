@@ -18,7 +18,6 @@ const state = {
   outcome: OUTCOMES.NONE,
   secret: [],
   rows: [],
-  activeRowIndex: -1,
   showingColourMenuFor: undefined,
   showingOutcomeModal: false
 };
@@ -32,19 +31,19 @@ const getters = {
   secret: state =>
     state.secret,
   activeRowIndex: state =>
-    state.activeRowIndex,
-  guessAtRow: state => row =>
-    state.rows[row]
-      ? state.rows[row].pegs
+    state.rows.length - 1,
+  guessAtRowIndex: state => rowIndex =>
+    state.rows[rowIndex]
+      ? state.rows[rowIndex].guess
       : undefined,
-  feedbackAtRow: state => row =>
-    state.rows[row]
-      ? state.rows[row].feedback
+  feedbackAtRowIndex: state => rowIndex =>
+    state.rows[rowIndex]
+      ? state.rows[rowIndex].feedback
       : undefined,
-  canSubmitRow: state => row =>
-    state.rows[row] &&
-    state.rows[row].pegs.every(peg => !!peg) &&
-    state.rows[row].feedback === undefined,
+  canSubmitRow: state => rowIndex => {
+    const row = state.rows[rowIndex];
+    return row && row.guess.every(peg => peg) && !row.feedback;
+  },
   gameInProgress: state =>
     state.gameState === GAME_STATES.IN_PROGRESS,
   gameOver: state =>
@@ -56,57 +55,39 @@ const getters = {
 };
 
 const mutations = {
-  newGame: state => {
+  newGame(state) {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.outcome = OUTCOMES.NONE;
     state.secret = generateRandomSecret();
-    console.log(`secret: ${state.secret.map(peg => peg.toString())}`);
+    console.log(`secret: ${state.secret}`);
     state.rows = [
       {
-        pegs: Array(4).fill(undefined),
+        guess: Array(4).fill(undefined),
         feedback: undefined
       }
     ];
-    state.activeRowIndex = 0;
   },
-  setPeg: (state, payload) => {
+  setPeg(state, payload) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
       const row = state.showingColourMenuFor.row;
       const col = state.showingColourMenuFor.col;
-      Vue.set(state.rows[row].pegs, col, payload.peg);
+      Vue.set(state.rows[row].guess, col, payload.peg);
     }
   },
-  submitRow: (state, payload) => {
+  submit(state) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
-      state.showingColourMenuFor = undefined;
-      const row = payload.row;
-      const guess = state.rows[row].pegs;
-      const feedback = evaluateGuess(state.secret, guess);
-      state.rows[row].feedback = feedback;
-      if (feedback.blacks === 4) {
-        state.gameState = GAME_STATES.GAME_OVER;
-        state.outcome = OUTCOMES.WON;
-        state.activeRowIndex = -1;
-        state.showingOutcomeModal = true;
-      }
-      else {
-        state.activeRowIndex++;
-        if (state.activeRowIndex === 10) {
-          state.gameState = GAME_STATES.GAME_OVER;
-          state.outcome = OUTCOMES.LOST;
-          state.activeRowIndex = -1;
-          state.showingOutcomeModal = true;
-        }
-        else {
-          state.rows.push({
-            pegs: Array(4).fill(undefined),
-            feedback: undefined
-          });
-        }
-      }
+      submit(state);
     }
   },
-  showColourMenuFor: (state, payload) => {
+  submitGuess(state, payload) {
+    if (state.gameState === GAME_STATES.IN_PROGRESS) {
+      const guess = payload.guess;
+      const rowIndex = state.rows.length - 1;
+      state.rows[rowIndex].guess = guess;
+      submit(state);
+    }
+  },
+  showColourMenuFor(state, payload) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
       state.showingColourMenuFor = {
         row: payload.row,
@@ -114,11 +95,36 @@ const mutations = {
       };
     }
   },
-  hideColourMenu: state => {
+  hideColourMenu(state) {
     state.showingColourMenuFor = undefined;
   },
-  hideOutcomeModal: state => {
+  hideOutcomeModal(state) {
     state.showingOutcomeModal = false;
+  }
+};
+
+const submit = (state) => {
+  const rowIndex = state.rows.length - 1;
+  const guess = state.rows[rowIndex].guess;
+  const feedback = evaluateGuess(state.secret, guess);
+  state.rows[rowIndex].feedback = feedback;
+  if (feedback.blacks === 4) {
+    state.gameState = GAME_STATES.GAME_OVER;
+    state.outcome = OUTCOMES.WON;
+    state.showingOutcomeModal = true;
+  }
+  else {
+    if (state.rows.length === 10) {
+      state.gameState = GAME_STATES.GAME_OVER;
+      state.outcome = OUTCOMES.LOST;
+      state.showingOutcomeModal = true;
+    }
+    else {
+      state.rows.push({
+        guess: Array(4).fill(undefined),
+        feedback: undefined
+      });
+    }
   }
 };
 
