@@ -44,6 +44,11 @@ export default {
     D.recalculateDimensions();
     window.addEventListener("resize", D.recalculateDimensions);
   },
+  mounted() {
+    if (window.location.search.includes("autosolve")) {
+      this.enableAutosolveMode();
+    }
+  },
   computed: {
     newGameButtonBox() {
       return {
@@ -61,7 +66,8 @@ export default {
     ])
   },
   methods: {
-    ...mapMutations("logic", { onNewGame: "newGame" })
+    ...mapMutations("logic", { onNewGame: "newGame" }),
+    ...mapMutations("logic", ["enableAutosolveMode"])
   },
   components: {
     Button,

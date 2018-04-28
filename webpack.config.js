@@ -1,27 +1,28 @@
 /* eslint-env node */
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
-const packageJson = require('./package.json');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+const packageJson = require("./package.json");
 
-const serverPublic = path.join(__dirname, 'server', 'public');
+const serverPublic = path.join(__dirname, "server", "public");
 
 module.exports = {
     entry: [
-        './client/index.js'
+        "babel-polyfill",
+        "./client/index.js"
     ],
     output: {
         path: serverPublic,
-        filename: 'bundle.js',
+        filename: "bundle.js",
     },
     plugins: [
         new CopyWebpackPlugin([
-            { context: './client', from: '*.html' },
-            { context: './client', from: '*.css' }
+            { context: "./client", from: "*.html" },
+            { context: "./client", from: "*.css" }
         ]),
         new HtmlWebpackPlugin({
-            template: './client/index.html',
+            template: "./client/index.html",
             version: packageJson.version
         })
     ],
@@ -30,19 +31,19 @@ module.exports = {
             {
                 test: /\.(js)$/,
                 exclude: /node_modules/,
-                use: 'babel-loader'
+                use: "babel-loader"
             },
             {
                 test: /\.vue$/,
-                loader: 'vue-loader',
+                loader: "vue-loader",
                 options: {
                     loaders: {
-                        js: 'babel-loader'
+                        js: "babel-loader"
                     }
                 }
             }]
     },
-    devtool: 'source-map',
+    devtool: "source-map",
     devServer: {
         contentBase: serverPublic
     }

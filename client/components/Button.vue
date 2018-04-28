@@ -2,20 +2,20 @@
   <g class="button" @click="handler">
     <rect
       class="button-outer-rect"
-      :x="outerRectX"
-      :y="outerRectY"
-      :width="outerRectWidth"
-      :height="outerRectHeight"
+      :x="outerRectBox.x"
+      :y="outerRectBox.y"
+      :width="outerRectBox.width"
+      :height="outerRectBox.height"
       :stroke-width="outerRectStrokeWidth"
     />
     <rect
       class="button-inner-rect"
-      :x="innerRectX"
-      :y="innerRectY"
-      :width="innerRectWidth"
-      :height="innerRectHeight"
+      :x="innerRectBox.x"
+      :y="innerRectBox.y"
+      :width="innerRectBox.width"
+      :height="innerRectBox.height"
     />
-    <text class="button-text" :x="textX" :y="textY">{{ label }}</text>
+    <text class="button-text" :x="centre.x" :y="centre.y">{{ label }}</text>
   </g>
 </template>
 
@@ -26,38 +26,30 @@ export default {
   name: "Button",
   props: ["x", "y", "width", "height", "label", "handler"],
   computed: {
-    outerRectX() {
-      return this.x;
-    },
-    outerRectY() {
-      return this.y;
-    },
-    outerRectWidth() {
-      return this.width;
-    },
-    outerRectHeight() {
-      return this.height;
+    outerRectBox() {
+      return {
+        x: this.x,
+        y: this.y,
+        width: this.width,
+        height: this.height
+      };
     },
     outerRectStrokeWidth() {
       return D.HALF_BORDER;
     },
-    innerRectX() {
-      return this.x + D.HALF_BORDER;
+    innerRectBox() {
+      return {
+        x: this.x + D.HALF_BORDER,
+        y: this.y + D.HALF_BORDER,
+        width: this.width - D.BORDER,
+        height: this.height - D.BORDER
+      };
     },
-    innerRectY() {
-      return this.y + D.HALF_BORDER;
-    },
-    innerRectWidth() {
-      return this.width - D.BORDER;
-    },
-    innerRectHeight() {
-      return this.height - D.BORDER;
-    },
-    textX() {
-      return this.x + this.width / 2;
-    },
-    textY() {
-      return this.y + this.height / 2;
+    centre() {
+      return {
+        x: this.x + this.width / 2,
+        y: this.y + this.height / 2
+      };
     }
   }
 };

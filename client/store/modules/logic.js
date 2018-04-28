@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { generateRandomSecret, evaluateGuess } from "../../logic";
+import { generateGuessAsync, ALL_COMBINATIONS } from "../../autosolve";
 
 const GAME_STATES = {
   INITIALISED: Symbol("initialised"),
@@ -19,7 +20,12 @@ const state = {
   secret: [],
   rows: [],
   showingColourMenuFor: undefined,
-  showingOutcomeModal: false
+  showingOutcomeModal: false,
+  autosolve: false,
+  autosolveState: {
+    set: [],
+    used: [],
+  }
 };
 
 const getters = {
@@ -42,7 +48,7 @@ const getters = {
       : undefined,
   canSubmitRow: state => rowIndex => {
     const row = state.rows[rowIndex];
-    return row && row.guess.every(peg => peg) && !row.feedback;
+    return row && !row.feedback && (row.guess.every(peg => peg) || state.autosolve);
   },
   gameInProgress: state =>
     state.gameState === GAME_STATES.IN_PROGRESS,
@@ -51,10 +57,20 @@ const getters = {
   gameWon: state =>
     state.outcome === OUTCOMES.WON,
   showingOutcomeModal: state =>
-    state.showingOutcomeModal
+    state.showingOutcomeModal,
+  autosolve: state =>
+    state.autosolve,
+  lastSubmittedRow: state =>
+    state.rows.slice().reverse().find(row => row.feedback)
 };
 
 const mutations = {
+  enableAutosolveMode(state) {
+    state.autosolve = true;
+  },
+  disableAutosolveMode(state) {
+    state.autosolve = false;
+  },
   newGame(state) {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.outcome = OUTCOMES.NONE;
@@ -66,6 +82,14 @@ const mutations = {
         feedback: undefined
       }
     ];
+    if (state.autosolve) {
+      state.autosolveState.set = ALL_COMBINATIONS;
+      state.autosolveState.used = [];
+    }
+    else {
+      state.autosolveState.set = [];
+      state.autosolveState.used = [];
+    }
   },
   setPeg(state, payload) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
@@ -79,11 +103,12 @@ const mutations = {
       submit(state);
     }
   },
-  submitGuess(state, payload) {
+  submitGeneratedGuess(state, payload) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
-      const guess = payload.guess;
       const rowIndex = state.rows.length - 1;
-      state.rows[rowIndex].guess = guess;
+      state.rows[rowIndex].guess = payload.guess;
+      state.autosolveState.set = payload.set;
+      state.autosolveState.used = payload.used;
       submit(state);
     }
   },
@@ -100,6 +125,22 @@ const mutations = {
   },
   hideOutcomeModal(state) {
     state.showingOutcomeModal = false;
+  }
+};
+
+const actions = {
+  generateGuessAsync({ commit, state, getters }) {
+    const lastSubmittedRow = getters.lastSubmittedRow
+      || { guess: undefined, feedback: undefined };
+    const { guess: lastGuess, feedback: lastFeedback } = lastSubmittedRow;
+    return generateGuessAsync(
+      state.autosolveState.set,
+      state.autosolveState.used,
+      lastGuess,
+      lastFeedback)
+      .then(result => {
+        commit("submitGeneratedGuess", result);
+      });
   }
 };
 
@@ -132,5 +173,6 @@ export default {
   namespaced: true,
   state,
   getters,
-  mutations
+  mutations,
+  actions
 };

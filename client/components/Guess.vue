@@ -44,12 +44,13 @@ export default {
       return guess ? guess.map(peg => PEG_TO_COLOUR[peg]) : [];
     },
     activeRow() {
-      return this.row === this.activeRowIndex;
+      return this.row === this.activeRowIndex && !this.autosolve;
     },
     ...mapGetters("logic", [
       "activeRowIndex",
       "guessAtRowIndex",
-      "showingColourMenuFor"
+      "showingColourMenuFor",
+      "autosolve"
     ])
   },
   methods: {

@@ -8,14 +8,15 @@
       />
     </template>
     <RowNumber :row="row" :key="`feedback-row-number-${row}`" />
-    <Button
+    <ButtonSpinner
       v-if="canSubmitRow(row)"
-      :x="enterButtonBox.x"
-      :y="enterButtonBox.y"
-      :width="enterButtonBox.width"
-      :height="enterButtonBox.height"
+      :x="submitButtonBox.x"
+      :y="submitButtonBox.y"
+      :width="submitButtonBox.width"
+      :height="submitButtonBox.height"
       :label="'Go'"
       :handler="onSubmit"
+      :showSpinner="showSpinner"
     />
     <template v-for="(colour, col) in colours">
       <SmallPeg
@@ -30,19 +31,24 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import * as D from "../dimensions";
 import { C } from "../constants";
 import SmallPegHole from "./SmallPegHole.vue";
 import SmallPeg from "./SmallPeg.vue";
 import RowNumber from "./RowNumber.vue";
-import Button from "./Button.vue";
+import ButtonSpinner from "./ButtonSpinner.vue";
 
 export default {
   name: "Feedback",
+  data() {
+    return {
+      showSpinner: false
+    };
+  },
   props: ["row"],
   computed: {
-    enterButtonBox() {
+    submitButtonBox() {
       const rowCentreY = D.firstRowCentreY - this.row * D.rowGapY;
       const x = D.smallCutoutX + D.BORDER;
       const y = rowCentreY - D.smallCutoutHeight / 2 + D.BORDER;
@@ -58,19 +64,26 @@ export default {
       const colours = [...blacks, ...whites];
       return colours;
     },
-    ...mapGetters("logic", ["canSubmitRow", "feedbackAtRowIndex"])
+    ...mapGetters("logic", ["canSubmitRow", "feedbackAtRowIndex", "autosolve"])
   },
   methods: {
     onSubmit() {
-      this.submit();
+      if (this.autosolve) {
+        this.showSpinner = true;
+        this.generateGuessAsync().then(() => this.showSpinner = false);
+      }
+      else {
+        this.submit();
+      }
     },
-    ...mapMutations("logic", ["submit"])
+    ...mapMutations("logic", ["submit"]),
+    ...mapActions("logic", ["generateGuessAsync"])
   },
   components: {
     SmallPegHole,
     SmallPeg,
     RowNumber,
-    Button
+    ButtonSpinner
   }
 };
 </script>
