@@ -2,7 +2,7 @@
   <g>
 
     <defs>
-      <clipPath v-for="(_, col) in 4" :id="`clipPath${col}`" :key="`clip-path-${col}`">
+      <clipPath id="clipPath">
         <rect
           :x="outerRectBox.x"
           :y="outerRectBox.y"
@@ -23,7 +23,7 @@
           :y="borderBox.y"
           :width="borderBox.width"
           :height="borderBox.height"
-          :clip-path="`url(#clipPath${col})`"
+          clip-path="url(#clipPath)"
         />
       </g>
       <rect
