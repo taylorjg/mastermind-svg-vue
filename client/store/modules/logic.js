@@ -37,7 +37,7 @@ const getters = {
   secret: state =>
     state.secret,
   activeRowIndex: state =>
-    state.rows.length - 1,
+    state.gameState === GAME_STATES.IN_PROGRESS ? state.rows.length - 1 : -1,
   guessAtRowIndex: state => rowIndex =>
     state.rows[rowIndex]
       ? state.rows[rowIndex].guess
