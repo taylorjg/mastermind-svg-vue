@@ -21,11 +21,13 @@ I created this separate repo to play around with it.
 * [ ] Add animations (e.g. when revealing the secret code)
 * [x] Responsive UI: size of device
 * [ ] Responsive UI: orientation of device
+* [ ] Provide a UI mechanism to toggle autosolve mode
 
 ## Non-UI things
 
 * [x] Add basic game logic
 * [x] Use [Vue.js](https://vuejs.org/) (my first Vue.js app!)
+* [x] Implement [autosolve mode](https://mastermind-svg-vue.herokuapp.com/?autosolve)
 
 ## Boring things
 
