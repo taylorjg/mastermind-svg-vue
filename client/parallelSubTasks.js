@@ -40,8 +40,8 @@ export const runParallelSubTasksAsync = (filteredSet, unused) => {
       params,
       subTask,
       function (subTaskResults) {
-        const guess2 = combineSubTaskResults(subTaskResults);
-        resolve(guess2);
+        const guess = combineSubTaskResults(subTaskResults);
+        resolve(guess);
       },
       MAX_THREADS
     );

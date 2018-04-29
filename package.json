@@ -1,6 +1,6 @@
 {
   "name": "mastermind-svg-vue",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "Mastermind using SVG and Vue.js",
   "scripts": {
     "start": "node server",

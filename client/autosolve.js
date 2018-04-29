@@ -1,6 +1,6 @@
 import { evaluateGuess } from "./logic";
 import { P, PEGS } from "./constants";
-import { runParallelSubTasksAsync} from "./fred";
+import { runParallelSubTasksAsync} from "./parallelSubTasks";
 
 export const ALL_COMBINATIONS =
   Array.from(function* () {
