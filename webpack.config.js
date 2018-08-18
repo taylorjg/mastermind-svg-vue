@@ -46,5 +46,9 @@ module.exports = {
     devtool: "source-map",
     devServer: {
         contentBase: serverPublic
+    },
+    mode: 'production',
+    performance: {
+        hints: false
     }
 };
