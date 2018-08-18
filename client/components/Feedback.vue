@@ -67,10 +67,11 @@ export default {
     ...mapGetters("logic", ["canSubmitRow", "feedbackAtRowIndex", "autosolve"])
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.autosolve) {
         this.showSpinner = true;
-        this.generateGuessAsync().then(() => this.showSpinner = false);
+        await this.generateGuessAsync();
+        this.showSpinner = false;
       }
       else {
         this.submit();

@@ -1,6 +1,6 @@
 {
   "name": "mastermind-svg-vue",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "Mastermind using SVG and Vue.js",
   "scripts": {
     "start": "node server",
@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
