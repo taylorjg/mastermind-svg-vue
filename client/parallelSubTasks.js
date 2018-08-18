@@ -35,6 +35,11 @@ export const runParallelSubTasksAsync = set => {
     PEGS
   };
 
+  // TODO: use hamsters.promise instead of Promise + hamsters.run
+  // However, at the moment, I get the following error:
+  //   ReferenceError: scaffold is not defined
+  // Some discussion of it here:
+  // https://github.com/austinksmith/Hamsters.js/issues/50#issuecomment-377788588
   return new Promise(resolve => {
     hamsters.run(
       params,
