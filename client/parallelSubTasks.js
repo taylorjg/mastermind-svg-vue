@@ -1,5 +1,6 @@
 import hamsters from "hamsters.js";
 import { PEGS } from "./constants";
+import { ALL_COMBINATIONS } from "./autosolve";
 
 hamsters.init({
   browser: true,
@@ -12,7 +13,7 @@ const range = n => Array.from(Array(n).keys());
 const minBy = (xs, f) =>
   xs.reduce((acc, x) => f(x) < f(acc) ? x : acc);
 
-const ALL_OUTCOMES =
+const ALL_SCORES =
   Array.from(function* () {
     for (const blacks of range(5))
       for (const whites of range(5))
@@ -21,17 +22,17 @@ const ALL_OUTCOMES =
     .filter(fb => fb.blacks + fb.whites <= 4)
     .filter(fb => !(fb.blacks === 3 && fb.whites === 1));
 
-export const runParallelSubTasksAsync = (filteredSet, unused) => {
+export const runParallelSubTasksAsync = set => {
 
   const combineSubTaskResults = subTaskResults =>
     minBy(subTaskResults, x => x.min).guess;
 
   const params = {
-    array: unused,
+    array: ALL_COMBINATIONS,
     threads: hamsters.maxThreads,
-    ALL_OUTCOMES,
-    PEGS,
-    filteredSet
+    set,
+    ALL_SCORES,
+    PEGS
   };
 
   return new Promise(resolve => {
@@ -53,10 +54,10 @@ const subTask = () => {
   const hamstersRtn = rtn;
   /* eslint-enable no-undef */
 
-  const ALL_OUTCOMES = hamstersParams.ALL_OUTCOMES;
+  const ALL_COMBINATIONS_CHUNK = hamstersParams.array;
+  const set = hamstersParams.set;
+  const ALL_SCORES = hamstersParams.ALL_SCORES;
   const PEGS = hamstersParams.PEGS;
-  const filteredSet = hamstersParams.filteredSet;
-  const unused = hamstersParams.array;
 
   const evaluateGuess = (secret, guess) => {
     const count = (xs, p) => xs.filter(x => x === p).length;
@@ -77,11 +78,11 @@ const subTask = () => {
     xs.reduce((acc, x) => acc + (p(x) ? 1 : 0), 0);
 
   const seed = { min: Number.MAX_VALUE };
-  hamstersRtn.data = unused.reduce(
+  hamstersRtn.data = ALL_COMBINATIONS_CHUNK.reduce(
     (currentBest, unusedCode) => {
-      const max = ALL_OUTCOMES.reduce(
-        (currentMax, outcome) => {
-          const count = countWithPredicate(filteredSet, evaluatesToSameFeedback(unusedCode, outcome));
+      const max = ALL_SCORES.reduce(
+        (currentMax, score) => {
+          const count = countWithPredicate(set, evaluatesToSameFeedback(unusedCode, score));
           return Math.max(currentMax, count);
         },
         0);

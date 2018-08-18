@@ -23,8 +23,7 @@ const state = {
   showingOutcomeModal: false,
   autosolve: false,
   autosolveState: {
-    set: [],
-    used: [],
+    set: []
   }
 };
 
@@ -83,11 +82,9 @@ const mutations = {
     ];
     if (state.autosolve) {
       state.autosolveState.set = ALL_COMBINATIONS;
-      state.autosolveState.used = [];
     }
     else {
       state.autosolveState.set = [];
-      state.autosolveState.used = [];
     }
   },
   setPeg(state, payload) {
@@ -107,7 +104,6 @@ const mutations = {
       const rowIndex = state.rows.length - 1;
       state.rows[rowIndex].guess = payload.guess;
       state.autosolveState.set = payload.set;
-      state.autosolveState.used = payload.used;
       submit(state);
     }
   },
@@ -131,12 +127,8 @@ const actions = {
   async generateGuessAsync({ commit, state, getters }) {
     const lastSubmittedRow = getters.lastSubmittedRow
       || { guess: undefined, feedback: undefined };
-    const { guess: lastGuess, feedback: lastFeedback } = lastSubmittedRow;
-    const result = await generateGuessAsync(
-      state.autosolveState.set,
-      state.autosolveState.used,
-      lastGuess,
-      lastFeedback);
+    const attempt = guess => evaluateGuess(state.secret, guess);
+    const result = await generateGuessAsync(state.autosolveState.set, attempt);
     commit("submitGeneratedGuess", result);
   }
 };
