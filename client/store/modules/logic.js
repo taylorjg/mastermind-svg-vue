@@ -75,7 +75,6 @@ const mutations = {
     state.gameState = GAME_STATES.IN_PROGRESS;
     state.outcome = OUTCOMES.NONE;
     state.secret = generateRandomSecret();
-    console.log(`secret: ${state.secret}`);
     state.rows = [
       {
         guess: Array(4).fill(undefined),

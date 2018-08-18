@@ -1,10 +1,10 @@
 import hamsters from "hamsters.js";
 import { PEGS } from "./constants";
 
-const MAX_THREADS = 8;
-
 hamsters.init({
-  maxThreads: MAX_THREADS,
+  browser: true,
+  reactNative: false,
+  node: false
 });
 
 const range = n => Array.from(Array(n).keys());
@@ -23,27 +23,25 @@ const ALL_OUTCOMES =
 
 export const runParallelSubTasksAsync = (filteredSet, unused) => {
 
-  console.log(`[runParallelSubTasksAsync] filteredSet.length: ${filteredSet.length}; unused.length: ${unused.length}`);
-
   const combineSubTaskResults = subTaskResults =>
     minBy(subTaskResults, x => x.min).guess;
 
   const params = {
+    array: unused,
+    threads: hamsters.maxThreads,
     ALL_OUTCOMES,
     PEGS,
-    filteredSet,
-    array: unused
+    filteredSet
   };
 
   return new Promise(resolve => {
     hamsters.run(
       params,
       subTask,
-      function (subTaskResults) {
-        const guess = combineSubTaskResults(subTaskResults);
+      function (rtn) {
+        const guess = combineSubTaskResults(rtn.data);
         resolve(guess);
-      },
-      MAX_THREADS
+      }
     );
   });
 };
@@ -59,8 +57,6 @@ const subTask = () => {
   const PEGS = hamstersParams.PEGS;
   const filteredSet = hamstersParams.filteredSet;
   const unused = hamstersParams.array;
-
-  console.log(`[subTask] ALL_OUTCOMES.length: ${ALL_OUTCOMES.length}; PEGS: ${PEGS.length}; filteredSet.length: ${filteredSet.length}; unused.length: ${unused.length}`);
 
   const evaluateGuess = (secret, guess) => {
     const count = (xs, p) => xs.filter(x => x === p).length;
