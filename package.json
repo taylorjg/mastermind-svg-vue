@@ -1,8 +1,9 @@
 {
   "name": "mastermind-svg-vue",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "Mastermind using SVG and Vue.js",
   "scripts": {
+    "build": "webpack",
     "start": "node server",
     "heroku-postbuild": "webpack"
   },
@@ -19,14 +20,14 @@
     "css-loader": "^0.28.11",
     "eslint": "^4.18.2",
     "express": "^4.16.3",
-    "hamsters.js": "^4.2.1",
+    "hamsters.js": "^5.1.1",
     "html-webpack-plugin": "^3.0.6",
     "vue": "^2.5.16",
     "vue-loader": "^14.2.2",
     "vue-template-compiler": "^2.5.16",
     "vuex": "^3.0.1",
     "webpack": "^3.11.0",
-    "webpack-dev-server": "^2.11.2"
+    "webpack-dev-server": "^3.1.5"
   },
   "engines": {
     "node": "8.4.0"
