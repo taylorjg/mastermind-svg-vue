@@ -2,6 +2,8 @@
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 const path = require('path')
 const { version } = require('./package.json')
 
@@ -25,14 +27,23 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './client/index.html',
       version
-    })
+    }),
+    new VueLoaderPlugin()
   ],
   module: {
     rules: [
       {
         test: /\.vue$/,
         loader: 'vue-loader'
-      }]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ]
+      }
+    ]
   },
   devtool: 'source-map',
   devServer: {
