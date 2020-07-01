@@ -1,18 +1,18 @@
-import Vue from "vue";
-import { generateRandomSecret, evaluateGuess } from "../../logic";
-import { generateGuessAsync, ALL_COMBINATIONS } from "../../autosolve";
+import Vue from 'vue'
+import { generateRandomSecret, evaluateGuess } from '../../logic'
+import { generateGuessAsync, ALL_COMBINATIONS } from '../../autosolve'
 
 const GAME_STATES = {
-  INITIALISED: Symbol("initialised"),
-  IN_PROGRESS: Symbol("in-progress"),
-  GAME_OVER: Symbol("game-over")
-};
+  INITIALISED: Symbol('initialised'),
+  IN_PROGRESS: Symbol('in-progress'),
+  GAME_OVER: Symbol('game-over')
+}
 
 const OUTCOMES = {
-  NONE: Symbol("none"),
-  WON: Symbol("won"),
-  LOST: Symbol("lost")
-};
+  NONE: Symbol('none'),
+  WON: Symbol('won'),
+  LOST: Symbol('lost')
+}
 
 const state = {
   gameState: GAME_STATES.INITIALISED,
@@ -25,7 +25,7 @@ const state = {
   autosolveState: {
     set: []
   }
-};
+}
 
 const getters = {
   showNewGameButton: state =>
@@ -46,8 +46,8 @@ const getters = {
       ? state.rows[rowIndex].feedback
       : undefined,
   canSubmitRow: state => rowIndex => {
-    const row = state.rows[rowIndex];
-    return row && !row.feedback && (row.guess.every(peg => peg) || state.autosolve);
+    const row = state.rows[rowIndex]
+    return row && !row.feedback && (row.guess.every(peg => peg) || state.autosolve)
   },
   gameInProgress: state =>
     state.gameState === GAME_STATES.IN_PROGRESS,
@@ -61,50 +61,50 @@ const getters = {
     state.autosolve,
   lastSubmittedRow: state =>
     state.rows.slice().reverse().find(row => row.feedback)
-};
+}
 
 const mutations = {
   enableAutosolveMode(state) {
-    state.autosolve = true;
+    state.autosolve = true
   },
   disableAutosolveMode(state) {
-    state.autosolve = false;
+    state.autosolve = false
   },
   newGame(state) {
-    state.gameState = GAME_STATES.IN_PROGRESS;
-    state.outcome = OUTCOMES.NONE;
-    state.secret = generateRandomSecret();
+    state.gameState = GAME_STATES.IN_PROGRESS
+    state.outcome = OUTCOMES.NONE
+    state.secret = generateRandomSecret()
     state.rows = [
       {
         guess: Array(4).fill(undefined),
         feedback: undefined
       }
-    ];
+    ]
     if (state.autosolve) {
-      state.autosolveState.set = ALL_COMBINATIONS;
+      state.autosolveState.set = ALL_COMBINATIONS
     }
     else {
-      state.autosolveState.set = [];
+      state.autosolveState.set = []
     }
   },
   setPeg(state, payload) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
-      const row = state.showingColourMenuFor.row;
-      const col = state.showingColourMenuFor.col;
-      Vue.set(state.rows[row].guess, col, payload.peg);
+      const row = state.showingColourMenuFor.row
+      const col = state.showingColourMenuFor.col
+      Vue.set(state.rows[row].guess, col, payload.peg)
     }
   },
   submit(state) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
-      submit(state);
+      submit(state)
     }
   },
   submitGeneratedGuess(state, payload) {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
-      const rowIndex = state.rows.length - 1;
-      state.rows[rowIndex].guess = payload.guess;
-      state.autosolveState.set = payload.set;
-      submit(state);
+      const rowIndex = state.rows.length - 1
+      state.rows[rowIndex].guess = payload.guess
+      state.autosolveState.set = payload.set
+      submit(state)
     }
   },
   showColourMenuFor(state, payload) {
@@ -112,51 +112,51 @@ const mutations = {
       state.showingColourMenuFor = {
         row: payload.row,
         col: payload.col
-      };
+      }
     }
   },
   hideColourMenu(state) {
-    state.showingColourMenuFor = undefined;
+    state.showingColourMenuFor = undefined
   },
   hideOutcomeModal(state) {
-    state.showingOutcomeModal = false;
+    state.showingOutcomeModal = false
   }
-};
+}
 
 const actions = {
   async generateGuessAsync({ commit, state /* , getters */ }) {
     // const lastSubmittedRow = getters.lastSubmittedRow
-    //   || { guess: undefined, feedback: undefined };
-    const attempt = guess => evaluateGuess(state.secret, guess);
-    const result = await generateGuessAsync(state.autosolveState.set, attempt);
-    commit("submitGeneratedGuess", result);
+    //   || { guess: undefined, feedback: undefined }
+    const attempt = guess => evaluateGuess(state.secret, guess)
+    const result = await generateGuessAsync(state.autosolveState.set, attempt)
+    commit('submitGeneratedGuess', result)
   }
-};
+}
 
 const submit = (state) => {
-  const rowIndex = state.rows.length - 1;
-  const guess = state.rows[rowIndex].guess;
-  const feedback = evaluateGuess(state.secret, guess);
-  state.rows[rowIndex].feedback = feedback;
+  const rowIndex = state.rows.length - 1
+  const guess = state.rows[rowIndex].guess
+  const feedback = evaluateGuess(state.secret, guess)
+  state.rows[rowIndex].feedback = feedback
   if (feedback.blacks === 4) {
-    state.gameState = GAME_STATES.GAME_OVER;
-    state.outcome = OUTCOMES.WON;
-    state.showingOutcomeModal = true;
+    state.gameState = GAME_STATES.GAME_OVER
+    state.outcome = OUTCOMES.WON
+    state.showingOutcomeModal = true
   }
   else {
     if (state.rows.length === 10) {
-      state.gameState = GAME_STATES.GAME_OVER;
-      state.outcome = OUTCOMES.LOST;
-      state.showingOutcomeModal = true;
+      state.gameState = GAME_STATES.GAME_OVER
+      state.outcome = OUTCOMES.LOST
+      state.showingOutcomeModal = true
     }
     else {
       state.rows.push({
         guess: Array(4).fill(undefined),
         feedback: undefined
-      });
+      })
     }
   }
-};
+}
 
 export default {
   namespaced: true,
@@ -164,4 +164,4 @@ export default {
   getters,
   mutations,
   actions
-};
+}

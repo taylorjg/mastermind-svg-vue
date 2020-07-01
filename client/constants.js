@@ -1,24 +1,24 @@
 export const C = {
-  R: "#FF0000",
-  G: "#00FF00",
-  B: "#0000FF",
-  Y: "#FFFF00",
-  BL: "#000000",
-  WH: "#FFFFFF"
-};
+  R: '#FF0000',
+  G: '#00FF00',
+  B: '#0000FF',
+  Y: '#FFFF00',
+  BL: '#000000',
+  WH: '#FFFFFF'
+}
 
-export const COLOURS = Object.values(C);
+export const COLOURS = Object.values(C)
 
 export const P = {
-  R: "R",
-  G: "G",
-  B: "B",
-  Y: "Y",
-  BL: "BL",
-  WH: "WH"
-};
+  R: 'R',
+  G: 'G',
+  B: 'B',
+  Y: 'Y',
+  BL: 'BL',
+  WH: 'WH'
+}
 
-export const PEGS = Object.values(P);
+export const PEGS = Object.values(P)
 
 export const PEG_TO_COLOUR = {
   [P.R]: C.R,
@@ -27,7 +27,7 @@ export const PEG_TO_COLOUR = {
   [P.Y]: C.Y,
   [P.BL]: C.BL,
   [P.WH]: C.WH,
-};
+}
 
 export const COLOUR_TO_PEG = {
   [C.R]: P.R,
@@ -36,4 +36,4 @@ export const COLOUR_TO_PEG = {
   [C.Y]: P.Y,
   [C.BL]: P.BL,
   [C.WH]: P.WH,
-};
+}
