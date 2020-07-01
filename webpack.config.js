@@ -11,7 +11,7 @@ const serverPublic = path.join(__dirname, 'server', 'public')
 
 module.exports = {
   entry: [
-    './client/index.js'
+    './src/index.js'
   ],
   output: {
     path: serverPublic,
@@ -20,12 +20,12 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        { context: './client', from: '*.html' },
-        { context: './client', from: '*.css' }
+        { context: './src', from: '*.html' },
+        { context: './src', from: '*.css' }
       ]
     }),
     new HtmlWebpackPlugin({
-      template: './client/index.html',
+      template: './src/index.html',
       version
     }),
     new VueLoaderPlugin()
