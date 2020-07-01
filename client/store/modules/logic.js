@@ -124,9 +124,9 @@ const mutations = {
 };
 
 const actions = {
-  async generateGuessAsync({ commit, state, getters }) {
-    const lastSubmittedRow = getters.lastSubmittedRow
-      || { guess: undefined, feedback: undefined };
+  async generateGuessAsync({ commit, state /* , getters */ }) {
+    // const lastSubmittedRow = getters.lastSubmittedRow
+    //   || { guess: undefined, feedback: undefined };
     const attempt = guess => evaluateGuess(state.secret, guess);
     const result = await generateGuessAsync(state.autosolveState.set, attempt);
     commit("submitGeneratedGuess", result);
