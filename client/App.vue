@@ -11,7 +11,7 @@
     />
     <SecretPanel />
     <template v-for="(_, row) in 10">
-      <Feedback :row="row" :key="`feedback-${row}`" />
+      <Score :row="row" :key="`score-${row}`" />
       <Guess :row="row" :key="`guess-${row}`" />
     </template>
     <MainPanel />
@@ -32,7 +32,7 @@ import { mapGetters, mapMutations } from "vuex";
 import * as D from "./dimensions";
 import Button from "./components/Button.vue";
 import SecretPanel from "./components/SecretPanel.vue";
-import Feedback from "./components/Feedback.vue";
+import Score from "./components/Score.vue";
 import Guess from "./components/Guess.vue";
 import MainPanel from "./components/MainPanel.vue";
 import ColourMenu from "./components/ColourMenu.vue";
@@ -72,7 +72,7 @@ export default {
   components: {
     Button,
     SecretPanel,
-    Feedback,
+    Score,
     Guess,
     MainPanel,
     ColourMenu,

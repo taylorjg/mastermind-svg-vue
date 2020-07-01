@@ -41,13 +41,13 @@ const getters = {
     state.rows[rowIndex]
       ? state.rows[rowIndex].guess
       : undefined,
-  feedbackAtRowIndex: state => rowIndex =>
+  scoreAtRowIndex: state => rowIndex =>
     state.rows[rowIndex]
-      ? state.rows[rowIndex].feedback
+      ? state.rows[rowIndex].score
       : undefined,
   canSubmitRow: state => rowIndex => {
     const row = state.rows[rowIndex]
-    return row && !row.feedback && (row.guess.every(peg => peg) || state.autosolve)
+    return row && !row.score && (row.guess.every(peg => peg) || state.autosolve)
   },
   gameInProgress: state =>
     state.gameState === GAME_STATES.IN_PROGRESS,
@@ -60,7 +60,7 @@ const getters = {
   autosolve: state =>
     state.autosolve,
   lastSubmittedRow: state =>
-    state.rows.slice().reverse().find(row => row.feedback)
+    state.rows.slice().reverse().find(row => row.score)
 }
 
 const mutations = {
@@ -77,7 +77,7 @@ const mutations = {
     state.rows = [
       {
         guess: Array(4).fill(undefined),
-        feedback: undefined
+        score: undefined
       }
     ]
     if (state.autosolve) {
@@ -134,9 +134,9 @@ const actions = {
 const submit = (state) => {
   const rowIndex = state.rows.length - 1
   const guess = state.rows[rowIndex].guess
-  const feedback = evaluateScore(state.secret, guess)
-  state.rows[rowIndex].feedback = feedback
-  if (feedback.blacks === 4) {
+  const score = evaluateScore(state.secret, guess)
+  state.rows[rowIndex].score = score
+  if (score.blacks === 4) {
     state.gameState = GAME_STATES.GAME_OVER
     state.outcome = OUTCOMES.WON
     state.showingOutcomeModal = true
@@ -150,7 +150,7 @@ const submit = (state) => {
     else {
       state.rows.push({
         guess: Array(4).fill(undefined),
-        feedback: undefined
+        score: undefined
       })
     }
   }

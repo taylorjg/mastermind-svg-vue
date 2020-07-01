@@ -4,10 +4,10 @@
       <SmallPegHole
         :row="row"
         :col="col"
-        :key="`feedback-small-peg-hole-${row}-${col}`"
+        :key="`score-small-peg-hole-${row}-${col}`"
       />
     </template>
-    <RowNumber :row="row" :key="`feedback-row-number-${row}`" />
+    <RowNumber :row="row" :key="`score-row-number-${row}`" />
     <ButtonSpinner
       v-if="canSubmitRow(row)"
       :x="submitButtonBox.x"
@@ -24,7 +24,7 @@
         :row="row"
         :col="col"
         :colour="colour"
-        :key="`feedback-small-peg-${row}-${col}`"
+        :key="`score-small-peg-${row}-${col}`"
       />
     </template>
   </g>
@@ -40,7 +40,7 @@ import RowNumber from "./RowNumber.vue";
 import ButtonSpinner from "./ButtonSpinner.vue";
 
 export default {
-  name: "Feedback",
+  name: "Score",
   data() {
     return {
       showSpinner: false
@@ -57,14 +57,14 @@ export default {
       return { x, y, width, height };
     },
     colours() {
-      const feedback = this.feedbackAtRowIndex(this.row);
-      if (!feedback) return [];
-      const blacks = Array(feedback.blacks).fill(C.BL);
-      const whites = Array(feedback.whites).fill(C.WH);
+      const score = this.scoreAtRowIndex(this.row);
+      if (!score) return [];
+      const blacks = Array(score.blacks).fill(C.BL);
+      const whites = Array(score.whites).fill(C.WH);
       const colours = [...blacks, ...whites];
       return colours;
     },
-    ...mapGetters("logic", ["canSubmitRow", "feedbackAtRowIndex", "autosolve"])
+    ...mapGetters("logic", ["canSubmitRow", "scoreAtRowIndex", "autosolve"])
   },
   methods: {
     async onSubmit() {
