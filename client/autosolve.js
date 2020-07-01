@@ -1,31 +1,31 @@
 import { evaluateScore } from './logic'
-import { P, PEGS } from './constants'
+import { P, ALL_PEGS } from './constants'
 import { runParallelSubTasksAsync } from './parallelSubTasks'
 
 export const ALL_COMBINATIONS =
   Array.from(function* () {
-    for (const a of PEGS)
-      for (const b of PEGS)
-        for (const c of PEGS)
-          for (const d of PEGS)
-            yield [a, b, c, d]
+    for (const p0 of ALL_PEGS)
+      for (const p1 of ALL_PEGS)
+        for (const p2 of ALL_PEGS)
+          for (const p3 of ALL_PEGS)
+            yield [p0, p1, p2, p3]
   }())
 
 const INITIAL_GUESS = [P.R, P.R, P.G, P.G]
 
-export const generateGuessAsync = async (set, attempt) => {
+export const generateGuessAsync = async (untried, attempt) => {
 
-  const guess = set.length === ALL_COMBINATIONS.length
+  const guess = untried.length === ALL_COMBINATIONS.length
     ? INITIAL_GUESS
-    : (set.length === 1
-      ? set[0]
-      : await runParallelSubTasksAsync(set))
+    : (untried.length === 1
+      ? untried[0]
+      : await runParallelSubTasksAsync(untried))
 
   const score = attempt(guess)
 
   return {
     guess,
-    set: set.filter(evaluatesToSameScore(guess, score))
+    untried: untried.filter(evaluatesToSameScore(guess, score))
   }
 }
 

@@ -1,5 +1,5 @@
 import hamsters from 'hamsters.js'
-import { PEGS } from './constants'
+import { ALL_PEGS } from './constants'
 import { ALL_COMBINATIONS } from './autosolve'
 
 hamsters.init({
@@ -22,7 +22,7 @@ const ALL_SCORES =
     .filter(fb => fb.blacks + fb.whites <= 4)
     .filter(fb => !(fb.blacks === 3 && fb.whites === 1))
 
-export const runParallelSubTasksAsync = set => {
+export const runParallelSubTasksAsync = untried => {
 
   const combineSubTaskResults = subTaskResults =>
     minBy(subTaskResults, x => x.min).guess
@@ -30,9 +30,9 @@ export const runParallelSubTasksAsync = set => {
   const params = {
     array: ALL_COMBINATIONS,
     threads: hamsters.maxThreads,
-    set,
+    untried,
     ALL_SCORES,
-    PEGS
+    ALL_PEGS
   }
 
   // TODO: use hamsters.promise instead of Promise + hamsters.run
@@ -60,9 +60,9 @@ const subTask = () => {
   /* eslint-enable no-undef */
 
   const ALL_COMBINATIONS_CHUNK = hamstersParams.array
-  const set = hamstersParams.set
+  const untried = hamstersParams.untried
   const ALL_SCORES = hamstersParams.ALL_SCORES
-  const PEGS = hamstersParams.PEGS
+  const ALL_PEGS = hamstersParams.ALL_PEGS
 
   const countOccurrenciesOfPeg = (peg, code) => {
     return (
@@ -84,7 +84,7 @@ const subTask = () => {
 
   const evaluateScore = (code1, code2) => {
     let sumOfMinOccurrencies = 0
-    PEGS.forEach(peg => {
+    ALL_PEGS.forEach(peg => {
       const numOccurrencies1 = countOccurrenciesOfPeg(peg, code1)
       const numOccurrencies2 = countOccurrenciesOfPeg(peg, code2)
       const minOccurrencies = Math.min(numOccurrencies1, numOccurrencies2)
@@ -109,7 +109,7 @@ const subTask = () => {
     (currentBest, unusedCode) => {
       const max = ALL_SCORES.reduce(
         (currentMax, score) => {
-          const count = countWithPredicate(set, evaluatesToSameScore(unusedCode, score))
+          const count = countWithPredicate(untried, evaluatesToSameScore(unusedCode, score))
           return Math.max(currentMax, count)
         },
         0)

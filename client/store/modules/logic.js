@@ -23,7 +23,7 @@ const state = {
   showingOutcomeModal: false,
   autosolve: false,
   autosolveState: {
-    set: []
+    untried: []
   }
 }
 
@@ -81,10 +81,10 @@ const mutations = {
       }
     ]
     if (state.autosolve) {
-      state.autosolveState.set = ALL_COMBINATIONS
+      state.autosolveState.untried = ALL_COMBINATIONS
     }
     else {
-      state.autosolveState.set = []
+      state.autosolveState.untried = []
     }
   },
   setPeg(state, payload) {
@@ -103,7 +103,7 @@ const mutations = {
     if (state.gameState === GAME_STATES.IN_PROGRESS) {
       const rowIndex = state.rows.length - 1
       state.rows[rowIndex].guess = payload.guess
-      state.autosolveState.set = payload.set
+      state.autosolveState.untried = payload.untried
       submit(state)
     }
   },
@@ -126,7 +126,7 @@ const mutations = {
 const actions = {
   async generateGuessAsync({ commit, state }) {
     const attempt = guess => evaluateScore(state.secret, guess)
-    const result = await generateGuessAsync(state.autosolveState.set, attempt)
+    const result = await generateGuessAsync(state.autosolveState.untried, attempt)
     commit('submitGeneratedGuess', result)
   }
 }

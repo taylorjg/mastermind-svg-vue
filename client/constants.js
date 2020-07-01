@@ -18,7 +18,7 @@ export const P = {
   WH: 'WH'
 }
 
-export const PEGS = Object.values(P)
+export const ALL_PEGS = Object.values(P)
 
 export const PEG_TO_COLOUR = {
   [P.R]: C.R,

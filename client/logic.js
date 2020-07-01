@@ -1,9 +1,9 @@
-import { PEGS } from './constants'
+import { ALL_PEGS } from './constants'
 
 export const generateRandomSecret = () => {
   const chooseRandomPeg = () => {
-    const randomIndex = Math.floor((Math.random() * PEGS.length))
-    return PEGS[randomIndex]
+    const randomIndex = Math.floor((Math.random() * ALL_PEGS.length))
+    return ALL_PEGS[randomIndex]
   }
   return [0, 1, 2, 3].map(chooseRandomPeg)
 }
@@ -28,7 +28,7 @@ const countMatchingPegsByPosition = (code1, code2) => {
 
 export const evaluateScore = (code1, code2) => {
   let sumOfMinOccurrencies = 0
-  PEGS.forEach(peg => {
+  ALL_PEGS.forEach(peg => {
     const numOccurrencies1 = countOccurrenciesOfPeg(peg, code1)
     const numOccurrencies2 = countOccurrenciesOfPeg(peg, code2)
     const minOccurrencies = Math.min(numOccurrencies1, numOccurrencies2)
