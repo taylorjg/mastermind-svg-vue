@@ -1,4 +1,4 @@
-import { evaluateGuess } from './logic'
+import { evaluateScore } from './logic'
 import { P, PEGS } from './constants'
 import { runParallelSubTasksAsync } from './parallelSubTasks'
 
@@ -25,12 +25,12 @@ export const generateGuessAsync = async (set, attempt) => {
 
   return {
     guess,
-    set: set.filter(evaluatesToSameFeedback(guess, score))
+    set: set.filter(evaluatesToSameScore(guess, score))
   }
 }
 
-const evaluatesToSameFeedback = (code1, feedback) => code2 =>
-  sameFeedback(evaluateGuess(code1, code2), feedback)
+const evaluatesToSameScore = (code1, score) => code2 =>
+  sameScore(evaluateScore(code1, code2), score)
 
-const sameFeedback = (fb1, fb2) =>
-  fb1.blacks === fb2.blacks && fb1.whites === fb2.whites
+const sameScore = (score1, score2) =>
+  score1.blacks === score2.blacks && score1.whites === score2.whites

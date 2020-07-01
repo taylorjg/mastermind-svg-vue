@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { generateRandomSecret, evaluateGuess } from '../../logic'
+import { generateRandomSecret, evaluateScore } from '../../logic'
 import { generateGuessAsync, ALL_COMBINATIONS } from '../../autosolve'
 
 const GAME_STATES = {
@@ -124,10 +124,8 @@ const mutations = {
 }
 
 const actions = {
-  async generateGuessAsync({ commit, state /* , getters */ }) {
-    // const lastSubmittedRow = getters.lastSubmittedRow
-    //   || { guess: undefined, feedback: undefined }
-    const attempt = guess => evaluateGuess(state.secret, guess)
+  async generateGuessAsync({ commit, state }) {
+    const attempt = guess => evaluateScore(state.secret, guess)
     const result = await generateGuessAsync(state.autosolveState.set, attempt)
     commit('submitGeneratedGuess', result)
   }
@@ -136,7 +134,7 @@ const actions = {
 const submit = (state) => {
   const rowIndex = state.rows.length - 1
   const guess = state.rows[rowIndex].guess
-  const feedback = evaluateGuess(state.secret, guess)
+  const feedback = evaluateScore(state.secret, guess)
   state.rows[rowIndex].feedback = feedback
   if (feedback.blacks === 4) {
     state.gameState = GAME_STATES.GAME_OVER

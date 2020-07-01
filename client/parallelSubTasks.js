@@ -64,20 +64,42 @@ const subTask = () => {
   const ALL_SCORES = hamstersParams.ALL_SCORES
   const PEGS = hamstersParams.PEGS
 
-  const evaluateGuess = (secret, guess) => {
-    const count = (xs, p) => xs.filter(x => x === p).length
-    const add = (a, b) => a + b
-    const sum = PEGS.map(p => Math.min(count(secret, p), count(guess, p))).reduce(add)
-    const blacks = secret.filter((peg, index) => peg === guess[index]).length
-    const whites = sum - blacks
+  const countOccurrenciesOfPeg = (peg, code) => {
+    return (
+      (peg === code[0] ? 1 : 0) +
+      (peg === code[1] ? 1 : 0) +
+      (peg === code[2] ? 1 : 0) +
+      (peg === code[3] ? 1 : 0)
+    )
+  }
+
+  const countMatchingPegsByPosition = (code1, code2) => {
+    return (
+      (code1[0] === code2[0] ? 1 : 0) +
+      (code1[1] === code2[1] ? 1 : 0) +
+      (code1[2] === code2[2] ? 1 : 0) +
+      (code1[3] === code2[3] ? 1 : 0)
+    )
+  }
+
+  const evaluateScore = (code1, code2) => {
+    let sumOfMinOccurrencies = 0
+    PEGS.forEach(peg => {
+      const numOccurrencies1 = countOccurrenciesOfPeg(peg, code1)
+      const numOccurrencies2 = countOccurrenciesOfPeg(peg, code2)
+      const minOccurrencies = Math.min(numOccurrencies1, numOccurrencies2)
+      sumOfMinOccurrencies += minOccurrencies
+    })
+    const blacks = countMatchingPegsByPosition(code1, code2)
+    const whites = sumOfMinOccurrencies - blacks
     return { blacks, whites }
   }
 
-  const sameFeedback = (fb1, fb2) =>
-    fb1.blacks === fb2.blacks && fb1.whites === fb2.whites
+  const sameScore = (score1, score2) =>
+    score1.blacks === score2.blacks && score1.whites === score2.whites
 
-  const evaluatesToSameFeedback = (code1, feedback) => code2 =>
-    sameFeedback(evaluateGuess(code1, code2), feedback)
+  const evaluatesToSameScore = (code1, score) => code2 =>
+    sameScore(evaluateScore(code1, code2), score)
 
   const countWithPredicate = (xs, p) =>
     xs.reduce((acc, x) => acc + (p(x) ? 1 : 0), 0)
@@ -87,7 +109,7 @@ const subTask = () => {
     (currentBest, unusedCode) => {
       const max = ALL_SCORES.reduce(
         (currentMax, score) => {
-          const count = countWithPredicate(set, evaluatesToSameFeedback(unusedCode, score))
+          const count = countWithPredicate(set, evaluatesToSameScore(unusedCode, score))
           return Math.max(currentMax, count)
         },
         0)
