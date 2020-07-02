@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { generateRandomSecret, evaluateScore } from '../../logic'
-import { generateGuessAsync, ALL_COMBINATIONS } from '../../autosolve'
+import { generateGuessAsync } from '../../autosolve'
+import { ALL_CODES } from '../../constants'
 
 const GAME_STATES = {
   INITIALISED: Symbol('initialised'),
@@ -81,7 +82,7 @@ const mutations = {
       }
     ]
     if (state.autosolve) {
-      state.autosolveState.untried = ALL_COMBINATIONS
+      state.autosolveState.untried = ALL_CODES
     }
     else {
       state.autosolveState.untried = []

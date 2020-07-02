@@ -3,6 +3,7 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const WorkerPlugin = require('worker-plugin')
 
 const path = require('path')
 const { version } = require('./package.json')
@@ -28,7 +29,8 @@ module.exports = {
       template: './src/index.html',
       version
     }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new WorkerPlugin()
   ],
   module: {
     rules: [

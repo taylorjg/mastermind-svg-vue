@@ -1,6 +1,6 @@
 {
   "name": "mastermind-svg-vue",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Mastermind using SVG and Vue.js",
   "scripts": {
     "eslint": "eslint .",
@@ -13,7 +13,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.3",
-    "hamsters.js": "^5.1.1",
     "promise-worker": "^2.0.1",
     "vue": "^2.5.17",
     "vue-style-loader": "^4.1.2",

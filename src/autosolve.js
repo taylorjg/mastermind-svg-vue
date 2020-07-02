@@ -1,25 +1,17 @@
-import { evaluateScore } from './logic'
-import { P, ALL_PEGS } from './constants'
-import { runParallelSubTasksAsync } from './parallelSubTasks'
+import PromiseWorker from 'promise-worker'
+import { evaluatesToSameScore } from './logic'
+import * as C from './constants'
 
-export const ALL_COMBINATIONS =
-  Array.from(function* () {
-    for (const p0 of ALL_PEGS)
-      for (const p1 of ALL_PEGS)
-        for (const p2 of ALL_PEGS)
-          for (const p3 of ALL_PEGS)
-            yield [p0, p1, p2, p3]
-  }())
-
-const INITIAL_GUESS = [P.R, P.R, P.G, P.G]
+const webWorker = new Worker('./web-worker.js', { type: 'module' })
+const webWorkerP = new PromiseWorker(webWorker)
 
 export const generateGuessAsync = async (untried, attempt) => {
 
-  const guess = untried.length === ALL_COMBINATIONS.length
-    ? INITIAL_GUESS
-    : (untried.length === 1
+  const guess = untried.length === C.ALL_CODES.length
+    ? C.INITIAL_GUESS
+    : untried.length === 1
       ? untried[0]
-      : await runParallelSubTasksAsync(untried))
+      : await webWorkerP.postMessage({ type: 'findBest', untried })
 
   const score = attempt(guess)
 
@@ -28,9 +20,3 @@ export const generateGuessAsync = async (untried, attempt) => {
     untried: untried.filter(evaluatesToSameScore(guess, score))
   }
 }
-
-const evaluatesToSameScore = (code1, score) => code2 =>
-  sameScore(evaluateScore(code1, code2), score)
-
-const sameScore = (score1, score2) =>
-  score1.blacks === score2.blacks && score1.whites === score2.whites
