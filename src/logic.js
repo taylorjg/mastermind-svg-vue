@@ -8,34 +8,28 @@ export const generateRandomSecret = () => {
   return [0, 1, 2, 3].map(chooseRandomPeg)
 }
 
-const countOccurrenciesOfPeg = (peg, code) => {
-  return (
-    (peg === code[0] ? 1 : 0) +
-    (peg === code[1] ? 1 : 0) +
-    (peg === code[2] ? 1 : 0) +
-    (peg === code[3] ? 1 : 0)
-  )
-}
+const countOccurrencesOfPeg = (peg, code) =>
+  (peg === code[0] ? 1 : 0) +
+  (peg === code[1] ? 1 : 0) +
+  (peg === code[2] ? 1 : 0) +
+  (peg === code[3] ? 1 : 0)
 
-const countMatchingPegsByPosition = (code1, code2) => {
-  return (
-    (code1[0] === code2[0] ? 1 : 0) +
-    (code1[1] === code2[1] ? 1 : 0) +
-    (code1[2] === code2[2] ? 1 : 0) +
-    (code1[3] === code2[3] ? 1 : 0)
-  )
-}
+const countMatchingPegsByPosition = (code1, code2) =>
+  (code1[0] === code2[0] ? 1 : 0) +
+  (code1[1] === code2[1] ? 1 : 0) +
+  (code1[2] === code2[2] ? 1 : 0) +
+  (code1[3] === code2[3] ? 1 : 0)
 
 export const evaluateScore = (code1, code2) => {
-  let sumOfMinOccurrencies = 0
+  let sumOfMinOccurrences = 0
   C.ALL_PEGS.forEach(peg => {
-    const numOccurrencies1 = countOccurrenciesOfPeg(peg, code1)
-    const numOccurrencies2 = countOccurrenciesOfPeg(peg, code2)
-    const minOccurrencies = Math.min(numOccurrencies1, numOccurrencies2)
-    sumOfMinOccurrencies += minOccurrencies
+    const numOccurrences1 = countOccurrencesOfPeg(peg, code1)
+    const numOccurrences2 = countOccurrencesOfPeg(peg, code2)
+    const minOccurrences = Math.min(numOccurrences1, numOccurrences2)
+    sumOfMinOccurrences += minOccurrences
   })
   const blacks = countMatchingPegsByPosition(code1, code2)
-  const whites = sumOfMinOccurrencies - blacks
+  const whites = sumOfMinOccurrences - blacks
   return { blacks, whites }
 }
 

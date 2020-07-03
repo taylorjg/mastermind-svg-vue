@@ -40,7 +40,6 @@ export const ALL_SCORES =
     .filter(fb => fb.blacks + fb.whites <= 4)
     .filter(fb => !(fb.blacks === 3 && fb.whites === 1))
 
-
 export const INITIAL_GUESS = [P.R, P.R, P.G, P.G]
 
 export const PEG_TO_COLOUR = {
