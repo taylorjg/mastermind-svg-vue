@@ -1,11 +1,8 @@
 import * as C from './constants'
 
-export const generateRandomSecret = () => {
-  const chooseRandomPeg = () => {
-    const randomIndex = Math.floor((Math.random() * C.ALL_PEGS.length))
-    return C.ALL_PEGS[randomIndex]
-  }
-  return [0, 1, 2, 3].map(chooseRandomPeg)
+export const randomSecret = () => {
+  const randomIndex = Math.floor((Math.random() * C.ALL_CODES.length))
+  return C.ALL_CODES[randomIndex]
 }
 
 const countOccurrencesOfPeg = (peg, code) =>

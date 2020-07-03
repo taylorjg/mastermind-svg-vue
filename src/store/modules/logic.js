@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { generateRandomSecret, evaluateScore } from '../../logic'
+import { randomSecret, evaluateScore } from '../../logic'
 import { generateGuessAsync } from '../../autosolve'
 import { ALL_CODES } from '../../constants'
 
@@ -74,7 +74,7 @@ const mutations = {
   newGame(state) {
     state.gameState = GAME_STATES.IN_PROGRESS
     state.outcome = OUTCOMES.NONE
-    state.secret = generateRandomSecret()
+    state.secret = randomSecret()
     state.rows = [
       {
         guess: Array(4).fill(undefined),
