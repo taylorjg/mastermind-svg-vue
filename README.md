@@ -33,3 +33,8 @@ I created this separate repo to play around with it.
 
 * [x] Add CI/CD via CircleCI 2.0
 * [x] Deploy to Heroku
+
+# Links
+
+* Related
+  * [gpu-js-experiments](https://github.com/taylorjg/gpu-js-experiments)
