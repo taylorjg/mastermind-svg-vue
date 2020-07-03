@@ -8,15 +8,14 @@ const WorkerPlugin = require('worker-plugin')
 const path = require('path')
 const { version } = require('./package.json')
 
-const serverPublic = path.join(__dirname, 'server', 'public')
+const SERVER_PUBLIC = path.join(__dirname, 'server', 'public')
 
 module.exports = {
-  entry: [
-    './src/index.js'
-  ],
+  entry: './src/index.js',
   output: {
-    path: serverPublic,
+    path: SERVER_PUBLIC,
     filename: 'bundle.js',
+    globalObject: '(typeof self != \'undefined\' ? self : this)'
   },
   plugins: [
     new CopyWebpackPlugin({
@@ -49,7 +48,7 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: serverPublic
+    contentBase: SERVER_PUBLIC
   },
   mode: 'production',
   performance: {

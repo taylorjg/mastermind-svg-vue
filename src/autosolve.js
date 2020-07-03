@@ -2,8 +2,8 @@ import PromiseWorker from 'promise-worker'
 import { evaluatesToSameScore } from './logic'
 import * as C from './constants'
 
-const webWorker = new Worker('./web-worker.js', { type: 'module' })
-const webWorkerP = new PromiseWorker(webWorker)
+const worker = new Worker('./autosolve-worker.js', { type: 'module' })
+const promiseWorker = new PromiseWorker(worker)
 
 export const generateGuessAsync = async (untried, attempt) => {
 
@@ -11,7 +11,7 @@ export const generateGuessAsync = async (untried, attempt) => {
     ? C.INITIAL_GUESS
     : untried.length === 1
       ? untried[0]
-      : await webWorkerP.postMessage({ type: 'findBest', untried })
+      : await promiseWorker.postMessage({ type: 'findBest', untried })
 
   const score = attempt(guess)
 
