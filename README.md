@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/taylorjg/mastermind-svg-vue/tree/master.svg?style=svg)](https://circleci.com/gh/taylorjg/mastermind-svg-vue/tree/master)
-
 # Description
 
 I previously implemented [Mastermind in React](https://github.com/taylorjg/Mastermind).
@@ -27,12 +25,8 @@ I created this separate repo to play around with it.
 
 * [x] Add basic game logic
 * [x] Use [Vue.js](https://vuejs.org/) (my first Vue.js app!)
-* [x] Implement [autosolve mode](https://mastermind-svg-vue.herokuapp.com/?autosolve)
-
-## Boring things
-
-* [x] Add CI/CD via CircleCI 2.0
-* [x] Deploy to Heroku
+* [x] Deploy to gh-pages
+* [x] Implement [autosolve mode](https://taylorjg.github.io/mastermind-svg-vue?autosolve)
 
 # Links
 

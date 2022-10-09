@@ -8,12 +8,12 @@ const WorkerPlugin = require('worker-plugin')
 const path = require('path')
 const { version } = require('./package.json')
 
-const SERVER_PUBLIC = path.join(__dirname, 'server', 'public')
+const BUILD_FOLDER = path.join(__dirname, 'build')
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: SERVER_PUBLIC,
+    path: BUILD_FOLDER,
     filename: 'bundle.js',
     globalObject: '(typeof self != \'undefined\' ? self : this)'
   },
@@ -48,7 +48,7 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: SERVER_PUBLIC
+    contentBase: BUILD_FOLDER
   },
   mode: 'production',
   performance: {
